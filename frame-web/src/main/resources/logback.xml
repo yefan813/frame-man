@@ -22,7 +22,7 @@
 		</encoder>
 	</appender>
 	
-	<logger name="com.dmall" level="${log.level}" additivity="false">
+	<logger name="com.frame" level="${log.level}" additivity="false">
 		<appender-ref ref="LOG_COMPLETEPAY_FILE" />
 		<appender-ref ref="CONSOLE" />
 	</logger>

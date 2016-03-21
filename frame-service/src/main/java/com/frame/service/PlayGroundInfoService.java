@@ -5,8 +5,9 @@ import java.util.Map;
 
 import com.frame.domain.Playground;
 import com.frame.domain.common.Page;
+import com.frame.service.base.BaseService;
 
-public interface PlayGroundInfoService {
+public interface PlayGroundInfoService extends BaseService<Playground, Long> {
 	
 		public List<Playground> getPlaygroundInfo(Page<Playground> page);
 

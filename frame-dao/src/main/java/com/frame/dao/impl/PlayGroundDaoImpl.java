@@ -3,6 +3,8 @@ package com.frame.dao.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Repository;
+
 import com.frame.dao.PlayGroundDao;
 import com.frame.dao.base.BaseDaoImpl;
 import com.frame.domain.Playground;
