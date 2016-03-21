@@ -1,8 +1,6 @@
 package com.myframe.web.controller;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -11,26 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.dmall.wx.groupon.interceptor.WeixinPassport;
-import com.dmall.wx.groupon.rpc.entity.UserInfo;
-import com.dmall.wx.groupon.rpc.service.PassportService;
-import com.wm.nb.web.filter.ServletContext;
-import com.wm.nb.web.interceptor.LoginContext;
+import com.myframe.web.interceptor.WeixinPassport;
 
 @Controller
 public class BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
-	@Resource
-	private PassportService passportService;
 
 	protected HttpServletRequest getRequest() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		return request;
-	}
-
-	protected HttpServletResponse getResponse() {
-		return ServletContext.getResponse();
 	}
 
 	protected String getRemoteIp() {
@@ -75,17 +63,6 @@ public class BaseController {
 		return "";
 	}
 
-	protected LoginContext getLoginContext() {
-		return LoginContext.getLoginContext();
-	}
-
-	protected String getLoginAccount() {
-		return LoginContext.getLoginContext().getAccount();
-	}
-
-	protected int getLoginId() {
-		return LoginContext.getLoginContext().getLongId();
-	}
 	
 	public String dealJosnP(String callback, String data){
 		if(data == null) data = "";
@@ -99,21 +76,6 @@ public class BaseController {
 		}
 	}
 	
-	protected Long getUserId() {
-		WeixinPassport ctx = (WeixinPassport) getRequest().getAttribute("weixinPassport");
-		if (ctx == null) {
-			return null;
-		}
-		Long userId = ctx.getUserId();
-		if (userId == null || userId == 0l) {
-			String unionId = ctx.getUnionId();
-			UserInfo userInfo = passportService.getUserInfoByUnionId(unionId);
-			if (userInfo != null) {
-				userId = userInfo.getUserId();
-			}
-		}
-		return userId;
-	}
 	
 	protected String getUnionId() {
 		WeixinPassport ctx = (WeixinPassport) getRequest().getAttribute("weixinPassport");
