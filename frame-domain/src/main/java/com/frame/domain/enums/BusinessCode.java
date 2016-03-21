@@ -2,10 +2,8 @@ package com.frame.domain.enums;
 
 public enum BusinessCode {
 
-	CREATE_ORDER_SUCCESS("0000", 10000, "创建订单成功", null),
-	USER_ID_IS_NULL("880001", 10001, "用户ID为空", null),
-	NOT_IN_TARGET_AREA("880002", 10002, "不在指定区域", null),
-	PRODUCT_ID_IS_NULL("880003", 10003, "产品ID为空", null);
+	SERVER_INTERNAL_ERROR("0000", 10000, "服务器内部错误", null),
+	CREATE_ORDER_SUCCESS("0001", 10000, "创建订单成功", null);
 	
 	private String code;
 	private int key;
