@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frame.dao.PlayGroundDao">
+
+	<!-- groupon 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+			id,
+			name,
+			address,
+			location,
+			tel,
+			pcode,
+			pname,
+			citycode as cityCode,
+			cityname as cityName,
+			adcode as adCode,
+			adname as adName,
+			parking_type as parkingType,
+			indoor_map as indoorMap,
+			feature,
+			created,
+			modified,
+			yn
+		]]>
+	</sql>
+
+	<!-- groupon 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM pay_ground]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+			<if test="id != null"><![CDATA[AND id = #{id}]]></if>
+			<if test="name != null"><![CDATA[AND name = #{name}]]></if>
+			<if test="address != null"><![CDATA[AND address = #{address}]]></if>
+			<if test="location != null"><![CDATA[AND location = #{location}]]></if>
+			<if test="tel != null"><![CDATA[AND tel = #{tel}]]></if>
+			<if test="pcode != null"><![CDATA[AND pcode = #{pcode}]]></if>
+			<if test="pname != null"><![CDATA[AND pname = #{pname}]]></if>
+			<if test="cityCode != null"><![CDATA[AND citycode = #{cityCode}]]></if>
+			<if test="cityName != null"><![CDATA[AND cityname = #{cityName}]]></if>
+			<if test="adCode != null"><![CDATA[AND adcode = #{adCode}]]></if>
+			<if test="adName != null"><![CDATA[AND adname = #{adName}]]></if>
+			<if test="parkingType != null"><![CDATA[AND parking_type = #{parkingType}]]></if>
+			<if test="indoorMap != null"><![CDATA[AND indoor_map = #{indoorMap}]]></if>
+			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
+			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
+			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
+			<if test="yn != null "><![CDATA[AND yn = #{yn}]]></if>
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="name != null"><![CDATA[name = #{name},]]></if>
+			<if test="address != null"><![CDATA[address = #{address},]]></if>
+			<if test="location != null"><![CDATA[location = #{location},]]></if>
+			<if test="tel != null"><![CDATA[tel = #{tel},]]></if>
+			<if test="pcode != null"><![CDATA[pcode = #{pcode},]]></if>
+			<if test="pname != null"><![CDATA[pname = #{pname},]]></if>
+			<if test="cityCode != null"><![CDATA[citycode = #{cityCode},]]></if>
+			<if test="cityName != null"><![CDATA[cityname = #{cityName},]]></if>
+			<if test="adCode != null"><![CDATA[adcode = #{adCode},]]></if>
+			<if test="adName != null"><![CDATA[adname = #{adName},]]></if>
+			<if test="parkingType != null"><![CDATA[parking_type = #{parkingType},]]></if>
+			<if test="indoorMap != null"><![CDATA[indoor_map = #{indoorMap},]]></if>
+			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
+			<![CDATA[modified = now(),]]>
+			<if test="yn != null"><![CDATA[yn = #{yn},]]></if>
+		</set>
+	</sql>
+
+	<!-- 插入groupon记录 -->
+	<insert id="insertEntry" parameterType="playground" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			INSERT INTO play_ground (name,address,location,tel,pcode,pname,citycode,cityname,adcode,adname,parking_type,indoor_map,feature,created,modified,yn)
+			VALUES (#{name},#{address},#{location},#{tel},#{pcode},#{pname},#{cityCode},#{cityName},#{adCode},#{adName},#{parkingType},#{indoorMap},#{feature},now(),now(),#{yn})
+		]]>
+	</insert>
+	
+	<!-- 返回插入的编号,在事务开启状态下有效 -->
+	<select id="lastSequence" resultType="int"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+	<!-- 删除记录,主键IN(array) -->
+	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
+		<![CDATA[DELETE FROM play_ground WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</delete>
+
+	<!-- 删除,通过条件 -->
+	<update id="deleteByCondtion" parameterType="playground" >
+		<![CDATA[DELETE FROM play_ground]]>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</update>
+
+	<!-- 修改记录通过主键 -->
+	<update id="updateByKey" parameterType="playground" >
+		<![CDATA[UPDATE play_ground]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+
+	<!-- 查询,通过主键IN(array) -->
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="playground">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<!-- 查询,通过条件 -->
+	<select id="selectEntryList" parameterType="playground" resultType="playground">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<!-- 总数查询,通过条件 -->
+	<select id="selectEntryListCount" parameterType="playground" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
+	
+	<!-- 其它SQL语句 -->
+	
+</mapper>
