@@ -9,6 +9,6 @@ import com.frame.service.base.BaseService;
 
 public interface PlayGroundInfoService extends BaseService<Playground, Long> {
 	
-		public List<Playground> getPlaygroundInfo(Page<Playground> page);
+		public List<Playground> getPlaygroundInfo(Page<Playground> page,Playground playground);
 
 }

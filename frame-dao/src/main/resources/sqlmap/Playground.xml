@@ -27,7 +27,7 @@
 	</sql>
 
 	<!-- groupon 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM pay_ground]]></sql>
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM play_ground]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
@@ -84,6 +84,9 @@
 		<![CDATA[
 			INSERT INTO play_ground (name,address,location,tel,pcode,pname,citycode,cityname,adcode,adname,parking_type,indoor_map,feature,created,modified,yn)
 			VALUES (#{name},#{address},#{location},#{tel},#{pcode},#{pname},#{cityCode},#{cityName},#{adCode},#{adName},#{parkingType},#{indoorMap},#{feature},now(),now(),#{yn})
+			ON DUPLICATE KEY UPDATE
+			tel=#{tel},parking_type=#{parkingType}
+			
 		]]>
 	</insert>
 	

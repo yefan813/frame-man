@@ -1,4 +1,4 @@
-package com.myframe.web.utils;
+package com.frame.web.utils;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

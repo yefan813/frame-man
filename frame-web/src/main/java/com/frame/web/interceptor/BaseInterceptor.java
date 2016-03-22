@@ -1,4 +1,4 @@
-package com.myframe.web.interceptor;
+package com.frame.web.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

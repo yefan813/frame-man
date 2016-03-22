@@ -1,4 +1,4 @@
-package com.myframe.web.controller;
+package com.frame.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.myframe.web.interceptor.WeixinPassport;
+import com.frame.web.interceptor.WeixinPassport;
 
 @Controller
 public class BaseController {

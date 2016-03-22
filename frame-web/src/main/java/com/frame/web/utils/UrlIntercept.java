@@ -1,4 +1,4 @@
-package com.myframe.web.utils;
+package com.frame.web.utils;
 
 public interface UrlIntercept {
 

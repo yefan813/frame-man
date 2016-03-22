@@ -1,4 +1,4 @@
-package com.myframe.web.utils;
+package com.frame.web.utils;
 
 import java.util.HashMap;
 import java.util.Map;

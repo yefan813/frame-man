@@ -3,7 +3,7 @@ package com.frame.domain.enums;
 public enum BusinessCode {
 
 	SERVER_INTERNAL_ERROR("0000", 10000, "服务器内部错误", null),
-	CREATE_ORDER_SUCCESS("0001", 10000, "创建订单成功", null);
+	SUCCESS("0001", 10000, "取数据成功", null);
 	
 	private String code;
 	private int key;

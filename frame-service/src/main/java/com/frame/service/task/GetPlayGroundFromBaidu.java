@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.alibaba.fastjson.JSON;
 import com.frame.domain.Playground;
+import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.GaoDeAPIResult;
 import com.frame.service.PlayGroundInfoService;
 import com.frame.service.utils.HttpClientUtil;
@@ -30,7 +31,7 @@ public class GetPlayGroundFromBaidu {
 	private PlayGroundInfoService playGroundInfoService;
 	
 	public void work(){
-		
+		System.out.println("从百度取数据------");
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put("key", BAIDU_PRIVATE_KEY);
 		params.put("keywords", "篮球场");
@@ -58,6 +59,7 @@ public class GetPlayGroundFromBaidu {
 		}
 		
 		for (Playground playground : pList) {
+			playground.setYn(YnEnum.Normal.getKey());
 			playGroundInfoService.insertEntry(playground);
 		}
 	}

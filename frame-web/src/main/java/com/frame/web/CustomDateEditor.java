@@ -2,7 +2,7 @@
 
 
  */
-package com.myframe.web;
+package com.frame.web;
 import java.beans.PropertyEditorSupport;
 import java.text.DateFormat;
 import java.text.ParseException;

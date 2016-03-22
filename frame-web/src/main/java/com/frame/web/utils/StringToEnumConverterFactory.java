@@ -1,4 +1,4 @@
-package com.myframe.web.utils;
+package com.frame.web.utils;
 
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;

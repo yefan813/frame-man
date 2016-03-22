@@ -1,4 +1,4 @@
-package com.myframe.web;
+package com.frame.web;
 
 import javax.servlet.http.HttpServletRequest;
 

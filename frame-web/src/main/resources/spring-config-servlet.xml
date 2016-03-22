@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>  
-<beans xmlns="http://www.springframework.org/schema/beans"  
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"  
-    xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"  
-	xmlns:mvc="http://www.springframework.org/schema/mvc"  
-    xmlns:util="http://www.springframework.org/schema/util"  
-    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
                      http://www.springframework.org/schema/beans/spring-beans.xsd  
                      http://www.springframework.org/schema/tx  
                      http://www.springframework.org/schema/tx/spring-tx.xsd  
@@ -15,26 +14,28 @@
                      http://www.springframework.org/schema/util        
                      http://www.springframework.org/schema/util/spring-util-3.2.xsd  
                      http://www.springframework.org/schema/mvc   
-                     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">  
-                     
-    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
-        <property name="supportedMediaTypes">
-            <list>
-                <value>text/html;charset=UTF-8</value>
-                <value>text/plain;charset=UTF-8</value>
-                <value>application/json;charset=UTF-8</value> 
-            </list>
-        </property>
-    </bean>
-         
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">  
-        <property name="messageConverters">
-            <list>
-                <ref bean="stringHttpMessageConverter" />
-            </list>
-        </property>
-    </bean>
-    
-    <mvc:annotation-driven/>  
-      
+                     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+	<bean id="stringHttpMessageConverter"
+		class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+				<value>text/plain;charset=UTF-8</value>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="stringHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<mvc:annotation-driven />
+
 </beans>  
