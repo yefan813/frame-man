@@ -1,13 +1,10 @@
 package com.frame.web.controller;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,13 +28,13 @@ public class PlaygroundController extends BaseController {
 	
 	
 	@RequestMapping(value = "/listPlaygrounds", method = {RequestMethod.GET, RequestMethod.POST})
-	public @ResponseBody String queryGroupons(Page<Playground> page, Model view){
+	public @ResponseBody String queryGroupons(Page<Playground> page){
 		RemoteResult result = null;
 		try{
 			Playground query = new Playground();
 			query.setYn(YnEnum.Normal.getKey());
-			List<Playground> playgrounds = playGroundInfoService.getPlaygroundInfo(page,query);
-			result = RemoteResult.result(BusinessCode.SUCCESS, playgrounds);
+			Page<Playground> playgrounds = playGroundInfoService.selectPage(query, page);
+			result = RemoteResult.result(BusinessCode.SUCCESS, playgrounds.getResult());
 		}catch (Exception e) {
 			LOGGER.error("列表异常", e);
 			System.out.println("列表异常" + e);
