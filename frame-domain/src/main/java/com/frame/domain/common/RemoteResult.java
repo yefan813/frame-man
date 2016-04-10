@@ -9,21 +9,21 @@ public class RemoteResult {
 	
 	private static final String SUCCESS_CODE = "0000";
 	
-	private String errCode;
-	private String errMsg;
+	private String code;
+	private String msg;
 	private Object data;
 	
-	public String getErrCode() {
-		return errCode;
+	public String getCode() {
+		return code;
 	}
-	public void setErrCode(String errCode) {
-		this.errCode = errCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
-	public String getErrMsg() {
-		return errMsg;
+	public String getMsg() {
+		return msg;
 	}
-	public void setErrMsg(String errMsg) {
-		this.errMsg = errMsg;
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 	public Object getData() {
 		return data;
@@ -34,25 +34,25 @@ public class RemoteResult {
 	
 	private RemoteResult(String errCode) {
 		super();
-		this.errCode = errCode;
+		this.code = errCode;
 	}
 	
 	private RemoteResult(String errCode, String errMsg) {
 		super();
-		this.errCode = errCode;
-		this.errMsg = errMsg;
+		this.code = errCode;
+		this.msg = errMsg;
 	}
 	
 	private RemoteResult(String errCode, String errMsg, Object data) {
 		super();
-		this.errCode = errCode;
-		this.errMsg = errMsg;
+		this.code = errCode;
+		this.msg = errMsg;
 		this.data = data;
 	}
 	
 	private RemoteResult(String errCode, Object data) {
 		super();
-		this.errCode = errCode;
+		this.code = errCode;
 		this.data = data;
 	}
 	

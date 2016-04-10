@@ -19,7 +19,7 @@ public class IndexController{
 	@RequestMapping(method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody RemoteResult index(HttpServletRequest request,Model view){
 		RemoteResult msg = RemoteResult.success();
-		msg.setErrMsg("Hello weixin gourpon!");
+		msg.setMsg("Hello weixin gourpon!");
 		return msg;
 	}
     

@@ -18,10 +18,18 @@
 	<!-- 全局别名设置，在映射文件中只需写别名，而不必写出整个类路径 -->
 	<typeAliases>
 		<typeAlias type="com.frame.domain.Playground" alias="playground"/>
+		<typeAlias type="com.frame.domain.Team" alias="team"/>
+		<typeAlias type="com.frame.domain.Match" alias="match"/>
+		<typeAlias type="com.frame.domain.UserTeamRelation" alias="userTeamRelation"/>
+		
+		
 	</typeAliases>
 
 	<!-- 映射文件路径 -->
 	<mappers>
 		<mapper resource="sqlmap/Playground.xml" />
+		<mapper resource="sqlmap/Team.xml" />
+		<mapper resource="sqlmap/Match.xml" />
+		<mapper resource="sqlmap/UserTeamRelation.xml" />
 	</mappers>
 </configuration>
