@@ -27,7 +27,7 @@
 		<appender-ref ref="CONSOLE" />
 	</logger>
 	
-	<logger name="java.sql" level="${log.level}" additivity="true">
+	<logger name="java.sql" level="DEBUG" additivity="true">
 		<appender-ref ref="CONSOLE" />
 	</logger>
 	
