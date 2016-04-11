@@ -14,6 +14,7 @@ public interface TeamDao extends BaseDao<Team, Long> {
 	 * @param parameters
 	 * @return
 	 */
-	public List<Playground> getPlaygroundInfo(Map<String, Object> parameters);
+	public List<Team> getUserTeams(Integer userId);
+	
 
 }

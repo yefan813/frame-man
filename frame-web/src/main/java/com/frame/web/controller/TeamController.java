@@ -60,10 +60,7 @@ public class TeamController extends BaseController {
 			return JSON.toJSONString(result);
 		}
 		try{
-			UserTeamRelation query = new UserTeamRelation();
-			query.setYn(YnEnum.Normal.getKey());
-			query.setUserId(userId);
-			List<UserTeamRelation> teams = userTeamRelationService.selectEntryList(query);
+			List<Team> teams = teamService.getUserTeams(userId);
 			result = RemoteResult.result(BusinessCode.SUCCESS, teams);
 		}catch (Exception e) {
 			LOGGER.error("列表异常", e);

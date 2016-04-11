@@ -122,5 +122,12 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<select id="selectUserTeamByUserId" parameterType="Map" resultType="team">
+		<![CDATA[ select ]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where id in (select team_id from user_team_relation where user_id = #{userId})  ]]>
+	</select>
+	
 	
 </mapper>

@@ -1,5 +1,6 @@
 package com.frame.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,11 +17,13 @@ public class TeamDaoImpl extends BaseDaoImpl<Team, Long> implements TeamDao {
 
 	private final static String NAMESPACE = "com.frame.dao.TeamDao.";
 	
-	private final static String SELECT_PLAYGROUNBINFO = "selectPlaygroundInfo";
+	private final static String SELECT_USERTEAMBY_USERID = "selectUserTeamByUserId";
 	
 	@Override
-	public List<Playground> getPlaygroundInfo(Map<String, Object> parameters) {
-		return this.select(getNameSpace(SELECT_PLAYGROUNBINFO), parameters);
+	public List<Team> getUserTeams(Integer userId) {
+		Map<String, Object> parameters  = new HashMap<String,Object>();
+		parameters.put("userId", userId);
+		return this.selectList(getNameSpace(SELECT_USERTEAMBY_USERID), parameters);
 	}
 
 	@Override

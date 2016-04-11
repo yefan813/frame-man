@@ -42,7 +42,7 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 	@Override
 	public List<Team> getUserTeams(Integer userId) {
 		// TODO Auto-generated method stub
-		return null;
+		return teamDao.getUserTeams(userId);
 	}
 	
 
