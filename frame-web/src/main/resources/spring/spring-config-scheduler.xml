@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    		http://www.springframework.org/schema/beans/spring-beans.xsd
+       		http://www.springframework.org/schema/context
+     		http://www.springframework.org/schema/context/spring-context.xsd
+     		http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-autowire="byName">
+   
+    <bean id="taskExecutor"  class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="20" />
+        <property name="maxPoolSize" value="100" />
+        <property name="queueCapacity" value="5000" />
+        <property name="keepAliveSeconds" value="2000" />
+        <property name="rejectedExecutionHandler">
+            <bean class="java.util.concurrent.ThreadPoolExecutor$AbortPolicy" />
+        </property>
+    </bean>    
+       
+
+	<bean id="getPlayGroundInfoFromBaidu" class="com.frame.service.task.GetPlayGroundFromBaidu" />
+    <bean id="getPlayGroundInfoFromBaiduTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject">
+            <ref bean="getPlayGroundInfoFromBaidu" />
+        </property>
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod">
+            <value>work</value>
+        </property>
+
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>       
+
+       
+    <!-- 定义触发时间 -->
+    <bean id="getPlayGroundInfoTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="getPlayGroundInfoFromBaiduTask" />
+        </property>
+        <!-- cron表达式 -->
+        <property name="cronExpression">
+            <value>${quartz.getPlaygroundInfo.time}</value>
+        </property>
+    </bean>
+       
+    <!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
+    <bean id="startQuertz" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="getPlayGroundInfoTrigger"/>
+            </list>
+        </property>
+        <property name="autoStartup">
+            <value>true</value>
+        </property>
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.threadPool.threadCount">1</prop>
+            </props>
+        </property>
+    </bean>
+       
+</beans>
