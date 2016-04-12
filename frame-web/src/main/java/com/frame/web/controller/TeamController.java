@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -51,12 +52,12 @@ public class TeamController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/getUserTeams/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-	public @ResponseBody String getUserTeams(@PathVariable Integer userId){
+	public @ResponseBody String getUserTeams(@PathVariable Long userId){
 		
 		RemoteResult result = null;
 		if(null == userId || userId  < 0 ){
 			LOGGER.error("调用getUserTeams 传入参数为：" + userId);
-			result = RemoteResult.result(BusinessCode.SERVER_INTERNAL_ERROR);
+			result = RemoteResult.result(BusinessCode.PARAMETERS_ERROR);
 			return JSON.toJSONString(result);
 		}
 		try{
@@ -70,6 +71,20 @@ public class TeamController extends BaseController {
 		
 		return JSON.toJSONString(result);
 	}
+	
+	@RequestMapping(value = "/createTeam", method = {RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody String createTeam(@RequestParam(value="userId") Long userId,Team team){
+		RemoteResult result = null;
+		if(null == userId || userId < 0 || null == team){
+			result = RemoteResult.result(BusinessCode.PARAMETERS_ERROR);
+			return JSON.toJSONString(result);
+		}
+		if(null != team){
+			
+		}
+		return JSON.toJSONString(result);
+	}
+	
 	
 	
 }

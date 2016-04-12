@@ -10,6 +10,6 @@ public interface TeamService extends BaseService<Team, Long> {
 	
 	public List<Team> getAllTeams(Page<Team> page);
 	
-	public List<Team> getUserTeams(Integer userId);
+	public List<Team> getUserTeams(Long userId);
 	
 }
