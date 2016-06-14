@@ -6,17 +6,17 @@ import com.frame.domain.base.BaseDomain;
 
 public class UserTeamRelation extends BaseDomain{
 	private static final long serialVersionUID = -7869400238880038556L;
-	private Integer userId;
+	private Long userId;
 	private String userName;
-	private Integer teamId;
+	private Long teamId;
 	private String teamName;
 	
 
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -33,7 +33,7 @@ public class UserTeamRelation extends BaseDomain{
 
 
 
-	public Integer getTeamId() {
+	public Long getTeamId() {
 		return teamId;
 	}
 
@@ -42,7 +42,7 @@ public class UserTeamRelation extends BaseDomain{
 
 
 
-	public void setTeamId(Integer teamId) {
+	public void setTeamId(Long teamId) {
 		this.teamId = teamId;
 	}
 

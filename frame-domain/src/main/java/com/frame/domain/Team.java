@@ -1,12 +1,16 @@
 package com.frame.domain;
 
+import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.frame.domain.base.BaseDomain;
+import com.frame.domain.base.BaseQuery;
 
-public class Team extends BaseDomain{
+public class Team extends BaseQuery{
 	private static final long serialVersionUID = -7869400238880038556L;
 	
+	
+	private Integer id;
 	/**
 	 * 球队当前人数
 	 */
@@ -36,6 +40,63 @@ public class Team extends BaseDomain{
 	 */
 	private String name;
 	
+	private String feature;
+	private Date created;
+	private Date modified;
+	private Integer yn;
+	
+	
+	
+
+	public Integer getId() {
+		return id;
+	}
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+	public String getFeature() {
+		return feature;
+	}
+
+
+	public void setFeature(String feature) {
+		this.feature = feature;
+	}
+
+
+	public Date getCreated() {
+		return created;
+	}
+
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+
+	public Date getModified() {
+		return modified;
+	}
+
+
+	public void setModified(Date modified) {
+		this.modified = modified;
+	}
+
+
+	public Integer getYn() {
+		return yn;
+	}
+
+
+	public void setYn(Integer yn) {
+		this.yn = yn;
+	}
+
 
 	public Integer getCurrentCount() {
 		return currentCount;

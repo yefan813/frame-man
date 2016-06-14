@@ -12,4 +12,6 @@ public interface TeamService extends BaseService<Team, Long> {
 	
 	public List<Team> getUserTeams(Long userId);
 	
+	public Boolean createTeam(Long userId,Team team);
+	
 }

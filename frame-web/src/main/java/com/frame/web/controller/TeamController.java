@@ -1,6 +1,7 @@
 package com.frame.web.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,14 +75,33 @@ public class TeamController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/createTeam", method = {RequestMethod.GET, RequestMethod.POST})
-	public @ResponseBody String createTeam(@RequestParam(value="userId") Long userId,Team team){
+	public @ResponseBody String createTeam(@RequestParam(value="userId") Long userId,
+			@RequestParam(value="imgUrl") String imgUrl,
+			@RequestParam(value="name") String name,
+			@RequestParam(value="peopleCount") Integer peopleCount){
 		RemoteResult result = null;
-		if(null == userId || userId < 0 || null == team){
+		Team  team = new Team();
+		team.setImgUrl(imgUrl);
+		team.setName(name);
+		team.setPeopleCount(peopleCount);
+		team.setLostTimes(0);
+		team.setWinTimes(0);
+		team.setStatus(1);
+		team.setYn(YnEnum.Normal.getKey());
+		if(null == userId || userId < 0){
+			LOGGER.error("调用createTeam 传入参数为：" + userId + "  team:" + team);
 			result = RemoteResult.result(BusinessCode.PARAMETERS_ERROR);
 			return JSON.toJSONString(result);
 		}
 		if(null != team){
-			
+			boolean res = teamService.createTeam(userId, team);
+			if(res){
+				LOGGER.error("创建活动成功！");
+				result = RemoteResult.result(BusinessCode.SUCCESS);
+			}else{
+				LOGGER.error("创建活动失败！");
+				result = RemoteResult.result(BusinessCode.FAILED);
+			}
 		}
 		return JSON.toJSONString(result);
 	}
