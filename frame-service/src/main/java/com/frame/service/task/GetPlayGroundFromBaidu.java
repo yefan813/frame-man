@@ -24,7 +24,7 @@ public class GetPlayGroundFromBaidu {
 	@Value("${GaoDeAPIKey}")
 	private String BAIDU_PRIVATE_KEY;
 
-	@Value("${GaoDeAPIUrl}")
+	@Value("${GaoDeSearchAPIUrl}")
 	private String BAIDU_MAP_URL;
 
 	@Resource

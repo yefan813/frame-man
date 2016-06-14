@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.service.PlayGroundInfoService;
+import com.frame.service.vo.PlaygroundVO;
 
 
 @Controller
@@ -32,13 +34,35 @@ public class PlaygroundController extends BaseController {
 	
 	
 	@RequestMapping(value = "/listPlaygrounds", method = {RequestMethod.GET, RequestMethod.POST})
-	public @ResponseBody String queryGroupons(Page<Playground> page){
+	public @ResponseBody String listPlaygrounds(Page<Playground> page,Playground playground){
 		RemoteResult result = null;
+		try{
+			playground.setYn(YnEnum.Normal.getKey());
+			Page<Playground> playgrounds = playGroundInfoService.selectPage(playground, page);
+			result = RemoteResult.result(BusinessCode.SUCCESS, playgrounds.getResult());
+		}catch (Exception e) {
+			LOGGER.error("列表异常", e);
+			System.out.println("列表异常" + e);
+			result = RemoteResult.result(BusinessCode.SERVER_INTERNAL_ERROR);
+		} 
+		
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/listPlaygroundsByLocation", method = {RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody String listPlaygrounds(Page<Playground> page,String location){
+		RemoteResult result = null;
+		List<PlaygroundVO> voList = null;
 		try{
 			Playground query = new Playground();
 			query.setYn(YnEnum.Normal.getKey());
 			Page<Playground> playgrounds = playGroundInfoService.selectPage(query, page);
-			result = RemoteResult.result(BusinessCode.SUCCESS, playgrounds.getResult());
+			//根据location 计算羽球场之间的直线距离，然后排序
+			if(CollectionUtils.isNotEmpty(playgrounds.getResult())){
+				voList = playGroundInfoService.conver2PlaygroundVO(playgrounds.getResult(),location);
+			}
+			
+			result = RemoteResult.result(BusinessCode.SUCCESS, voList);
 		}catch (Exception e) {
 			LOGGER.error("列表异常", e);
 			System.out.println("列表异常" + e);

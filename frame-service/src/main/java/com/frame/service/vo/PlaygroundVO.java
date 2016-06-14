@@ -1,25 +1,24 @@
-package com.frame.domain;
+package com.frame.service.vo;
+
+import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.frame.domain.base.BaseDomain;
+public class PlaygroundVO implements Serializable {
 
-public class Playground extends BaseDomain {
-	private static final long serialVersionUID = -7869400238880038556L;
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2668393795569587572L;
 	private String id;
 	private String name;
 	private String address;
 	private String location;
 	private String tel;
 	private String pcode;
-	private String pname;
 	private String cityCode;
 	private String cityName;
-	private String adCode;
-	private String adName;
-	private String parkingType;
-	private String indoorMap;
+	private Long dictance;
 
 	public void setId(String id) {
 		this.id = id;
@@ -65,13 +64,6 @@ public class Playground extends BaseDomain {
 		this.pcode = pcode;
 	}
 
-	public String getPname() {
-		return pname;
-	}
-
-	public void setPname(String pname) {
-		this.pname = pname;
-	}
 
 	public String getCityCode() {
 		return cityCode;
@@ -89,36 +81,16 @@ public class Playground extends BaseDomain {
 		this.cityName = cityName;
 	}
 
-	public String getAdCode() {
-		return adCode;
+	public Long getDictance() {
+		return dictance;
 	}
 
-	public void setAdCode(String adCode) {
-		this.adCode = adCode;
+	public void setDictance(Long dictance) {
+		this.dictance = dictance;
 	}
 
-	public String getAdName() {
-		return adName;
-	}
-
-	public void setAdName(String adName) {
-		this.adName = adName;
-	}
-
-	public String getParkingType() {
-		return parkingType;
-	}
-
-	public void setParkingType(String parkingType) {
-		this.parkingType = parkingType;
-	}
-
-	public String getIndoorMap() {
-		return indoorMap;
-	}
-
-	public void setIndoorMap(String indoorMap) {
-		this.indoorMap = indoorMap;
+	public String getId() {
+		return id;
 	}
 
 	@Override
