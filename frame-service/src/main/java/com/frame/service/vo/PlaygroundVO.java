@@ -14,11 +14,13 @@ public class PlaygroundVO implements Serializable {
 	private String name;
 	private String address;
 	private String location;
+	private Double longitude;
+	private Double latitude;
 	private String tel;
 	private String pcode;
 	private String cityCode;
 	private String cityName;
-	private Long dictance;
+	private Double dictance;
 
 	public void setId(String id) {
 		this.id = id;
@@ -81,16 +83,32 @@ public class PlaygroundVO implements Serializable {
 		this.cityName = cityName;
 	}
 
-	public Long getDictance() {
+	public Double getDictance() {
 		return dictance;
 	}
 
-	public void setDictance(Long dictance) {
+	public void setDictance(Double dictance) {
 		this.dictance = dictance;
 	}
 
 	public String getId() {
 		return id;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
 
 	@Override

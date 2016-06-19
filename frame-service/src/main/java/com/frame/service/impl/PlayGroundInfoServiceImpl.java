@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.frame.dao.PlayGroundDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.Playground;
+import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.service.PlayGroundInfoService;
 import com.frame.service.base.BaseServiceImpl;
@@ -56,6 +57,25 @@ public class PlayGroundInfoServiceImpl extends BaseServiceImpl<Playground, Long>
 	}
 
 	@Override
+	public Page<Playground> getPlayGroundByLocation(Page<Playground> page,double longitude, double latitude) {
+		
+		Map<String , Double> params = new HashMap<String, Double>();
+		params.put("longitude", longitude);
+		params.put("latitude", latitude);
+		List<Playground> data = playGroundDao.getPlayGroundByLocation(params);
+		if(CollectionUtils.isNotEmpty(data)){
+			page.setResult(data);
+		}
+		
+		Playground query = new Playground();
+		query.setYn(YnEnum.Normal.getKey());
+		int totalCount = playGroundDao.selectEntryListCount(query);
+		
+		page.setTotalCount(totalCount);
+		return page;
+	}
+
+	@Override
 	public List<PlaygroundVO> conver2PlaygroundVO(List<Playground> params,String location) {
 		List<PlaygroundVO> voList = new ArrayList<PlaygroundVO>() ;
 		if(CollectionUtils.isEmpty(params)){
@@ -79,23 +99,9 @@ public class PlayGroundInfoServiceImpl extends BaseServiceImpl<Playground, Long>
 		vo.setCityName(playground.getCityName());
 		vo.setCityCode(playground.getCityCode());
 		
-		Long distance = getDistance(playground.getLocation(),location);//得到直线距离
-		vo.setDictance(distance);
-		return vo;
-	}
-	
-	private Long getDistance(String origins,String destination){
-		Long distance = null;
-//		System.out.println("从高德取数据------");
-//		Map<String, Object> params = new HashMap<String, Object>();
-//		params.put("key", BAIDU_PRIVATE_KEY);
-//		params.put("origins", origins);
-//		params.put("destination", destination);
-//		params.put("types", DISTANCE_TYPE_DIS);
-//
-//		String result = HttpClientUtil.sendGetRequestByJava(GAODE_DISDANCE_URL, params, null);
-//		
 		
-		return distance;
+		
+		vo.setDictance(playground.getDistance());
+		return vo;
 	}
 }

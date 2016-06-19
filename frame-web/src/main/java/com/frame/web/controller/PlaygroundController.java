@@ -53,10 +53,17 @@ public class PlaygroundController extends BaseController {
 	public @ResponseBody String listPlaygrounds(Page<Playground> page,String location){
 		RemoteResult result = null;
 		List<PlaygroundVO> voList = null;
+		double lng = 9999d;double lat = 9999d;
+		
 		try{
-			Playground query = new Playground();
-			query.setYn(YnEnum.Normal.getKey());
-			Page<Playground> playgrounds = playGroundInfoService.selectPage(query, page);
+			String[] locations = location.split(",");
+			if(locations.length > 0){
+				lng = Double.valueOf(locations[0]);
+				lat = Double.valueOf(locations[1]);
+			}
+			
+			Page<Playground> playgrounds = playGroundInfoService.getPlayGroundByLocation(page, lng, lat);
+			
 			//根据location 计算羽球场之间的直线距离，然后排序
 			if(CollectionUtils.isNotEmpty(playgrounds.getResult())){
 				voList = playGroundInfoService.conver2PlaygroundVO(playgrounds.getResult(),location);
