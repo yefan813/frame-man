@@ -76,16 +76,20 @@ public class TeamController extends BaseController {
 	
 	@RequestMapping(value = "/createTeam", method = {RequestMethod.GET, RequestMethod.POST})
 	public @ResponseBody String createTeam(@RequestParam(value="userId") Long userId,
+			@RequestParam(value="userName") String userName,
 			@RequestParam(value="imgUrl") String imgUrl,
 			@RequestParam(value="name") String name,
 			@RequestParam(value="peopleCount") Integer peopleCount){
 		RemoteResult result = null;
 		Team  team = new Team();
 		team.setImgUrl(imgUrl);
+		team.setCreateUser(userId);
+		team.setCreateUserName(userName);
 		team.setName(name);
 		team.setPeopleCount(peopleCount);
 		team.setLostTimes(0);
 		team.setWinTimes(0);
+		team.setCurrentCount(1);
 		team.setStatus(1);
 		team.setYn(YnEnum.Normal.getKey());
 		if(null == userId || userId < 0){

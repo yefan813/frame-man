@@ -14,6 +14,8 @@
 			win_times as winTimes,
 			img_url as imgUrl,
 			name,
+			create_user as createUser,
+			create_user_name as createUserName,
 			feature,
 			created,
 			modified,
@@ -34,6 +36,8 @@
 			<if test="lostTimes != null"><![CDATA[AND lost_times = #{lostTimes}]]></if>
 			<if test="winTimes != null"><![CDATA[AND win_times = #{winTimes}]]></if>
 			<if test="imgUrl != null"><![CDATA[AND img_url = #{imgUrl}]]></if>
+			<if test="createUser != null"><![CDATA[AND create_user = #{createUser}]]></if>
+			<if test="createUserName != null"><![CDATA[AND create_user_name = #{createUserName}]]></if>
 			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
 			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
 			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
@@ -65,8 +69,8 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_team (current_count,people_count,status,lost_times,win_times,img_url,feature,created,modified,yn)
-			VALUES (#{currentCount},#{peopleCount},#{status},#{lostTimes},#{winTimes},#{imgUrl},#{feature},now(),now(),#{yn})
+			INSERT INTO tb_team (name,current_count,people_count,status,lost_times,win_times,img_url,create_user,create_user_name,feature,created,modified,yn)
+			VALUES (#{name},#{currentCount},#{peopleCount},#{status},#{lostTimes},#{winTimes},#{imgUrl},#{createUser},#{createUserName},#{feature},now(),now(),#{yn})
 		]]>
 	</insert>
 	

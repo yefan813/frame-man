@@ -40,6 +40,9 @@ public class Team extends BaseQuery{
 	 */
 	private String name;
 	
+	private String createUserName;
+	private Long createUser;
+	
 	private String feature;
 	private Date created;
 	private Date modified;
@@ -192,6 +195,26 @@ public class Team extends BaseQuery{
 	}
 
 
+
+
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
+
+
+	public Long getCreateUser() {
+		return createUser;
+	}
+
+
+	public void setCreateUser(Long createUser) {
+		this.createUser = createUser;
+	}
 
 
 	@Override
