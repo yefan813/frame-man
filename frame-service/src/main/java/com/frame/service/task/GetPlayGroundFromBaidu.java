@@ -77,6 +77,13 @@ public class GetPlayGroundFromBaidu {
 
 		for (Playground playground : pList) {
 			playground.setYn(YnEnum.Normal.getKey());
+			
+			String[] locations = playground.getLocation().split(",");
+			if(locations.length > 0){
+				playground.setLongitude(Double.valueOf(locations[0]));
+				playground.setLatitude(Double.valueOf(locations[1]));
+			}
+			
 			playGroundInfoService.insertEntry(playground);
 		}
 	}

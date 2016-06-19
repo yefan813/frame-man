@@ -13,7 +13,8 @@ public class Playground extends BaseDomain {
 	private String location;
 	private Double longitude;
 	private Double latitude;
-	private Double distance;
+	private String distance;
+	private Double myDistance;
 	private String tel;
 	private String pcode;
 	private String pname;
@@ -125,42 +126,38 @@ public class Playground extends BaseDomain {
 	}
 
 	public Double getLongitude() {
-		String[] locations = location.split(",");
-		if(locations.length > 0){
-			longitude = Double.valueOf(locations[0]);
-		}else{
-			return 99999d;
-		}
 		return longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
 	}
 
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
-	public Double getLatitude() {
-		String[] locations = location.split(",");
-		if(locations.length > 0){
-			latitude = Double.valueOf(locations[1]);
-		}else{
-			return 99999d;
-		}
-		return latitude;
-	}
 
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 
-	public Double getDistance() {
+	public String getDistance() {
 		return distance;
 	}
 
-	public void setDistance(Double distance) {
+	public void setDistance(String distance) {
 		this.distance = distance;
 	}
 	
-	
+	public Double getMyDistance() {
+		return myDistance;
+	}
+
+	public void setMyDistance(Double myDistance) {
+		this.myDistance = myDistance;
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

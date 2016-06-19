@@ -59,9 +59,14 @@ public class PlayGroundInfoServiceImpl extends BaseServiceImpl<Playground, Long>
 	@Override
 	public Page<Playground> getPlayGroundByLocation(Page<Playground> page,double longitude, double latitude) {
 		
-		Map<String , Double> params = new HashMap<String, Double>();
+		Map<String , Object> params = new HashMap<String, Object>();
 		params.put("longitude", longitude);
 		params.put("latitude", latitude);
+		params.put("startIndex", page.getStartIndex());
+		params.put("pageSize", page.getPageSize());
+		params.put("orderField", "myDistance");
+		params.put("orderFieldType", "DESC");
+		
 		List<Playground> data = playGroundDao.getPlayGroundByLocation(params);
 		if(CollectionUtils.isNotEmpty(data)){
 			page.setResult(data);
@@ -99,9 +104,7 @@ public class PlayGroundInfoServiceImpl extends BaseServiceImpl<Playground, Long>
 		vo.setCityName(playground.getCityName());
 		vo.setCityCode(playground.getCityCode());
 		
-		
-		
-		vo.setDictance(playground.getDistance());
+		vo.setDictance(playground.getMyDistance());
 		return vo;
 	}
 }

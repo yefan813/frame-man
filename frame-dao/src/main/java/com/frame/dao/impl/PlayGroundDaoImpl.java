@@ -30,7 +30,7 @@ public class PlayGroundDaoImpl extends BaseDaoImpl<Playground, Long> implements 
 	}
 
 	@Override
-	public List<Playground> getPlayGroundByLocation(Map<String, Double> params) {
+	public List<Playground> getPlayGroundByLocation(Map<String, Object> params) {
 		return selectList(getNameSpace(SELECTP_LAYGROUNDBY_LOCATION), params);
 	}
 	
