@@ -149,7 +149,12 @@
 	<!-- 其它SQL语句 -->
 	<select id="selectPlayGroundByLocation" parameterType="Map" resultType="playground">
 		<![CDATA[SELECT id,name,address,location,longitude,latitude,tel,pcode,cityCode,cityName,
-        (POWER(MOD(ABS(longitude - #{longitude}),360),2) + POWER(ABS(latitude - #{latitude}),2)) AS myDistance
+        111.1111 *
+	    DEGREES(acos( cos( radians(latitude) ) 
+	      * cos( radians('30.57726210') ) 
+	      * cos( radians('103.98632053') - radians(longitude)) + sin(radians(latitude))
+	      * sin( radians('30.57726210') ))) as myDistance
+	      
         FROM play_ground
         ]]>
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
