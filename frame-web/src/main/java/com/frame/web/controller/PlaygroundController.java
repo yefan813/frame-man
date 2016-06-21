@@ -55,6 +55,10 @@ public class PlaygroundController extends BaseController {
 		List<PlaygroundVO> voList = null;
 		double lng = 9999d;double lat = 9999d;
 		
+		if(null == location || !location.contains(",")){
+			result = RemoteResult.result(BusinessCode.PARAMETERS_ERROR);
+			return JSON.toJSONString(result);
+		}
 		try{
 			String[] locations = location.split(",");
 			if(locations.length > 0){
