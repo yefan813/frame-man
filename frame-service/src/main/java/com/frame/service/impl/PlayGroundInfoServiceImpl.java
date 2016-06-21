@@ -65,7 +65,7 @@ public class PlayGroundInfoServiceImpl extends BaseServiceImpl<Playground, Long>
 		params.put("startIndex", page.getStartIndex());
 		params.put("pageSize", page.getPageSize());
 		params.put("orderField", "myDistance");
-		params.put("orderFieldType", "DESC");
+		params.put("orderFieldType", "asc");
 		
 		List<Playground> data = playGroundDao.getPlayGroundByLocation(params);
 		if(CollectionUtils.isNotEmpty(data)){
