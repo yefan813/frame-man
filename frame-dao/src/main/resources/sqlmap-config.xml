@@ -21,6 +21,7 @@
 		<typeAlias type="com.frame.domain.Team" alias="team"/>
 		<typeAlias type="com.frame.domain.Match" alias="match"/>
 		<typeAlias type="com.frame.domain.UserTeamRelation" alias="userTeamRelation"/>
+		<typeAlias type="com.frame.domain.User" alias="user"/>
 		
 		
 	</typeAliases>
@@ -31,5 +32,6 @@
 		<mapper resource="sqlmap/Team.xml" />
 		<mapper resource="sqlmap/Match.xml" />
 		<mapper resource="sqlmap/UserTeamRelation.xml" />
+		<mapper resource="sqlmap/User.xml" />
 	</mappers>
 </configuration>

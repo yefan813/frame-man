@@ -1,7 +1,7 @@
 package com.frame.service;
 
+import com.frame.domain.User;
 import com.frame.domain.UserBind;
-import com.frame.domain.UserInfo;
 
 /**
  * Created by garnett on 2015/11/18.
@@ -9,14 +9,14 @@ import com.frame.domain.UserInfo;
 public interface PassportService {
 
     //根据微信unionId获取用户信息
-    public UserInfo getUserInfoByUnionId(String unionId);
+    public User getUserInfoByUnionId(String unionId); 
     
     /**
      * 根据微信userId获取用户信息
      * @param userId
      * @return
      */
-    public UserInfo getUserInfoByUserId(Long userId);
+    public User getUserInfoByUserId(Long userId);
 
     // 根据微信unionId判断用户是否绑定
     public boolean isUserBindedByUnionId(String unionId);
