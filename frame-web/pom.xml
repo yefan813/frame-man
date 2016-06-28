@@ -1,21 +1,22 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.yefan.frame</groupId>
-    <artifactId>frame-man</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>frame-web</artifactId>
-  <packaging>war</packaging>
-  <name>frame-web Maven Webapp</name>
-  <url>http://maven.apache.org</url>
-  
-  <build>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.yefan.frame</groupId>
+		<artifactId>frame-man</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>frame-web</artifactId>
+	<packaging>war</packaging>
+	<name>frame-web Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<build>
 		<filters>
 			<filter>${pfile}</filter>
-		</filters> 
+		</filters>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -33,6 +34,17 @@
 					<uriEncoding>UTF-8</uriEncoding>
 				</configuration>
 			</plugin>
+			<plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>1.6</source>
+                  <target>1.6</target>
+                  <encoding>UTF-8</encoding>
+                  <compilerArguments>
+                   <extdirs>src\main\webapp\WEB-INF\lib</extdirs>
+                 </compilerArguments>
+              </configuration>
+            </plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -54,13 +66,13 @@
 			</properties>
 		</profile>
 	</profiles>
-  <dependencies>
-    <dependency>
-    	<groupId>com.yefan.frame</groupId>
-    	<artifactId>frame-service</artifactId>
-    	<version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
+	<dependencies>
+		<dependency>
+			<groupId>com.yefan.frame</groupId>
+			<artifactId>frame-service</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>velocity-tools</groupId>
 			<artifactId>velocity-tools</artifactId>
 		</dependency>
@@ -74,19 +86,19 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-        	<groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>	
-       <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
-		</dependency> 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-        </dependency>		
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
@@ -96,8 +108,8 @@
 			<artifactId>fastjson</artifactId>
 		</dependency>
 		<dependency>
-				<groupId>org.quartz-scheduler</groupId>
-				<artifactId>quartz</artifactId>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
 		</dependency>
-  </dependencies>
+	</dependencies>
 </project>
