@@ -90,7 +90,9 @@ public class UserController extends BaseController {
 		if(res > 0){
 			LOGGER.info("用户编辑成功,传入的参数为：[{}]",JSON.toJSONString(user));
 			result = RemoteResult.success();
-			user.setAvatarUrl(IMAGEPREFIX + user.getAvatarUrl());
+			if(null != user.getAvatarUrl()){
+				user.setAvatarUrl(IMAGEPREFIX + user.getAvatarUrl());
+			}
 			result.setData(user);
 		}else{
 			LOGGER.info("用户编辑失败,传入的参数为：[{}]",JSON.toJSONString(user));
