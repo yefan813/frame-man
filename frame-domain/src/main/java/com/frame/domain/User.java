@@ -9,41 +9,42 @@ import com.frame.domain.base.BaseDomain;
  */
 public class User extends BaseDomain {
 
-    private static final long serialVersionUID = 6723005414893784943L;
+	private static final long serialVersionUID = 6723005414893784943L;
 
-    private String name;					// 姓名
-    
-    private String password;
-    
-    private String point;					// 积分
-    
-    private String email;					// email
-    	
-    private String tel;						// 用户电话
-    
-    private Integer level;					// 用户等级
-    
-    private String nickName;				// 用户昵称
+	private String name; // 姓名
 
-    private String avatarUrl;				// 用户头像URL
+	private Integer sex;
 
-    public String getNickName() {
-        return nickName;
-    }
+	private String password; // 密码
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
+	private String point; // 积分
 
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
+	private String email; // email
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-    
-    
+	private String tel; // 用户电话
+
+	private Integer level; // 用户等级
+
+	private String nickName; // 用户昵称
+
+	private String avatarUrl; // 用户头像URL
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -90,6 +91,14 @@ public class User extends BaseDomain {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Integer getSex() {
+		return sex;
+	}
+
+	public void setSex(Integer sex) {
+		this.sex = sex;
 	}
 
 	@Override

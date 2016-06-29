@@ -6,9 +6,12 @@ import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.omg.CORBA.StringHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +23,10 @@ import com.frame.domain.User;
 import com.frame.domain.UserValid;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
+import com.frame.domain.img.ImageValidate;
+import com.frame.domain.img.ImgDealMsg;
+import com.frame.domain.img.Result;
+import com.frame.service.ImgSysService;
 import com.frame.service.TaoBaoSmsService;
 import com.frame.service.UserService;
 import com.frame.service.UserValidService;
@@ -39,13 +46,58 @@ public class UserController extends BaseController {
 	@Resource
 	private TaoBaoSmsService taoBaoSmsService;
 	
-	@RequestMapping(value = "/editUserInfo", method = {RequestMethod.GET, RequestMethod.POST})
+	@Resource
+	private ImgSysService imgSysService;
+	
+	@Value("${img.prefix}")
+	private String IMAGEPREFIX;
+	
+	@RequestMapping(value = "/editUserInfo", method = {RequestMethod.GET, RequestMethod.POST},produces = "application/json;charset=UTF-8")
 	public @ResponseBody String editUserInfo(User user,@RequestParam(value = "imgFile", required = false) MultipartFile imgFile){
 		RemoteResult result = null;
+		if(null == user){
+			LOGGER.info("调用editUserInfo 传入的参数错误");
+			result = RemoteResult.failure("0001", "传入参数错误");
+			return JSON.toJSONString(result);
+		}
+		if(imgFile != null && imgFile.getSize() > 0){
+			try {
+				if (imgFile.getBytes() != null && imgFile.getBytes().length > 0) {
+					Result r = ImageValidate.validate4Upload(imgFile);
+					if (r.isSuccess()) {
+						ImgDealMsg re = imgSysService.uploadByteImg(imgFile.getBytes(), "lanqiupai");
+						if (re != null && re.isSuccess()) {
+							// 上传成功
+							String imgUrl = (String) re.getMsg();
+							//上床成功设置template 图片路径
+							user.setAvatarUrl(imgUrl);
+						} else { 
+							// 上传文件失败，在页面提示
+							result = RemoteResult.failure("0001","头像上传失败！");
+							return dealJosnP("", result);
+						}
+					} else {
+						result = RemoteResult.failure("0001",r.getResultCode());
+						return dealJosnP("", result);
+					}
+				}
+			}catch(Exception e){
+				LOGGER.error("失败:" + e.getMessage(), e);
+				result = RemoteResult.failure("0001","操作失败:" + e.getMessage());
+			}
+		}
+		int res = userService.insertEntry(user);
+		if(res > 0){
+			LOGGER.info("用户编辑成功,传入的参数为：[{}]",JSON.toJSONString(user));
+			result = RemoteResult.success();
+			user.setAvatarUrl(IMAGEPREFIX + user.getAvatarUrl());
+			result.setData(user);
+		}else{
+			LOGGER.info("用户编辑失败,传入的参数为：[{}]",JSON.toJSONString(user));
+			result = RemoteResult.failure("0001", "用户编辑失败，服务器异常");
+		}
 		
-		
-		
-		return null;
+		return JSON.toJSONString(result);
 	}
 	
 	

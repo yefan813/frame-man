@@ -1,4 +1,5 @@
-package com.frame.common.tools;
+package com.frame.domain.util;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -165,10 +166,6 @@ public class DateUtil {
 	public static String format(Date date) {
 		return formatDateTime(date, DATE_TIME_FORMAT);
 	}
-	
-	public static String format(Date date, String format) {
-		return formatDateTime(date, format);
-	}
 
 	/**
 	 * 
@@ -177,15 +174,6 @@ public class DateUtil {
 	 */
 	public static String getCurrDate() {
 		return format(new Date());
-	}
-	
-	public boolean isAfter(Date startDate){
-		Date now = toYyyymmddDateTime(new Date());
-		if(startDate != null && startDate.after(now)) {
-			return true;
-		} else{
-			return false;
-		}
 	}
 
 	/**

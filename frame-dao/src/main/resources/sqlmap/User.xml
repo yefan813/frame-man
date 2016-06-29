@@ -8,6 +8,7 @@
 		<![CDATA[
 			id,
 			name,
+			sex,
 			nickname as nickName,
 			point,
 			avatar_url as avatarUrl,
@@ -29,6 +30,7 @@
 		<where>
 			<if test="id != null"><![CDATA[AND id = #{id}]]></if>
 			<if test="name != null"><![CDATA[AND name = #{name}]]></if>
+			<if test="sex != null"><![CDATA[AND sex = #{sex}]]></if>
 			<if test="nickName != null"><![CDATA[AND nickname = #{nickName}]]></if>
 			<if test="point != null"><![CDATA[AND point = #{point}]]></if>
 			<if test="avatarUrl != null"><![CDATA[AND avatar_url = #{avatarUrl}]]></if>
@@ -52,6 +54,7 @@
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
 			<if test="name != null"><![CDATA[name = #{name},]]></if>
+			<if test="sex != null"><![CDATA[sex = #{sex},]]></if>
 			<if test="nickName != null"><![CDATA[nickname = #{nickName},]]></if>
 			<if test="point != null"><![CDATA[point = #{point},]]></if>
 			<if test="level != null"><![CDATA[level = #{level},]]></if>
@@ -67,8 +70,8 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_user (name,nickname,point,avatar_url,email,tel,level,feature,created,modified,yn)
-			VALUES (#{name},#{nickName},#{point},#{avatarUrl},#{email},#{tel},#{level},#{feature},now(),now(),#{yn})
+			INSERT INTO tb_user (name,sex,nickname,point,avatar_url,email,tel,level,feature,created,modified,yn)
+			VALUES (#{name},#{sex},#{nickName},#{point},#{avatarUrl},#{email},#{tel},#{level},#{feature},now(),now(),#{yn})
 		]]>
 	</insert>
 	
