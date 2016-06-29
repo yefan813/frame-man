@@ -10,13 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.frame.domain.User;
 import com.frame.domain.UserValid;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
 import com.frame.service.TaoBaoSmsService;
 import com.frame.service.UserValidService;
-import com.sun.xml.internal.rngom.nc.NameClassWalker;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
