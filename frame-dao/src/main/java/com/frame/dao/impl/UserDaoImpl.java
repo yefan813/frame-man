@@ -19,11 +19,17 @@ public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 
 	private final static String NAMESPACE = "com.frame.dao.UserDao.";
 	
+	private final static String UPDATE_BY_TEL = "updateByTel";
 
 	@Override
 	public String getNameSpace(String statement) {
-		// TODO Auto-generated method stub
 		return NAMESPACE + statement;
+	}
+
+
+	@Override
+	public int updateUserByTel(User user) {
+		return this.update(getNameSpace(UPDATE_BY_TEL), user);
 	}
 
 

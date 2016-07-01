@@ -30,6 +30,7 @@ import com.frame.service.ImgSysService;
 import com.frame.service.TaoBaoSmsService;
 import com.frame.service.UserService;
 import com.frame.service.UserValidService;
+import com.frame.service.utils.RandomStrUtils;
 
 
 @Controller
@@ -86,7 +87,7 @@ public class UserController extends BaseController {
 				result = RemoteResult.failure("0001","操作失败:" + e.getMessage());
 			}
 		}
-		int res = userService.insertEntry(user);
+		int res = userService.updateByTel(user);
 		if(res > 0){
 			LOGGER.info("用户编辑成功,传入的参数为：[{}]",JSON.toJSONString(user));
 			result = RemoteResult.success();
@@ -117,6 +118,7 @@ public class UserController extends BaseController {
 		condtion.setTel(tel);
 		condtion.setYn(YnEnum.Normal.getKey());
 		List<UserValid> valids = userValidService.selectEntryList(condtion);
+		
 		if(CollectionUtils.isNotEmpty(valids)){
 			boolean res = false;
 			for (UserValid userValid : valids) {
@@ -126,11 +128,22 @@ public class UserController extends BaseController {
 				}
 			}
 			if(res){
-				result = RemoteResult.success();
+				//验证成功向数据库写入一条默认数据
+				User defaultUser = new User();
+				defaultUser.setTel(tel);
+				defaultUser.setPassword(password);
+				defaultUser.setNickName(RandomStrUtils.getUniqueString(6));
+				defaultUser.setYn(YnEnum.Normal.getKey());
+				if(userService.insertEntry(defaultUser) > 0){
+					result = RemoteResult.success();
+					result.setData(defaultUser);
+				}else{
+					LOGGER.info("用户验证成功，插入临时用户数据失败");
+					result = RemoteResult.failure("0001", "系统异常");
+				}
 			}else{
-				result = RemoteResult.failure("0001","验证失败");
+				result = RemoteResult.failure("0002","验证失败,验证码失效，请重新获取验证码");
 			}
-			
 		}else{
 			result = RemoteResult.failure("0001","验证失败");
 		}

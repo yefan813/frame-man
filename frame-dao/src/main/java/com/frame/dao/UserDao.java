@@ -5,5 +5,6 @@ import com.frame.domain.User;
 
 public interface UserDao extends BaseDao<User, Long> {
 	
+	public int updateUserByTel(User user);
 
 }

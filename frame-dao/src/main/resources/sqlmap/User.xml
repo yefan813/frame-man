@@ -98,6 +98,13 @@
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
+	
+	<!-- 修改记录通过主键 -->
+	<update id="updateByTel" parameterType="user" >
+		<![CDATA[UPDATE tb_user]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE tel = #{tel}]]>
+	</update>
 
 	<!-- 查询,通过主键IN(array) -->
 	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="user">

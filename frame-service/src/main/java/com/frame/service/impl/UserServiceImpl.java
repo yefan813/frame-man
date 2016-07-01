@@ -25,6 +25,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		// TODO Auto-generated method stub
 		return userDao;
 	}
+
+	@Override
+	public int updateByTel(User user) {
+		return userDao.updateUserByTel(user);
+	}
 	
 
 }
