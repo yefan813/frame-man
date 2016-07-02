@@ -152,7 +152,7 @@ public class UserController extends BaseController {
 		boolean result = false;
 		long from =  userValid.getValidDate().getTime() + 60 * 1000;
 		long to = validDate;
-		if(from > 0 && from < to && validCode.equals(userValid.getValidCode())){
+		if(from > 0 && from > to && validCode.equals(userValid.getValidCode())){
 			result = true;
 		}
 		return result;
