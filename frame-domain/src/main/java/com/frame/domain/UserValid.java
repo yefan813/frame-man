@@ -1,6 +1,7 @@
 package com.frame.domain;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 

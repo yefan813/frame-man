@@ -1,6 +1,6 @@
 package com.frame.service.impl;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Random;
 
 import javax.annotation.Resource;
