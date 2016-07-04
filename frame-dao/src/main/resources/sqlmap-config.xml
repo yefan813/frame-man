@@ -23,6 +23,8 @@
 		<typeAlias type="com.frame.domain.UserTeamRelation" alias="userTeamRelation"/>
 		<typeAlias type="com.frame.domain.User" alias="user"/>
 		<typeAlias type="com.frame.domain.UserValid" alias="userValid"/>
+		<typeAlias type="com.frame.domain.UserAuths" alias="userAuths"/>
+		
 		
 		
 		
@@ -36,6 +38,7 @@
 		<mapper resource="sqlmap/UserTeamRelation.xml" />
 		<mapper resource="sqlmap/User.xml" />
 		<mapper resource="sqlmap/UserValid.xml" />
+		<mapper resource="sqlmap/UserAuths.xml" />
 		
 	</mappers>
 </configuration>

@@ -1,5 +1,7 @@
 package com.frame.domain;
 
+import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.frame.domain.base.BaseDomain;
@@ -13,7 +15,17 @@ public class User extends BaseDomain {
 
 	private String name; // 姓名
 
-	private Integer sex;
+	private Integer sex; //性别
+	
+	private Integer status; //状态
+	
+	private Integer role; //角色
+	
+	private String address; //地址
+	
+	private String loginIp; //上次登录ip
+	
+	private Date loginTime; //上次登陆时间
 
 	private String password; // 密码
 
@@ -99,6 +111,46 @@ public class User extends BaseDomain {
 
 	public void setSex(Integer sex) {
 		this.sex = sex;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getLoginIp() {
+		return loginIp;
+	}
+
+	public void setLoginIp(String loginIp) {
+		this.loginIp = loginIp;
+	}
+
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
 	}
 
 	@Override
