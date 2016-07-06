@@ -132,13 +132,7 @@ public class UserController extends BaseController {
 				defaultUser.setPassword(password);
 				defaultUser.setNickName(RandomStrUtils.getUniqueString(6));
 				defaultUser.setYn(YnEnum.Normal.getKey());
-				if(userService.insertEntry(defaultUser) > 0){
-					result = RemoteResult.success();
-					result.setData(defaultUser);
-				}else{
-					LOGGER.info("用户验证成功，插入临时用户数据失败");
-					result = RemoteResult.failure("0001", "系统异常");
-				}
+				result = userService.registUser(defaultUser);
 			}else{
 				result = RemoteResult.failure("0002","验证失败,验证码失效，请重新获取验证码");
 			}
