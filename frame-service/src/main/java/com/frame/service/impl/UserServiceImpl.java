@@ -14,9 +14,12 @@ import com.frame.dao.UserDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.AppSecret;
 import com.frame.domain.User;
+import com.frame.domain.UserAuths;
+import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.service.AppSecretService;
+import com.frame.service.UserAuthsService;
 import com.frame.service.UserService;
 import com.frame.service.base.BaseServiceImpl;
 import com.frame.service.utils.RandomStrUtils;
@@ -31,6 +34,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 	
 	@Resource
 	private AppSecretService appSecretService;
+	
+	@Resource
+	private UserAuthsService UserAuthsService;
 
 	@Override
 	public BaseDao<User, Long> getDao() {
@@ -45,30 +51,59 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 
 	@Override
 	@Transactional(rollbackFor={Exception.class})
-	public RemoteResult registUser(User user) {
+	public RemoteResult registUser(User user, UserAuths userAuths) {
 		RemoteResult res = null;
 		int appRes = 0;
-		int result = userDao.insertEntry(user);
+		int result = 0;
+		//插入用户基本信息
+		if(null != user && user.getId() != null){
+			result = userDao.updateByKey(user);//更新默认用户
+		}else if(null != user && user.getId() == null){
+			result = userDao.insertEntryCreateId(user);//插入默认用户
+		}
+		if(null != user && result <= 0){
+			res = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
+			return res;
+		}
 		
+		//生成用户授权信息
+		int userAuthsRes= 0;
+		if(null != user){
+			userAuths.setUserId(user.getId().intValue());
+		}
+		if(null != userAuths && userAuths.getId() != null){
+			userAuthsRes = UserAuthsService.updateByKey(userAuths);//更新授权信息
+		}else if(null != userAuths && userAuths.getId() == null){
+			userAuthsRes = UserAuthsService.insertEntry(userAuths);//插入授权信息
+		}
+		
+		if(userAuthsRes <= 0){
+			res = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
+			return res;
+		}
+		
+		//生成用户唯一的appKey 和 secretKey
 		AppSecret appSecret = new AppSecret();
+		appSecret.setYn(YnEnum.Normal.getKey());
 		appSecret.setUserId(user.getId().intValue());
-		
 		List<AppSecret> resList = appSecretService.selectEntryList(appSecret);
 		if(CollectionUtils.isNotEmpty(resList)){
 			appSecret = resList.get(0);
+			appRes = 1;
 		}else{
-			appSecret.setUserName(user.getName());
 			appSecret.setApiKey(RandomStrUtils.getUniqueString(10));
 			appSecret.setSecretKey(RandomStrUtils.getUniqueString(16));
 			appRes = appSecretService.insertEntry(appSecret);
 		}
-		
-		
-		if(result > 0 && appRes > 0){
-			res = RemoteResult.success();
-		}else{
+		if(appRes <= 0){
 			res = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
+			return res;
 		}
+		AppSecret secret = new AppSecret();
+		secret.setApiKey(appSecret.getApiKey());
+		secret.setSecretKey(appSecret.getSecretKey());
+		res = RemoteResult.success(secret);
+		
 		return res;
 	}
 	

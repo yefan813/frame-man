@@ -6,6 +6,7 @@
 	<!-- groupon 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
+			id,
 			user_id as userId,
 			identity_type as identityType,
 			identifier,

@@ -17,15 +17,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
+import com.frame.domain.AppSecret;
 import com.frame.domain.User;
+import com.frame.domain.UserAuths;
 import com.frame.domain.UserValid;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
+import com.frame.domain.enums.BusinessCode;
 import com.frame.domain.img.ImageValidate;
 import com.frame.domain.img.ImgDealMsg;
 import com.frame.domain.img.Result;
+import com.frame.service.AppSecretService;
 import com.frame.service.ImgSysService;
 import com.frame.service.TaoBaoSmsService;
+import com.frame.service.UserAuthsService;
 import com.frame.service.UserService;
 import com.frame.service.UserValidService;
 import com.frame.service.utils.RandomStrUtils;
@@ -41,6 +46,12 @@ public class UserController extends BaseController {
 	
 	@Resource
 	private UserValidService userValidService;
+	
+	@Resource
+	private UserAuthsService userAuthsService;
+	
+	@Resource
+	private AppSecretService appSecretService;
 	
 	@Resource
 	private TaoBaoSmsService taoBaoSmsService;
@@ -111,6 +122,17 @@ public class UserController extends BaseController {
 			result = RemoteResult.failure("0001","传入参数错误");
 			return JSON.toJSONString(result);
 		}
+		//判断用户是否已经注册
+		User query = new User();
+		query.setTel(tel);
+		query.setYn(YnEnum.Normal.getKey());
+		List<User> users = userService.selectEntryList(query);
+		if(CollectionUtils.isNotEmpty(users)){
+			LOGGER.info("该用户已经注册，手机号为【{}】",tel);
+			result = RemoteResult.failure("0001","该手机号已经注册");
+			return JSON.toJSONString(result);
+		}
+		
 		//判断出入的validCode 是否是发送时的code
 		UserValid condtion = new UserValid();
 		condtion.setTel(tel);
@@ -132,7 +154,15 @@ public class UserController extends BaseController {
 				defaultUser.setPassword(password);
 				defaultUser.setNickName(RandomStrUtils.getUniqueString(6));
 				defaultUser.setYn(YnEnum.Normal.getKey());
-				result = userService.registUser(defaultUser);
+				
+				UserAuths userAuths = new UserAuths();
+				userAuths.setIdentityType(UserAuths.IDENTITY_RYPE_TEL);
+				userAuths.setIdentifier(tel);
+				userAuths.setCredential(password);
+				userAuths.setVerified(1);//已验证
+				userAuths.setYn(YnEnum.Normal.getKey());
+				
+				result = userService.registUser(defaultUser,userAuths);
 			}else{
 				result = RemoteResult.failure("0002","验证失败,验证码失效，请重新获取验证码");
 			}
@@ -165,12 +195,79 @@ public class UserController extends BaseController {
 	
 
 	@RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
-	public @ResponseBody String login(User user){
+	public @ResponseBody String login(UserAuths userAuths){
 		RemoteResult result = null;
+		if(null == userAuths || userAuths.getIdentityType() == null){
+			LOGGER.error("调用login 传入的参数错误 登陆类型【{}】",userAuths.getIdentityType());
+			result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+			return JSON.toJSONString(result);
+		}
 		
+		if(userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_TEL || userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_EMAIL || userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_USERNAME){
+			if(userAuths.getIdentifier() == null || userAuths.getCredential() == null){
+				LOGGER.error("站内 调用login 传入的参数错误，无用户登陆类型，密码");
+				result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+				return JSON.toJSONString(result);
+			}
+			userAuths.setYn(YnEnum.Normal.getKey());
+			List<UserAuths> resList = userAuthsService.selectEntryList(userAuths);
+			if(CollectionUtils.isNotEmpty(resList)){
+				LOGGER.info("调用登陆方法找到用户，返回appkey secret");
+				UserAuths oldData = resList.get(0);
+				
+				AppSecret query = new AppSecret();
+				query.setUserId(oldData.getUserId());
+				query.setYn(YnEnum.Normal.getKey());
+				List<AppSecret> appSecrets = appSecretService.selectEntryList(query);
+				if(CollectionUtils.isNotEmpty(appSecrets)){
+					AppSecret secret = new AppSecret();
+					secret.setApiKey(appSecrets.get(0).getApiKey());
+					secret.setSecretKey(appSecrets.get(0).getSecretKey());
+					result = RemoteResult.success(secret);
+					return JSON.toJSONString(result);
+				}else{
+					LOGGER.error("站内 调用login 找不到信管的蜜月信息");
+					result = RemoteResult.failure("0001", "找不到相关的密钥信息，请联系管理员");
+					return JSON.toJSONString(result);
+				}
+				
+			}
+		}
 		
-		
-		return null;
+		if(userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_QQ || userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_WEICHAT || userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_WEIBO){
+			if(userAuths.getIdentifier() == null){
+				LOGGER.error("第三方登录调用login 传入的参数错误，无用户第三方唯一标识");
+				result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+				return JSON.toJSONString(result);
+			}
+			//第三方登录直接更新或者新建一条记录
+			UserAuths query = new UserAuths();
+			query.setIdentityType(userAuths.getIdentityType());
+			query.setIdentifier(userAuths.getIdentifier());
+			List<UserAuths> resList = userAuthsService.selectEntryList(userAuths);
+			if(CollectionUtils.isNotEmpty(resList)){
+				UserAuths oldData = resList.get(0);
+				oldData.setCredential(userAuths.getCredential());
+				
+				User user = new User();
+				user.setId(oldData.getUserId());
+				result = userService.registUser(user,oldData);
+			}else{
+				User defaultUser = new User();
+				defaultUser.setNickName(RandomStrUtils.getUniqueString(6));
+				defaultUser.setYn(YnEnum.Normal.getKey());
+				
+				UserAuths newData = new UserAuths();
+				newData.setIdentityType(userAuths.getIdentityType());
+				newData.setIdentifier(userAuths.getIdentifier());
+				newData.setCredential(userAuths.getCredential());
+				newData.setVerified(1);//已验证
+				newData.setYn(YnEnum.Normal.getKey());
+				result = userService.registUser(defaultUser,newData);
+			}
+			
+		}
+		return JSON.toJSONString(result);
 	}
 	
 	

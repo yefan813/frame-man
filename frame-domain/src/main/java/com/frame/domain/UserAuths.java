@@ -10,12 +10,20 @@ import com.frame.domain.base.BaseDomain;
 public class UserAuths extends BaseDomain {
 
 	private static final long serialVersionUID = 6723005414893784943L;
+	
+	public static final int IDENTITY_RYPE_TEL = 1;
+	public static final int IDENTITY_RYPE_EMAIL = 2;
+	public static final int IDENTITY_RYPE_QQ = 3;
+	public static final int IDENTITY_RYPE_WEICHAT = 4;
+	public static final int IDENTITY_RYPE_WEIBO = 5;
+	public static final int IDENTITY_RYPE_USERNAME = 6;
+	
 
 	private Integer userId; // 用户id
 
 	private Integer identityType; // 登陆类型
 
-	private String identity; // 第三放登录唯一标识
+	private String identifier; // 第三放登录唯一标识
 
 	private String credential; // 密码
 
@@ -37,12 +45,12 @@ public class UserAuths extends BaseDomain {
 		this.identityType = identityType;
 	}
 
-	public String getIdentity() {
-		return identity;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setIdentity(String identity) {
-		this.identity = identity;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public String getCredential() {

@@ -13,16 +13,16 @@ public class BaseDomain extends BaseQuery {
 	
 	private static final long serialVersionUID = -2671530029171920798L;
 	
-	private Long id;
+	private Integer id;
 	private String feature;
 	private Date created;
 	private Date modified;
 	private Integer yn;
 	
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getFeature() {
