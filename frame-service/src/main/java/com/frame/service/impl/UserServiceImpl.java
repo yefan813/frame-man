@@ -65,10 +65,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		
 		
 		if(result > 0 && appRes > 0){
-			AppSecret returnData = new AppSecret();
-			returnData.setApiKey(appSecret.getApiKey());
-			returnData.setSecretKey(appSecret.getSecretKey());
-			res = RemoteResult.success(returnData);
+			res = RemoteResult.success();
 		}else{
 			res = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
 		}
