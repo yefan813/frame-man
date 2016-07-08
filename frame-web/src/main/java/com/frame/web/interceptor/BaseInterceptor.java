@@ -77,7 +77,6 @@ public class BaseInterceptor implements HandlerInterceptor  {
 		
 		// 对参数名进行字典排序  
 		Map paramMap = new HashMap(request.getParameterMap());
-		paramMap.remove("apiKey");
 		paramMap.remove("sign");
 		Map<String,String> resMap = transToMAP(paramMap);
 		String codes = getSignature(resMap,appSecret.getSecretKey());  
