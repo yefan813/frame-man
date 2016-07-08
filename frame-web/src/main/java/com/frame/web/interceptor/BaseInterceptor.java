@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.frame.domain.AppSecret;
+import com.frame.domain.base.YnEnum;
 import com.frame.service.AppSecretService;
 
 /**
@@ -64,17 +65,20 @@ public class BaseInterceptor implements HandlerInterceptor  {
 		
 		AppSecret appSecret = new AppSecret();
 		appSecret.setApiKey(apiKey);
-		
+		appSecret.setYn(YnEnum.Normal.getKey());
 		List<AppSecret> resList = appSecretService.selectEntryList(appSecret);
 		if(CollectionUtils.isEmpty(resList)){
+			logger.error("没找到相关的apikey");
 			return false;
 		}else{
+			logger.error("找到相关的apikey,验证参数是否被篡改");
 			appSecret = resList.get(0);
 		}
 		
 		// 对参数名进行字典排序  
-		Map paramMap = request.getParameterMap();
+		Map paramMap = new HashMap(request.getParameterMap());
 		paramMap.remove("apiKey");
+		paramMap.remove("sign");
 		Map<String,String> resMap = transToMAP(paramMap);
 		String codes = getSignature(resMap,appSecret.getSecretKey());  
 		
