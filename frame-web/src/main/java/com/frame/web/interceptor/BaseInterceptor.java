@@ -22,6 +22,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
+import com.alibaba.fastjson.JSON;
 import com.frame.domain.AppSecret;
 import com.frame.domain.base.YnEnum;
 import com.frame.service.AppSecretService;
@@ -79,6 +80,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 		Map paramMap = new HashMap(request.getParameterMap());
 		paramMap.remove("sign");
 		Map<String, String> resMap = transToMAP(paramMap);
+		logger.info("请求参数为：【{}】",JSON.toJSONString(paramMap));
 		String codes = getSignature(resMap, appSecret.getSecretKey());
 
 		if (sign.equals(codes)) {
@@ -144,7 +146,9 @@ public class BaseInterceptor implements HandlerInterceptor {
 		// }
 		return sign;
 	}
-
+	public static void main(String[] args) {
+		System.out.println(MD5Encode("apiKey=IV3HZmpCPcUWRoncurrentPage=1loaction=103.986233,30.577267pageSize=20timestamp=1467998409817LYusB0UG5tjmdC3OM", "UTF-8").toLowerCase());
+	}
 	private static String byteArrayToHexString(byte b[]) {
 		StringBuffer resultSb = new StringBuffer();
 		for (int i = 0; i < b.length; i++)
