@@ -123,31 +123,15 @@ public class BaseInterceptor implements HandlerInterceptor {
 			basestring.append(param.getKey()).append("=").append(param.getValue());
 		}
 		basestring.append(secret);
-
 		// 使用MD5对待签名串求签
+		logger.info("待摘要的字符串为:[{}]",basestring.toString());
 		String sign = MD5Encode(basestring.toString(), "UTF-8").toLowerCase();
+		logger.info("摘要的后的字符串为:[{}]",sign);
 		
-//		byte[] bytes = null;
-//		try {
-//			MessageDigest md5 = MessageDigest.getInstance("MD5");
-//			bytes = md5.digest(basestring.toString().getBytes("UTF-8"));
-//		} catch (GeneralSecurityException ex) {
-//			throw new IOException(ex);
-//		}
-
-		// 将MD5输出的二进制结果转换为小写的十六进制
-
-		// for (int i = 0; i < bytes.length; i++) {
-		// String hex = Integer.toHexString(bytes[i] & 0xFF);
-		// if (hex.length() == 1) {
-		// sign.append("0");
-		// }
-		// sign.append(hex);
-		// }
 		return sign;
 	}
 	public static void main(String[] args) {
-		System.out.println(MD5Encode("apiKey=IV3HZmpCPcUWRoncurrentPage=1loaction=103.986233,30.577267pageSize=20timestamp=1467998409817LYusB0UG5tjmdC3OM", "UTF-8").toLowerCase());
+		System.out.println(MD5Encode("apiKey=IV3HZmpCPcUWRoncurrentPage=1loaction=103.986125,30.577337pageSize=20timestamp=1468033012451LYusB0UG5tjmdC3OM", "UTF-8").toLowerCase());
 	}
 	private static String byteArrayToHexString(byte b[]) {
 		StringBuffer resultSb = new StringBuffer();
