@@ -130,9 +130,6 @@ public class BaseInterceptor implements HandlerInterceptor {
 		
 		return sign;
 	}
-	public static void main(String[] args) {
-		System.out.println(MD5Encode("apiKey=IV3HZmpCPcUWRoncurrentPage=1loaction=103.986125,30.577337pageSize=20timestamp=1468033012451LYusB0UG5tjmdC3OM", "UTF-8").toLowerCase());
-	}
 	private static String byteArrayToHexString(byte b[]) {
 		StringBuffer resultSb = new StringBuffer();
 		for (int i = 0; i < b.length; i++)
