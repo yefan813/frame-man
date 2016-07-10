@@ -1,6 +1,7 @@
 package com.frame.web.interceptor;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.security.MessageDigest;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.TreeMap;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.soap.AddressingFeature.Responses;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.frame.domain.AppSecret;
 import com.frame.domain.base.YnEnum;
+import com.frame.domain.common.RemoteResult;
 import com.frame.service.AppSecretService;
 
 /**
@@ -46,50 +49,78 @@ public class BaseInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		
+		response.setHeader("Content-type", "text/html;charset=UTF-8");  
+		//这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859  
+		response.setCharacterEncoding("UTF-8");  
+		
+		RemoteResult result = null;
 		String apiKey = request.getParameter("apiKey");
 		String timestamp = request.getParameter("timestamp");
 		String sign = request.getParameter("sign");
+		Writer writer = null;
+		try {
+			writer = response.getWriter();
+			if (StringUtils.isEmpty(apiKey) || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign)) {
+				logger.error("接口过滤器调用，传入的参数错误，传入的参数为apiKey:【{}】，timestamp【{}】，sign：【{}】", apiKey, timestamp, sign);
+				result = RemoteResult.failure("0001","传入的参数错误");
+				writer.write(JSON.toJSONString(result));
+				return false;
+			}
+			Date now = new Date();
+			long appDate = Long.valueOf(timestamp);
+			long afteDate = appDate + 60 * 1000;
+			Date appRequestTime = new Date(afteDate);
 
-		if (StringUtils.isEmpty(apiKey) || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign)) {
-			logger.error("接口过滤器调用，传入的参数错误，传入的参数为apiKey:【{}】，timestamp【{}】，sign：【{}】", apiKey, timestamp, sign);
-			return false;
+			if (now.after(appRequestTime)) {// 超过60s 请求无效
+				logger.error("请求超过60s，请求无效,请求来自apiKey：【{}】", apiKey);
+				result = RemoteResult.failure("0001","请求超过60s，请求无效");
+				writer.write(JSON.toJSONString(result));
+				return false;
+			}
+
+			AppSecret appSecret = new AppSecret();
+			appSecret.setApiKey(apiKey);
+			appSecret.setYn(YnEnum.Normal.getKey());
+			List<AppSecret> resList = appSecretService.selectEntryList(appSecret);
+			if (CollectionUtils.isEmpty(resList)) {
+				logger.error("没找到相关的apikey");
+				result = RemoteResult.failure("0001","没找到相关的apikey");
+				writer.write(JSON.toJSONString(result));
+				return false;
+			} else {
+				logger.error("找到相关的apikey,验证参数是否被篡改");
+				appSecret = resList.get(0);
+			}
+
+			// 对参数名进行字典排序
+			Map paramMap = new HashMap(request.getParameterMap());
+			paramMap.remove("sign");
+			Map<String, String> resMap = transToMAP(paramMap);
+			logger.info("请求参数为：【{}】",JSON.toJSONString(paramMap));
+			String codes = getSignature(resMap, appSecret.getSecretKey());
+			
+			if (sign.equals(codes)) {
+				logger.error("参数验证成功！");
+				result = RemoteResult.failure("0000","签名匹配成功");
+				writer.write(JSON.toJSONString(result));
+				return true;
+			} else {
+				logger.error("参数验证失败！服务器传入的sign：【{}】， 服务器的sign：【{}】", sign, codes);
+				result = RemoteResult.failure("0001","签名不匹配，请求参数不正确或者请求参数被篡改");
+				writer.write(JSON.toJSONString(result));
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(writer != null){
+				writer.flush();
+				writer.close();
+			}
 		}
-		Date now = new Date();
-		long appDate = Long.valueOf(timestamp);
-		long afteDate = appDate + 60 * 1000;
-		Date appRequestTime = new Date(afteDate);
-
-		if (now.after(appRequestTime)) {// 超过60s 请求无效
-			logger.error("请求超过60s，请求无效,请求来自apiKey：【{}】", apiKey);
-			return false;
-		}
-
-		AppSecret appSecret = new AppSecret();
-		appSecret.setApiKey(apiKey);
-		appSecret.setYn(YnEnum.Normal.getKey());
-		List<AppSecret> resList = appSecretService.selectEntryList(appSecret);
-		if (CollectionUtils.isEmpty(resList)) {
-			logger.error("没找到相关的apikey");
-			return false;
-		} else {
-			logger.error("找到相关的apikey,验证参数是否被篡改");
-			appSecret = resList.get(0);
-		}
-
-		// 对参数名进行字典排序
-		Map paramMap = new HashMap(request.getParameterMap());
-		paramMap.remove("sign");
-		Map<String, String> resMap = transToMAP(paramMap);
-		logger.info("请求参数为：【{}】",JSON.toJSONString(paramMap));
-		String codes = getSignature(resMap, appSecret.getSecretKey());
-
-		if (sign.equals(codes)) {
-			logger.error("参数验证成功！");
-			return true;
-		} else {
-			logger.error("参数验证失败！服务器传入的sign：【{}】， 服务器的sign：【{}】", sign, codes);
-			return false;
-		}
+		return false;
 	}
 
 	@Override

@@ -110,7 +110,7 @@ public class TeamController extends BaseController {
 							team.setImgUrl(imgUrl);
 						} else { 
 							// 上传文件失败，在页面提示
-							result = RemoteResult.failure("0001","头像上传失败！");
+							result = RemoteResult.failure("0001","球队头像上传失败！");
 							return dealJosnP("", result);
 						}
 					} else {
