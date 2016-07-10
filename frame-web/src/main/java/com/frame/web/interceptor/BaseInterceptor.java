@@ -70,7 +70,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 			}
 			Date now = new Date();
 			long appDate = Long.valueOf(timestamp);
-			long afteDate = appDate + 600 * 1000;
+			long afteDate = appDate + 60 * 1000;
 			Date appRequestTime = new Date(afteDate);
 
 			if (now.after(appRequestTime)) {// 超过60s 请求无效
