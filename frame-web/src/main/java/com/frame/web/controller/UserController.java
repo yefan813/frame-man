@@ -96,7 +96,7 @@ public class UserController extends BaseController {
 				result = RemoteResult.failure("0001","操作失败:" + e.getMessage());
 			}
 		}
-		int res = userService.updateByTel(user);
+		int res = userService.updateByKey(user);
 		if(res > 0){
 			LOGGER.info("用户编辑成功,传入的参数为：[{}]",JSON.toJSONString(user));
 			result = RemoteResult.success();
