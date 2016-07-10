@@ -61,21 +61,22 @@ public class BaseInterceptor implements HandlerInterceptor {
 		String sign = request.getParameter("sign");
 		Writer writer = null;
 		try {
-			writer = response.getWriter();
 			if (StringUtils.isEmpty(apiKey) || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign)) {
 				logger.error("接口过滤器调用，传入的参数错误，传入的参数为apiKey:【{}】，timestamp【{}】，sign：【{}】", apiKey, timestamp, sign);
 				result = RemoteResult.failure("0001","传入的参数错误");
+				writer = response.getWriter();
 				writer.write(JSON.toJSONString(result));
 				return false;
 			}
 			Date now = new Date();
 			long appDate = Long.valueOf(timestamp);
-			long afteDate = appDate + 60 * 1000;
+			long afteDate = appDate + 600 * 1000;
 			Date appRequestTime = new Date(afteDate);
 
 			if (now.after(appRequestTime)) {// 超过60s 请求无效
 				logger.error("请求超过60s，请求无效,请求来自apiKey：【{}】", apiKey);
 				result = RemoteResult.failure("0001","请求超过60s，请求无效");
+				writer = response.getWriter();
 				writer.write(JSON.toJSONString(result));
 				return false;
 			}
@@ -87,6 +88,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 			if (CollectionUtils.isEmpty(resList)) {
 				logger.error("没找到相关的apikey");
 				result = RemoteResult.failure("0001","没找到相关的apikey");
+				writer = response.getWriter();
 				writer.write(JSON.toJSONString(result));
 				return false;
 			} else {
@@ -102,13 +104,12 @@ public class BaseInterceptor implements HandlerInterceptor {
 			String codes = getSignature(resMap, appSecret.getSecretKey());
 			
 			if (sign.equals(codes)) {
-				logger.error("参数验证成功！");
-				result = RemoteResult.failure("0000","签名匹配成功");
-				writer.write(JSON.toJSONString(result));
+				logger.info("参数验证成功！");
 				return true;
 			} else {
 				logger.error("参数验证失败！服务器传入的sign：【{}】， 服务器的sign：【{}】", sign, codes);
 				result = RemoteResult.failure("0001","签名不匹配，请求参数不正确或者请求参数被篡改");
+				writer = response.getWriter();
 				writer.write(JSON.toJSONString(result));
 				return false;
 			}
