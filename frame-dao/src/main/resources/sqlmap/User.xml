@@ -14,6 +14,9 @@
 			avatar_url as avatarUrl,
 			email,
 			tel,
+			height,
+			weight,
+			position,
 			level,
 			feature,
 			created,
@@ -36,6 +39,9 @@
 			<if test="avatarUrl != null"><![CDATA[AND avatar_url = #{avatarUrl}]]></if>
 			<if test="email != null"><![CDATA[AND email = #{email}]]></if>
 			<if test="tel != null"><![CDATA[AND tel = #{tel}]]></if>
+			<if test="height != null"><![CDATA[AND height = #{tel}]]></if>
+			<if test="weight != null"><![CDATA[AND weight = #{weight}]]></if>
+			<if test="position != null"><![CDATA[AND position = #{tel}]]></if>
 			<if test="level != null"><![CDATA[AND level = #{level}]]></if>
 			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
 			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
@@ -61,6 +67,9 @@
 			<if test="avatarUrl != null"><![CDATA[avatar_url = #{avatarUrl},]]></if>
 			<if test="email != null"><![CDATA[email = #{email},]]></if>
 			<if test="tel != null"><![CDATA[tel = #{tel},]]></if>
+			<if test="height != null"><![CDATA[height = #{height},]]></if>
+			<if test="weight != null"><![CDATA[weight = #{weight},]]></if>
+			<if test="position != null"><![CDATA[position = #{position},]]></if>
 			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
 			<![CDATA[modified = now(),]]>
 			<if test="yn != null"><![CDATA[yn = #{yn},]]></if>
@@ -70,8 +79,8 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="user" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_user (name,sex,nickname,point,avatar_url,email,tel,level,feature,created,modified,yn)
-			VALUES (#{name},#{sex},#{nickName},#{point},#{avatarUrl},#{email},#{tel},#{level},#{feature},now(),now(),#{yn})
+			INSERT INTO tb_user (name,sex,nickname,point,avatar_url,email,tel,height,weight,position,level,feature,created,modified,yn)
+			VALUES (#{name},#{sex},#{nickName},#{point},#{avatarUrl},#{email},#{tel},#{height},#{weight},#{position},#{level},#{feature},now(),now(),#{yn})
 		]]>
 	</insert>
 	

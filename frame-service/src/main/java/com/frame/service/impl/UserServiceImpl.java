@@ -100,6 +100,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			return res;
 		}
 		AppSecret secret = new AppSecret();
+		secret.setUserId(appSecret.getUserId());
 		secret.setApiKey(appSecret.getApiKey());
 		secret.setSecretKey(appSecret.getSecretKey());
 		res = RemoteResult.success(secret);
