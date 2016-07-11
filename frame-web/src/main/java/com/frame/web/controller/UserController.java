@@ -221,6 +221,7 @@ public class UserController extends BaseController {
 				List<AppSecret> appSecrets = appSecretService.selectEntryList(query);
 				if(CollectionUtils.isNotEmpty(appSecrets)){
 					AppSecret secret = new AppSecret();
+					secret.setUserId(appSecrets.get(0).getUserId());
 					secret.setApiKey(appSecrets.get(0).getApiKey());
 					secret.setSecretKey(appSecrets.get(0).getSecretKey());
 					result = RemoteResult.success(secret);
