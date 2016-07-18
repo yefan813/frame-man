@@ -23,10 +23,6 @@ public class User extends BaseDomain {
 	
 	private String address; //地址
 	
-	private String loginIp; //上次登录ip
-	
-	private Date loginTime; //上次登陆时间
-
 	private String password; // 密码
 
 	private String point; // 积分
@@ -143,21 +139,6 @@ public class User extends BaseDomain {
 		this.address = address;
 	}
 
-	public String getLoginIp() {
-		return loginIp;
-	}
-
-	public void setLoginIp(String loginIp) {
-		this.loginIp = loginIp;
-	}
-
-	public Date getLoginTime() {
-		return loginTime;
-	}
-
-	public void setLoginTime(Date loginTime) {
-		this.loginTime = loginTime;
-	}
 
 	public Integer getHeight() {
 		return height;

@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.frame.dao.TeamDao">
+<mapper namespace="com.frame.dao.UserLoginDao">
 
 	<!-- groupon 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
 			id,
-			current_count as currentCount,
-			people_count as peopleCount,
-			status,
-			lost_times as lostTimes,
-			win_times as winTimes,
-			img_url as imgUrl,
-			name,
-			create_user as createUser,
-			create_user_name as createUserName,
+			user_id as userId,
+			login_ip as loginIp,
+			login_time as loginTime,
 			address,
 			location,
 			feature,
@@ -26,22 +20,16 @@
 	</sql>
 
 	<!-- groupon 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_team]]></sql>
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_app_secret]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
-			<if test="id != null"><![CDATA[AND id = #{id}]]></if>
-			<if test="currentCount != null"><![CDATA[AND current_count = #{currentCount}]]></if>
-			<if test="peopleCount != null"><![CDATA[AND people_count = #{peopleCount}]]></if>
-			<if test="status != null"><![CDATA[AND status = #{status}]]></if>
-			<if test="lostTimes != null"><![CDATA[AND lost_times = #{lostTimes}]]></if>
-			<if test="winTimes != null"><![CDATA[AND win_times = #{winTimes}]]></if>
-			<if test="imgUrl != null"><![CDATA[AND img_url = #{imgUrl}]]></if>
-			<if test="createUser != null"><![CDATA[AND create_user = #{createUser}]]></if>
-			<if test="createUserName != null"><![CDATA[AND create_user_name = #{createUserName}]]></if>
-			<if test="address != null"><![CDATA[AND address = #{address}]]></if>
+			<if test="userId != null"><![CDATA[AND user_id = #{userId}]]></if>
+			<if test="loginIp != null"><![CDATA[AND login_ip = #{loginIp}]]></if>
+			<if test="loginTime != null"><![CDATA[AND login_time = #{loginTime}]]></if>
 			<if test="location != null"><![CDATA[AND location = #{location}]]></if>
+			<if test="address != null"><![CDATA[AND address = #{address}]]></if>
 			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
 			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
 			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
@@ -58,14 +46,11 @@
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
-			<if test="currentCount != null"><![CDATA[current_count = #{currentCount},]]></if>
-			<if test="peopleCount != null"><![CDATA[people_count = #{peopleCount},]]></if>
-			<if test="status != null"><![CDATA[status = #{status},]]></if>
-			<if test="lostTimes != null"><![CDATA[lost_times = #{lostTimes},]]></if>
-			<if test="winTimes != null"><![CDATA[win_times = #{winTimes},]]></if>
-			<if test="imgUrl != null"><![CDATA[img_url = #{imgUrl},]]></if>
-			<if test="address != null"><![CDATA[address = #{address},]]></if>
+			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
+			<if test="loginIp != null"><![CDATA[login_ip = #{loginIp},]]></if>
+			<if test="loginTime != null"><![CDATA[login_time = #{loginTime},]]></if>
 			<if test="location != null"><![CDATA[location = #{location},]]></if>
+			<if test="address != null"><![CDATA[address = #{address},]]></if>
 			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
 			<![CDATA[modified = now(),]]>
 			<if test="yn != null"><![CDATA[yn = #{yn},]]></if>
@@ -75,8 +60,8 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_team (name,current_count,people_count,status,lost_times,win_times,img_url,create_user,create_user_name,address,location,feature,created,modified,yn)
-			VALUES (#{name},#{currentCount},#{peopleCount},#{status},#{lostTimes},#{winTimes},#{imgUrl},#{createUser},#{createUserName},#{address},#{location},#{feature},now(),now(),#{yn})
+			INSERT INTO tb_app_secret (user_id,login_ip,login_time,location,address,feature,created,modified,yn)
+			VALUES (#{userId},#{loginIp},#{loginTime},#{location},#{address},#{feature},now(),now(),#{yn})
 		]]>
 	</insert>
 	
@@ -85,27 +70,27 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM tb_team WHERE id IN]]>
+		<![CDATA[DELETE FROM tb_app_secret WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<update id="deleteByCondtion" parameterType="team" >
-		<![CDATA[DELETE FROM tb_team]]>
+	<update id="deleteByCondtion" parameterType="appSecret" >
+		<![CDATA[DELETE FROM tb_app_secret]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</update>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="team" >
-		<![CDATA[UPDATE team]]>
+	<update id="updateByKey" parameterType="appSecret" >
+		<![CDATA[UPDATE tb_app_secret]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="team">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="appSecret">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -116,7 +101,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="team" resultType="team">
+	<select id="selectEntryList" parameterType="appSecret" resultType="appSecret">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -125,19 +110,12 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="team" resultType="int">
+	<select id="selectEntryListCount" parameterType="appSecret" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	<select id="selectUserTeamByUserId" parameterType="Map" resultType="team">
-		<![CDATA[ select ]]>
-		<include refid="QUERY_COLUMN_LIST"/>
-		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[ where id in (select team_id from user_team_relation where user_id = #{userId})  ]]>
-	</select>
-	
 	
 </mapper>

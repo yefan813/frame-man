@@ -25,6 +25,7 @@
 		<typeAlias type="com.frame.domain.UserValid" alias="userValid"/>
 		<typeAlias type="com.frame.domain.UserAuths" alias="userAuths"/>
 		<typeAlias type="com.frame.domain.AppSecret" alias="appSecret"/>
+		<typeAlias type="com.frame.domain.UserLogin" alias="userLogin"/>
 		
 		
 	</typeAliases>
@@ -39,6 +40,7 @@
 		<mapper resource="sqlmap/UserValid.xml" />
 		<mapper resource="sqlmap/UserAuths.xml" />
 		<mapper resource="sqlmap/AppSecret.xml" />
+		<mapper resource="sqlmap/UserLOgin.xml" />
 		
 	</mappers>
 </configuration>
