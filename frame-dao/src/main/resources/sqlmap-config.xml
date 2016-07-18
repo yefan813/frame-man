@@ -40,7 +40,7 @@
 		<mapper resource="sqlmap/UserValid.xml" />
 		<mapper resource="sqlmap/UserAuths.xml" />
 		<mapper resource="sqlmap/AppSecret.xml" />
-		<mapper resource="sqlmap/UserLOgin.xml" />
+		<mapper resource="sqlmap/UserLogin.xml" />
 		
 	</mappers>
 </configuration>

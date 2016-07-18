@@ -16,16 +16,14 @@ public class UserLogin extends BaseDomain {
 	 */
 	private static final long serialVersionUID = -345112426717796512L;
 
-	/**
-	 * 
-	 */
-
 	private Integer userId; // 用户id
 
 	private String loginIp; // 用户名ip
 
+	
+	private String address;
 	private Date loginTime; // 用户登录ip
-
+	
 	private String location; // 用户定位坐标
 
 	public Integer getUserId() {
@@ -58,6 +56,14 @@ public class UserLogin extends BaseDomain {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	@Override

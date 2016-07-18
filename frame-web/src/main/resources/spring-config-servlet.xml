@@ -37,7 +37,7 @@
 	</bean>
 
 
-
+<!-- 
  	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
@@ -49,7 +49,7 @@
 				<property name="key" value="${wm.passport.token.public_key}" />
 			</bean>
 		</mvc:interceptor>
-	</mvc:interceptors>
+	</mvc:interceptors> -->
 
 	<mvc:annotation-driven />
 	

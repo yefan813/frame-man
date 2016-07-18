@@ -20,7 +20,7 @@
 	</sql>
 
 	<!-- groupon 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_app_secret]]></sql>
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_user_login]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
@@ -60,8 +60,9 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_app_secret (user_id,login_ip,login_time,location,address,feature,created,modified,yn)
+			INSERT INTO tb_user_login (user_id,login_ip,login_time,location,address,feature,created,modified,yn)
 			VALUES (#{userId},#{loginIp},#{loginTime},#{location},#{address},#{feature},now(),now(),#{yn})
+			ON DUPLICATE KEY UPDATE login_time = #{loginTime}, location = #{location}
 		]]>
 	</insert>
 	
@@ -70,7 +71,7 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM tb_app_secret WHERE id IN]]>
+		<![CDATA[DELETE FROM tb_user_login WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
@@ -78,13 +79,13 @@
 
 	<!-- 删除,通过条件 -->
 	<update id="deleteByCondtion" parameterType="appSecret" >
-		<![CDATA[DELETE FROM tb_app_secret]]>
+		<![CDATA[DELETE FROM tb_user_login]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</update>
 
 	<!-- 修改记录通过主键 -->
 	<update id="updateByKey" parameterType="appSecret" >
-		<![CDATA[UPDATE tb_app_secret]]>
+		<![CDATA[UPDATE tb_user_login]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
