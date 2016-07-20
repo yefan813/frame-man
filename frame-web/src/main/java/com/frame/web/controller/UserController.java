@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.frame.domain.AppSecret;
 import com.frame.domain.User;
 import com.frame.domain.UserAuths;
+import com.frame.domain.UserLogin;
 import com.frame.domain.UserValid;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
@@ -62,6 +63,12 @@ public class UserController extends BaseController {
 	@Value("${img.prefix}")
 	private String IMAGEPREFIX;
 	
+	/**
+	 *	编辑用户信息接口 
+	 * @param user
+	 * @param imgFile
+	 * @return
+	 */
 	@RequestMapping(value = "/editUserInfo", method = {RequestMethod.GET, RequestMethod.POST},produces = "application/json;charset=UTF-8")
 	public @ResponseBody String editUserInfo(User user,@RequestParam(value = "imgFile", required = false) MultipartFile imgFile){
 		RemoteResult result = null;
@@ -113,6 +120,15 @@ public class UserController extends BaseController {
 	}
 	
 	
+	/**
+	 * 
+	 * 用户注册接口
+	 * @param tel
+	 * @param password
+	 * @param validCode
+	 * @param validDate
+	 * @return
+	 */
 	@RequestMapping(value = "/regist", method = {RequestMethod.GET, RequestMethod.POST})
 	public @ResponseBody String registUser(String tel, String password, String validCode, Long validDate){
 		RemoteResult result = null;
@@ -172,6 +188,13 @@ public class UserController extends BaseController {
 		return JSON.toJSONString(result);
 	}
 	
+	/**
+	 * 验证调用接口的时间是否超时
+	 * @param userValid
+	 * @param validCode
+	 * @param validDate
+	 * @return
+	 */
 	private static boolean validUserRegist(UserValid userValid, String validCode, Long validDate){
 		boolean result = false;
 		long from =  userValid.getValidDate().getTime() + 60 * 1000;
@@ -182,6 +205,13 @@ public class UserController extends BaseController {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * 获取验证码
+	 * @param tel
+	 * @param validDate
+	 * @return
+	 */
 	@RequestMapping(value = "/getValidCode", method = {RequestMethod.GET, RequestMethod.POST})
 	public @ResponseBody String registUser(String tel,Long validDate){
 		RemoteResult result = null;
@@ -194,6 +224,12 @@ public class UserController extends BaseController {
 	}
 	
 
+	/**
+	 * 
+	 * 用户登录接口
+	 * @param userAuths
+	 * @return
+	 */
 	@RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
 	public @ResponseBody String login(UserAuths userAuths){
 		RemoteResult result = null;
@@ -282,8 +318,22 @@ public class UserController extends BaseController {
 		return null;
 	}
 	
-	
-	
-	
-	
+	@RequestMapping(value = "/getNearByUser", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String getNearByUser(UserLogin userLogin) {
+		RemoteResult result = null;
+		if (null == userLogin || userLogin.getUserId() == null || userLogin.getLatitude() == null || userLogin.getLongitude() == null) {
+			LOGGER.info("调用getNearByUser 传入的参数错误");
+			result = RemoteResult.failure("0001", "传入参数错误");
+			return JSON.toJSONString(result);
+		}
+		
+		List<User> list = userService.getNearByUser(userLogin);
+		if(CollectionUtils.isNotEmpty(list)){
+			result = RemoteResult.success(list);
+			
+		}else{
+			result = RemoteResult.failure("0001", "无数据");
+		}
+		return JSON.toJSONString(result);
+	}
 }

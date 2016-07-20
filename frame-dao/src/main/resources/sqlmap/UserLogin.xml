@@ -11,6 +11,8 @@
 			login_ip as loginIp,
 			login_time as loginTime,
 			address,
+			longitude,
+			latitude,
 			location,
 			feature,
 			created,
@@ -18,7 +20,7 @@
 			yn
 		]]>
 	</sql>
-
+	
 	<!-- groupon 查询列来源表-->
 	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_user_login]]></sql>
 	
@@ -29,6 +31,7 @@
 			<if test="loginIp != null"><![CDATA[AND login_ip = #{loginIp}]]></if>
 			<if test="loginTime != null"><![CDATA[AND login_time = #{loginTime}]]></if>
 			<if test="location != null"><![CDATA[AND location = #{location}]]></if>
+			<if test="latitude != null"><![CDATA[AND latitude = #{latitude}]]></if>
 			<if test="address != null"><![CDATA[AND address = #{address}]]></if>
 			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
 			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
@@ -49,6 +52,8 @@
 			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
 			<if test="loginIp != null"><![CDATA[login_ip = #{loginIp},]]></if>
 			<if test="loginTime != null"><![CDATA[login_time = #{loginTime},]]></if>
+			<if test="longitude != null"><![CDATA[longitude = #{longitude},]]></if>
+			<if test="latitude != null"><![CDATA[latitude = #{latitude},]]></if>
 			<if test="location != null"><![CDATA[location = #{location},]]></if>
 			<if test="address != null"><![CDATA[address = #{address},]]></if>
 			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
@@ -58,10 +63,10 @@
 	</sql>
 
 	<!-- 插入team记录 -->
-	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insertEntry" parameterType="UserLogin" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_user_login (user_id,login_ip,login_time,location,address,feature,created,modified,yn)
-			VALUES (#{userId},#{loginIp},#{loginTime},#{location},#{address},#{feature},now(),now(),#{yn})
+			INSERT INTO tb_user_login (user_id,login_ip,login_time,location,latitude,longitude,address,feature,created,modified,yn)
+			VALUES (#{userId},#{loginIp},#{loginTime},#{location},#{latitude},#{longitude},#{address},#{feature},now(),now(),#{yn})
 			ON DUPLICATE KEY UPDATE login_time = #{loginTime}, location = #{location}
 		]]>
 	</insert>
@@ -78,20 +83,20 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<update id="deleteByCondtion" parameterType="appSecret" >
+	<update id="deleteByCondtion" parameterType="UserLogin" >
 		<![CDATA[DELETE FROM tb_user_login]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</update>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="appSecret" >
+	<update id="updateByKey" parameterType="UserLogin" >
 		<![CDATA[UPDATE tb_user_login]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="appSecret">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="UserLogin">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -102,7 +107,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="appSecret" resultType="appSecret">
+	<select id="selectEntryList" parameterType="UserLogin" resultType="UserLogin">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -111,7 +116,7 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="appSecret" resultType="int">
+	<select id="selectEntryListCount" parameterType="UserLogin" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>

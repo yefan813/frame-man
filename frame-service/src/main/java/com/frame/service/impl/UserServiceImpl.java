@@ -15,6 +15,7 @@ import com.frame.dao.base.BaseDao;
 import com.frame.domain.AppSecret;
 import com.frame.domain.User;
 import com.frame.domain.UserAuths;
+import com.frame.domain.UserLogin;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
@@ -107,6 +108,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		
 		return res;
 	}
-	
+	@Override
+	public List<User> getNearByUser(UserLogin userLogin) {
+		return userDao.getNearByUser(userLogin);
+	}
 
 }

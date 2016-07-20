@@ -26,20 +26,22 @@ public class UserLoginController extends BaseController {
 	@RequestMapping(value = "/saveUserLoginInfo", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String saveUserLoginInfo(UserLogin userLogin) {
 		RemoteResult result = null;
-		if(userLogin == null || userLogin.getUserId() == null || userLogin.getLocation()== null || userLogin.getLoginTime() == null){
+		if (userLogin == null || userLogin.getUserId() == null || userLogin.getLocation() == null
+				|| userLogin.getLoginTime() == null) {
 			LOGGER.info("调用saveUsetLoginInfo 传入的参数错误");
 			result = RemoteResult.failure("0001", "传入参数错误");
 			return JSON.toJSONString(result);
 		}
 		userLogin.setYn(YnEnum.Normal.getKey());
-		if(userLoginService.insertEntry(userLogin) > 0){
-			LOGGER.info("用户定位保存成功,传入的参数为：[{}]",JSON.toJSONString(userLogin));
+		if (userLoginService.insertEntry(userLogin) > 0) {
+			LOGGER.info("用户定位保存成功,传入的参数为：[{}]", JSON.toJSONString(userLogin));
 			result = RemoteResult.success();
-		}else{
-			LOGGER.info("用户定位失败,传入的参数为：[{}]",JSON.toJSONString(userLogin));
+		} else {
+			LOGGER.info("用户定位失败,传入的参数为：[{}]", JSON.toJSONString(userLogin));
 			result = RemoteResult.failure("0001", "用户定位失败，服务器异常");
 		}
 		return JSON.toJSONString(result);
 	}
+
 
 }

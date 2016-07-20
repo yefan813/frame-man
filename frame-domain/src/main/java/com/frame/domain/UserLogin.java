@@ -18,14 +18,16 @@ public class UserLogin extends BaseDomain {
 
 	private Integer userId; // 用户id
 
-	private String loginIp; // 用户名ip
+	private String loginIp; // 登录ip
 
-	
 	private String address;
+	private Double latitude;
+	private Double longitude;
 	private Date loginTime; // 用户登录ip
-	
+
 	private String location; // 用户定位坐标
 
+	private Double myDistance;
 	public Integer getUserId() {
 		return userId;
 	}
@@ -64,6 +66,30 @@ public class UserLogin extends BaseDomain {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getMyDistance() {
+		return myDistance;
+	}
+
+	public void setMyDistance(Double myDistance) {
+		this.myDistance = myDistance;
 	}
 
 	@Override

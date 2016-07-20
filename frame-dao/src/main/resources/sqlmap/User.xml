@@ -24,7 +24,22 @@
 			yn
 		]]>
 	</sql>
-
+	<sql id="USER_QUERY_COLUMN_LIST">
+			<![CDATA[
+				user1.id,
+				user1.name,
+				user1.sex,
+				user1.nickname as nickName,
+				user1.point,
+				user1.avatar_url as avatarUrl,
+				user1.email,
+				user1.tel,
+				user1.height,
+				user1.weight,
+				user1.position,
+				user1.level,
+			]]>
+		</sql>
 	<!-- groupon 查询列来源表-->
 	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_user]]></sql>
 	
@@ -143,5 +158,16 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	
+	<select id="getNearByUser" parameterType="UserLogin" resultType="user">
+		<![CDATA[SELECT]]>
+		<include refid="USER_QUERY_COLUMN_LIST"/>
+		<![CDATA[t1.myDistance from tb_user user1 
+		LEFT JOIN (select  user_id,111.1111 *
+		    DEGREES(acos( cos( radians(latitude) ) 
+		      * cos( radians(#{latitude}) ) 
+		      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
+		      * sin( radians(#{latitude}) ))) as myDistance  
+	    from tb_user_login u1 where u1.user_id != #{userId}) as t1 on t1.user_id = user1.id where id != #{userId}
+        ]]>
+	</select>
 </mapper>

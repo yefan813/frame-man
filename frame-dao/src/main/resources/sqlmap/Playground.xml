@@ -152,7 +152,7 @@
         111.1111 *
 	    DEGREES(acos( cos( radians(latitude) ) 
 	      * cos( radians(#{latitude}) ) 
-	      * cos( radians(${longitude}) - radians(longitude)) + sin(radians(latitude))
+	      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
 	      * sin( radians(#{latitude}) ))) as myDistance
 	      
         FROM play_ground
