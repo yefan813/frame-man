@@ -26,11 +26,16 @@ public class UserLoginController extends BaseController {
 	@RequestMapping(value = "/saveUserLoginInfo", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String saveUserLoginInfo(UserLogin userLogin) {
 		RemoteResult result = null;
-		if (userLogin == null || userLogin.getUserId() == null || userLogin.getLocation() == null
-				|| userLogin.getLoginTime() == null) {
+		if (userLogin == null || userLogin.getUserId() == null || (userLogin.getLocation() == null
+			|| !userLogin.getLocation().contains(","))	|| userLogin.getLoginTime() == null) {
 			LOGGER.info("调用saveUsetLoginInfo 传入的参数错误");
 			result = RemoteResult.failure("0001", "传入参数错误");
 			return JSON.toJSONString(result);
+		}
+		String[] loArr = userLogin.getLocation().split(",");
+		if(null != loArr && loArr.length >0){
+			userLogin.setLatitude(Double.valueOf(loArr[0]));
+			userLogin.setLongitude(Double.valueOf(loArr[0]));
 		}
 		userLogin.setYn(YnEnum.Normal.getKey());
 		if (userLoginService.insertEntry(userLogin) > 0) {
