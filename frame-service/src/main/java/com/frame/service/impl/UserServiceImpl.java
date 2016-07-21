@@ -17,6 +17,7 @@ import com.frame.domain.User;
 import com.frame.domain.UserAuths;
 import com.frame.domain.UserLogin;
 import com.frame.domain.base.YnEnum;
+import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.service.AppSecretService;
@@ -109,8 +110,25 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		return res;
 	}
 	@Override
-	public List<User> getNearByUser(UserLogin userLogin) {
-		return userDao.getNearByUser(userLogin);
+	public RemoteResult getNearByUser(Page<User> page, UserLogin userLogin) {
+		RemoteResult remoteResult = null; 
+		userLogin.setStartIndex(page.getStartIndex());
+		userLogin.setEndIndex(page.getEndIndex());
+		
+		List<User> res = userDao.getNearByUser(userLogin);
+		if(CollectionUtils.isNotEmpty(res)){
+			remoteResult = RemoteResult.success();
+		}else{
+			remoteResult = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+			return remoteResult;
+		}
+		int total = userDao.getNearByUserCount(userLogin);
+		
+		page.setResult(res);
+		page.setTotalCount(total);
+		
+		remoteResult.setData(page);
+		return remoteResult;
 	}
 
 }

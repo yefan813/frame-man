@@ -13,14 +13,15 @@ import com.frame.domain.UserLogin;
 public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 
 	private final static String NAMESPACE = "com.frame.dao.UserDao.";
-	
+
 	private final static String UPDATE_BY_TEL = "updateByTel";
 	private final static String GETNEARBYUSER = "getNearByUser";
+	private final static String GETNEARBYUSERCOUNT = "getNearByUserCount";
+
 	@Override
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
 	}
-
 
 	@Override
 	public int updateUserByTel(User user) {
@@ -30,6 +31,13 @@ public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 	@Override
 	public List<User> getNearByUser(UserLogin userLogin) {
 		// TODO Auto-generated method stub
-		return selectList(getNameSpace(GETNEARBYUSER),userLogin);
+		return selectList(getNameSpace(GETNEARBYUSER), userLogin);
 	}
+
+	@Override
+	public int getNearByUserCount(UserLogin userLogin) {
+		// TODO Auto-generated method stub
+		return select(getNameSpace(GETNEARBYUSERCOUNT), userLogin);
+	}
+
 }

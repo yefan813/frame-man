@@ -7,7 +7,11 @@ import com.frame.domain.User;
 import com.frame.domain.UserLogin;
 
 public interface UserDao extends BaseDao<User, Long> {
-	
+
 	public int updateUserByTel(User user);
-	List<User> getNearByUser(UserLogin userLogin);
+
+	public List<User> getNearByUser(UserLogin userLogin);
+
+	public int getNearByUserCount(UserLogin userLogin);
+
 }
