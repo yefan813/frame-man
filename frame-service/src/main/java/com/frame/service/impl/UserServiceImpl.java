@@ -127,7 +127,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		page.setResult(res);
 		page.setTotalCount(total);
 		
-		remoteResult.setData(page);
+		remoteResult.setData(page.getResult());
 		return remoteResult;
 	}
 
