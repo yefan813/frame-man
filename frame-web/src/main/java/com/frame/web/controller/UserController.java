@@ -74,7 +74,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/editUserInfo", method = {RequestMethod.GET, RequestMethod.POST},produces = "application/json;charset=UTF-8")
 	public @ResponseBody String editUserInfo(User user,@RequestParam(value = "imgFile", required = false) MultipartFile imgFile){
 		RemoteResult result = null;
-		if(null == user){
+		if(null == user || user.getId() == null){
 			LOGGER.info("调用editUserInfo 传入的参数错误");
 			result = RemoteResult.failure("0001", "传入参数错误");
 			return JSON.toJSONString(result);
