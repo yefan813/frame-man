@@ -10,6 +10,7 @@
 			user_id as userId,
 			login_ip as loginIp,
 			login_time as loginTime,
+			device_token as deviceToken,
 			address,
 			longitude,
 			latitude,
@@ -30,6 +31,7 @@
 			<if test="userId != null"><![CDATA[AND user_id = #{userId}]]></if>
 			<if test="loginIp != null"><![CDATA[AND login_ip = #{loginIp}]]></if>
 			<if test="loginTime != null"><![CDATA[AND login_time = #{loginTime}]]></if>
+			<if test="deviceToken != null"><![CDATA[AND device_token = #{deviceToken}]]></if>
 			<if test="location != null"><![CDATA[AND location = #{location}]]></if>
 			<if test="latitude != null"><![CDATA[AND latitude = #{latitude}]]></if>
 			<if test="address != null"><![CDATA[AND address = #{address}]]></if>
@@ -54,6 +56,7 @@
 			<if test="loginTime != null"><![CDATA[login_time = #{loginTime},]]></if>
 			<if test="longitude != null"><![CDATA[longitude = #{longitude},]]></if>
 			<if test="latitude != null"><![CDATA[latitude = #{latitude},]]></if>
+			<if test="deviceToken != null"><![CDATA[device_token = #{deviceToken},]]></if>
 			<if test="location != null"><![CDATA[location = #{location},]]></if>
 			<if test="address != null"><![CDATA[address = #{address},]]></if>
 			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
@@ -65,10 +68,12 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="UserLogin" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_user_login (user_id,login_ip,login_time,location,latitude,longitude,address,feature,created,modified,yn)
-			VALUES (#{userId},#{loginIp},#{loginTime},#{location},#{latitude},#{longitude},#{address},#{feature},now(),now(),#{yn})
-			ON DUPLICATE KEY UPDATE login_time = #{loginTime}, location = #{location}
-		]]>
+			INSERT INTO tb_user_login (user_id,login_ip,login_time,location,latitude,longitude,address,device_token,feature,created,modified,yn)
+			VALUES (#{userId},#{loginIp},#{loginTime},#{location},#{latitude},#{longitude},#{address},#{deviceToken},#{feature},now(),now(),#{yn})
+			ON DUPLICATE KEY UPDATE ]]>
+			<if test="location != null"><![CDATA[location = #{location},]]></if>
+			<if test="deviceToken != null"><![CDATA[device_token = #{deviceToken},]]></if>
+			<if test="loginTime != null"><![CDATA[login_time = #{loginTime},]]></if>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

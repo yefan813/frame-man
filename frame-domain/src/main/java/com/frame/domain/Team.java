@@ -9,6 +9,9 @@ import com.frame.domain.base.BaseQuery;
 public class Team extends BaseQuery {
 	private static final long serialVersionUID = -7869400238880038556L;
 
+	public static final Integer TEAMSTATUS_FULL = 1;
+	public static final Integer TEAMSTATUS_NOTFULL = 2;
+	
 	private Integer id;
 	/**
 	 * 球队当前人数

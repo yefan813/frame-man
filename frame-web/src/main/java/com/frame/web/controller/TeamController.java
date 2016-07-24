@@ -130,7 +130,7 @@ public class TeamController extends BaseController {
 		team.setLostTimes(0);
 		team.setWinTimes(0);
 		team.setCurrentCount(1);
-		team.setStatus(1);
+		team.setStatus(Team.TEAMSTATUS_NOTFULL);
 		team.setYn(YnEnum.Normal.getKey());
 		if(null == userId || userId < 0){
 			LOGGER.error("调用createTeam 传入参数为：" + userId + "  team:" + team);

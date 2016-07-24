@@ -28,6 +28,8 @@ public class UserLogin extends BaseDomain {
 	private String location; // 用户定位坐标
 
 	private Double myDistance;
+	
+	private String deviceToken;
 	public Integer getUserId() {
 		return userId;
 	}
@@ -90,6 +92,14 @@ public class UserLogin extends BaseDomain {
 
 	public void setMyDistance(Double myDistance) {
 		this.myDistance = myDistance;
+	}
+
+	public String getDeviceToken() {
+		return deviceToken;
+	}
+
+	public void setDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
 	}
 
 	@Override

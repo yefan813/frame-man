@@ -63,6 +63,7 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 		utRelation.setTeamId(team.getId().longValue());
 		utRelation.setTeamName(team.getName());
 		utRelation.setUserId(userId);
+		utRelation.setType(UserTeamRelation.TEAM_TYPE_CAPTURE);
 		utRelation.setYn(YnEnum.Normal.getKey());
 		int result = userTeamRelationDao.insertEntry(utRelation);
 		if(result > 0){
