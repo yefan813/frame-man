@@ -1,5 +1,7 @@
 package com.frame.web.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -15,6 +17,8 @@ import com.frame.domain.UserLogin;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
 import com.frame.service.UserLoginService;
+import com.frame.service.impl.APNSService;
+import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping(value = "/userLogin")
@@ -23,6 +27,9 @@ public class UserLoginController extends BaseController {
 
 	@Resource
 	private UserLoginService userLoginService;
+	
+	@Resource
+	private APNSService aPNSService;
 
 	@RequestMapping(value = "/saveUserLoginInfo", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String saveUserLoginInfo(UserLogin userLogin) {
@@ -73,5 +80,14 @@ public class UserLoginController extends BaseController {
 		return JSON.toJSONString(result);
 	}
 
-
+	
+	
+	@RequestMapping(value = "/sendNotifi", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String sendNotifi(String msg, String deviceToken) {
+		RemoteResult result = null;
+		List<String> list = Lists.newArrayList();
+		list.add(deviceToken);
+		aPNSService.senPushNotification(list, msg);
+		return JSON.toJSONString(result);
+	}
 }

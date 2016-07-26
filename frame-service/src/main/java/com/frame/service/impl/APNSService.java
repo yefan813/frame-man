@@ -1,6 +1,10 @@
 package com.frame.service.impl;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +39,12 @@ public class APNSService {
 	 
 	        // 创建和苹果APNS服务器的连接connection对象
 	        ApnsServiceBuilder serviceBuilder = APNS.newService();
-	        // 通过类加载器加载ios证书
+	        // 通过类加载器加载ios证书\
 	        serviceBuilder.withCert(APNSService.class.getClassLoader().getResourceAsStream(iosCertPath), iosCertPassword);
 	        // 设定为推送正式产品环境
-	        serviceBuilder.withProductionDestination();
+	        serviceBuilder.withSandboxDestination();
 	        // 从builder到service对象
 	        ApnsService service = serviceBuilder.build();
-	 
 	        String sound = "default.mp3";// 默认响铃文件名称
 	        int badge = 5;// 小红点数字
 	        PayloadBuilder payloadBuilder = APNS.newPayload();
@@ -49,10 +52,8 @@ public class APNSService {
 	        payloadBuilder.sound(sound);
 	        try {
 	            // 尝试推送10条消息内容不同的消息
-	            for (int i = 0; i < 10; i++) {
-	                String payload = payloadBuilder.alertBody(content).build();
-	                System.out.println(service.push(deviceTokens, payload).toString());
-	            }
+                String payload = payloadBuilder.alertBody(content).build();
+                LOGGER.info(service.push(deviceTokens, payload).toString());
 	        } catch (NetworkIOException e) {
 	        	LOGGER.error("推送消息到苹果APNS服务器遇到网络异常");
 	            e.printStackTrace();
