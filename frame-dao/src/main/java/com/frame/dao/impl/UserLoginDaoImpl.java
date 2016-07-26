@@ -14,11 +14,18 @@ public class UserLoginDaoImpl extends BaseDaoImpl<UserLogin, Integer> implements
 
 	private final static String NAMESPACE = "com.frame.dao.UserLoginDao.";
 	
+	private final static String SELECT_USERDEVICETOKENENTRYLIST = "selectUserDeviceTokenEntryList";
 
 	@Override
 	public String getNameSpace(String statement) {
 		// TODO Auto-generated method stub
 		return NAMESPACE + statement;
+	}
+
+
+	@Override
+	public List<UserLogin> queryUserDeviceTokenByTeamId(Integer teamId) {
+		return selectList(getNameSpace(SELECT_USERDEVICETOKENENTRYLIST), teamId);
 	}
 
 	

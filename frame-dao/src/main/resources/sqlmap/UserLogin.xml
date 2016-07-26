@@ -128,5 +128,12 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<select id="selectUserDeviceTokenEntryList" parameterType="int" resultType="UserLogin">
+		<![CDATA[SELECT tb_ul.device_token from tb_user_login tb_ul 
+			LEFT JOIN user_team_relation  utr
+			on  tb_ul.user_id = utr.user_id 
+			where utr.team_id = #{teamId}]]>
+	</select>
+	
 	
 </mapper>

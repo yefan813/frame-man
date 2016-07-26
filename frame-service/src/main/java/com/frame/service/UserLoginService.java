@@ -7,5 +7,5 @@ import com.frame.domain.UserLogin;
 import com.frame.service.base.BaseService;
 
 public interface UserLoginService extends BaseService<UserLogin, Integer> {
-	
+	public List<UserLogin> queryUserDeviceTokenByTeamId(Integer teamId);
 }

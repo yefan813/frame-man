@@ -29,5 +29,10 @@ public class UserLoginServiceImpl extends BaseServiceImpl<UserLogin, Integer> im
 		return userLoginDao;
 	}
 
+	@Override
+	public List<UserLogin> queryUserDeviceTokenByTeamId(Integer teamId) {
+		return userLoginDao.queryUserDeviceTokenByTeamId(teamId);
+	}
+
 
 }

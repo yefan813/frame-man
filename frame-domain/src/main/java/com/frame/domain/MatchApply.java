@@ -12,6 +12,10 @@ import com.frame.domain.base.BaseDomain;
  */
 public class MatchApply extends BaseDomain {
 	private static final long serialVersionUID = -7869400238880038556L;
+	
+	public static final int TYPE_PERSONLY = 1;
+	
+	public static final int TYPE_TEAM = 2;
 
 	private Integer type;
 	
