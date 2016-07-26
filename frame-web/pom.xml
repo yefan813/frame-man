@@ -44,6 +44,16 @@
 				<pfile>online.properties</pfile>
 			</properties>
 		</profile>
+		<!-- 开发环境 -->
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<pfile>dev.properties</pfile>
+			</properties>
+		</profile>
 		<!-- 本地开发环境 -->
 		<profile>
 			<id>local</id>
@@ -51,7 +61,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<pfile>dev.properties</pfile>
+				<pfile>local.properties</pfile>
 			</properties>
 		</profile>
 	</profiles>

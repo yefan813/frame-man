@@ -40,7 +40,7 @@ public class APNSService {
 	        // 创建和苹果APNS服务器的连接connection对象
 	        ApnsServiceBuilder serviceBuilder = APNS.newService();
 	        // 通过类加载器加载ios证书\
-	        serviceBuilder.withCert(APNSService.class.getClassLoader().getResourceAsStream(iosCertPath), iosCertPassword);
+	        serviceBuilder.withCert(iosCertPath, iosCertPassword);
 	        // 设定为推送正式产品环境
 	        serviceBuilder.withSandboxDestination();
 	        // 从builder到service对象
