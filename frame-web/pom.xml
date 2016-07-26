@@ -46,7 +46,7 @@
 		</profile>
 		<!-- 开发环境 -->
 		<profile>
-			<id>local</id>
+			<id>dev</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
