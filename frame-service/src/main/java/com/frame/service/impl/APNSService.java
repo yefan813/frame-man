@@ -12,6 +12,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.frame.domain.common.RemoteResult;
@@ -32,6 +33,7 @@ public class APNSService {
 	@Value("${iosCertPath}")
 	private String iosCertPath;
 	
+	@Async
 	public RemoteResult senPushNotification(List<String> deviceTokens, String content){
 		RemoteResult msg = null;
 		

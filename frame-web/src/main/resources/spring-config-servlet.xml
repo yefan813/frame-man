@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  
                      http://www.springframework.org/schema/beans/spring-beans.xsd  
                      http://www.springframework.org/schema/tx  
@@ -14,7 +15,9 @@
                      http://www.springframework.org/schema/util        
                      http://www.springframework.org/schema/util/spring-util-3.2.xsd  
                      http://www.springframework.org/schema/mvc   
-                     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+                     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+                     http://www.springframework.org/schema/task
+                     http://www.springframework.org/schema/task/spring-task.xsd">
 
 	<bean id="stringHttpMessageConverter"
 		class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -38,7 +41,7 @@
 
 
 
-    <mvc:interceptors>
+	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/out-ifs/**" />
@@ -52,7 +55,9 @@
 	</mvc:interceptors>
 
 	<mvc:annotation-driven />
-	
+	<!-- 支持异步方法执行 -->
+	<task:annotation-driven />
+
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- one of the properties available; the maximum file size in bytes -->
