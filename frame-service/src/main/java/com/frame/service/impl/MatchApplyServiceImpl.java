@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,10 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 				
 				
 				List<UserLogin> sourceTeam = userLoginService.queryUserDeviceTokenByTeamId(matchApply.getSourceIdentityId());
+				if(CollectionUtils.isEmpty(sourceTeam)){
+					LOGGER.info("球队无队员");
+					return RemoteResult.success();
+				}
 				List<String> soDeviceTokens = Lists.transform(sourceTeam,new Function<UserLogin , String>(){
 
 					@Override
@@ -83,6 +88,10 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 				
 				
 				List<UserLogin> targetTeam = userLoginService.queryUserDeviceTokenByTeamId(matchApply.getTargetIdentityId());
+				if(CollectionUtils.isEmpty(targetTeam)){
+					LOGGER.info("球队无队员");
+					return RemoteResult.success();
+				}
 				List<String> tarDeviceTokens = Lists.transform(targetTeam,new Function<UserLogin , String>(){
 
 					@Override

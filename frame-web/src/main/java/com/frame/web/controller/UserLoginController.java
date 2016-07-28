@@ -70,7 +70,7 @@ public class UserLoginController extends BaseController {
 		login.setUserId(userId);
 		login.setDeviceToken(deviceToken);
 		
-		if (userLoginService.insertEntry(login) > 0) {
+		if (userLoginService.registDeviceToken(login) > 0) {
 			LOGGER.info("用户定位保存成功,传入的参数为：[{}]", JSON.toJSONString(login));
 			result = RemoteResult.success();
 		} else {

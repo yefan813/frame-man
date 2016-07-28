@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.frame.dao.UserLoginDao;
 import com.frame.dao.base.BaseDao;
-import com.frame.domain.User;
 import com.frame.domain.UserLogin;
 import com.frame.service.UserLoginService;
 import com.frame.service.base.BaseServiceImpl;
@@ -34,5 +33,11 @@ public class UserLoginServiceImpl extends BaseServiceImpl<UserLogin, Integer> im
 		return userLoginDao.queryUserDeviceTokenByTeamId(teamId);
 	}
 
+	@Override
+	public int registDeviceToken(UserLogin userLogin) {
+		return userLoginDao.registDeviceToken(userLogin);
+	}
+
+	
 
 }

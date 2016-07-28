@@ -70,10 +70,7 @@
 		<![CDATA[
 			INSERT INTO tb_user_login (user_id,login_ip,login_time,location,latitude,longitude,address,device_token,feature,created,modified,yn)
 			VALUES (#{userId},#{loginIp},#{loginTime},#{location},#{latitude},#{longitude},#{address},#{deviceToken},#{feature},now(),now(),#{yn})
-			ON DUPLICATE KEY UPDATE ]]>
-			<if test="location != null"><![CDATA[location = #{location},]]></if>
-			<if test="deviceToken != null"><![CDATA[device_token = #{deviceToken},]]></if>
-			<if test="loginTime != null"><![CDATA[login_time = #{loginTime},]]></if>
+			]]>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
@@ -134,6 +131,10 @@
 			on  tb_ul.user_id = utr.user_id 
 			where utr.team_id = #{teamId}]]>
 	</select>
+	
+	<update id="registDeviceToken" parameterType="UserLogin">
+		<![CDATA[UPDATE tb_user_login set device_token = #{deviceToken} WHERE user_id = #{userId}]]>
+	</update>
 	
 	
 </mapper>
