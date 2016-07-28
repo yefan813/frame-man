@@ -27,10 +27,23 @@ public class MatchApplyController extends BaseController {
 	@RequestMapping(value = "/applyMatch", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String applyMatch(MatchApply matchApply) {
 		RemoteResult result = null;
-		if(null == matchApply || matchApply.getType() == null ||matchApply.getSourceIdentityId()==null || matchApply.getTargetIdentityId() == null){
-			LOGGER.info("调用applyMatch 传入的参数错误");
-			result = RemoteResult.failure("0001", "传入参数错误");
+		
+		if(null == matchApply || matchApply.getType() == null ){
+			LOGGER.info("调用applyMatch 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
 			return JSON.toJSONString(result);
+		}
+		if(matchApply.getType() != null){
+			if(matchApply.getType() == MatchApply.TYPE_PERSONLY && matchApply.getSourceIdentityId()==null){
+				LOGGER.info("调用applyMatch 传入的参数SourceIdentityI错误");
+				result = RemoteResult.failure("0001", "传入参数SourceIdentityI错误");
+				return JSON.toJSONString(result);
+			}
+			else if(matchApply.getType() == MatchApply.TYPE_TEAM &&( matchApply.getSourceIdentityId()==null || matchApply.getTargetIdentityId() == null)){
+				LOGGER.info("调用applyMatch 传入的参数SourceIdentityI,TargetIdentityId错误");
+				result = RemoteResult.failure("0001", "传入参数错误");
+				return JSON.toJSONString(result);
+			}
 		}
 		result = matchApplyService.applyMatch(matchApply);
 		return JSON.toJSONString(result);
