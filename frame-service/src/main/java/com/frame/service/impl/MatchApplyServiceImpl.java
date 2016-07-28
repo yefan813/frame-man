@@ -105,6 +105,8 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 				apnsService.senPushNotification(tarDeviceTokens, content);
 				
 				result = RemoteResult.success();
+			}else{
+				return RemoteResult.success();
 			}
 			
 			

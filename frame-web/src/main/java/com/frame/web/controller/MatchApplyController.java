@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.frame.domain.MatchApply;
+import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
 import com.frame.service.MatchApplyService;
 
@@ -45,6 +46,7 @@ public class MatchApplyController extends BaseController {
 				return JSON.toJSONString(result);
 			}
 		}
+		matchApply.setYn(YnEnum.Normal.getKey());
 		result = matchApplyService.applyMatch(matchApply);
 		return JSON.toJSONString(result);
 	}
