@@ -61,21 +61,25 @@ public class UserLoginController extends BaseController {
 	@RequestMapping(value = "/registDeviceToken", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String registDeviceToken(Integer userId, String deviceToken) {
 		RemoteResult result = null;
-		if ( userId == null || StringUtils.isEmpty(deviceToken) ) {
-			LOGGER.info("调用registDeviceToken 传入的参数错误");
-			result = RemoteResult.failure("0001", "传入参数错误");
-			return JSON.toJSONString(result);
-		}
-		UserLogin login = new UserLogin();
-		login.setUserId(userId);
-		login.setDeviceToken(deviceToken);
-		
-		if (userLoginService.registDeviceToken(login) > 0) {
-			LOGGER.info("用户定位保存成功,传入的参数为：[{}]", JSON.toJSONString(login));
-			result = RemoteResult.success();
-		} else {
-			LOGGER.info("用户定位失败,传入的参数为：[{}]", JSON.toJSONString(login));
-			result = RemoteResult.failure("0001", "用户定位失败，服务器异常");
+		try {
+			if ( userId == null || StringUtils.isEmpty(deviceToken) ) {
+				LOGGER.info("调用registDeviceToken 传入的参数错误");
+				result = RemoteResult.failure("0001", "传入参数错误");
+				return JSON.toJSONString(result);
+			}
+			UserLogin login = new UserLogin();
+			login.setUserId(userId);
+			login.setDeviceToken(deviceToken);
+			
+			if (userLoginService.registDeviceToken(login) > 0) {
+				LOGGER.info("用户注册deviceToken成功,传入的参数为：[{}]", JSON.toJSONString(login));
+				result = RemoteResult.success();
+			} else {
+				LOGGER.info("用户注册deviceToken失败,传入的参数为：[{}]", JSON.toJSONString(login));
+				result = RemoteResult.failure("0001", "用户注册deviceToken失败，服务器异常");
+			}
+		} catch (Exception e) {
+			LOGGER.info("调用registDeviceToken异常",e);
 		}
 		return JSON.toJSONString(result);
 	}
