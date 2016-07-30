@@ -1,7 +1,10 @@
 package com.frame.web.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,9 @@ import com.alibaba.fastjson.JSON;
 import com.frame.domain.MatchApply;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
+import com.frame.domain.enums.BusinessCode;
+import com.frame.domain.vo.TeamApplyRecordVO;
+import com.frame.domain.vo.UserApplyRecordVO;
 import com.frame.service.MatchApplyService;
 
 
@@ -46,8 +52,144 @@ public class MatchApplyController extends BaseController {
 				return JSON.toJSONString(result);
 			}
 		}
+		matchApply.setStatus(MatchApply.STATUS_APPLYING);
 		matchApply.setYn(YnEnum.Normal.getKey());
 		result = matchApplyService.applyMatch(matchApply);
 		return JSON.toJSONString(result);
 	}
+	
+	@RequestMapping(value = "/persionMatchApply", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String persionMatchApply(Integer userId) {
+		RemoteResult result = null;
+		if(userId == null ){
+			LOGGER.info("调用mineApplyMatch 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		
+		
+		List<UserApplyRecordVO> voList = matchApplyService.queryPersionMatchApply(userId);
+		if(CollectionUtils.isEmpty(voList)){
+			LOGGER.info("调用mineApplyMatch ,无数据");
+			result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+		}else{
+			result = RemoteResult.success(voList);
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/mineTeamApplyMatch", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String mineTeamApplyMatch(Integer userId) {
+		RemoteResult result = null;
+		if(userId == null){
+			LOGGER.info("调用mineTeamApplyMatch 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		List<TeamApplyRecordVO> voList = matchApplyService.queryMineTeamApplyMatch(userId);
+		if(CollectionUtils.isEmpty(voList)){
+			LOGGER.info("调用mineTeamApplyMatch ,无数据");
+			result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+		}else{
+			result = RemoteResult.success(voList);
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	
+	@RequestMapping(value = "/mineTeamInventMatch", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String mineTeamInventMatch(Integer userId) {
+		RemoteResult result = null;
+		if(userId == null){
+			LOGGER.info("调用mineTeamInventMatch 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		List<TeamApplyRecordVO> voList = matchApplyService.queryMineTeamInventMatch(userId);
+		if(CollectionUtils.isEmpty(voList)){
+			LOGGER.info("调用mineTeamInventMatch ,无数据");
+			result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+		}else{
+			result = RemoteResult.success(voList);
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	
+	@RequestMapping(value = "/agreeMatchAply", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String agreeMatchAply(Integer id) {
+		RemoteResult result = null;
+		if(id == null){
+			LOGGER.info("调用agreeMatchAply 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		MatchApply condition = new MatchApply();
+		condition.setId(id);
+		condition.setStatus(MatchApply.STATUS_AGREEMENT);
+		if(matchApplyService.update(condition) > 0){
+			result = RemoteResult.success();
+		}else{
+			result = RemoteResult.failure(BusinessCode.FAILED.getCode(), BusinessCode.FAILED.getValue());
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/regectMatchAply", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String regectMatchAply(Integer id) {
+		RemoteResult result = null;
+		if(id == null){
+			LOGGER.info("调用regectMatchAply 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		MatchApply condition = new MatchApply();
+		condition.setId(id);
+		condition.setStatus(MatchApply.STATUS_REJECT);
+		if(matchApplyService.update(condition) > 0){
+			result = RemoteResult.success();
+		}else{
+			result = RemoteResult.failure(BusinessCode.FAILED.getCode(), BusinessCode.FAILED.getValue());
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/sourceTeamCancle", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String sourceTeamCancle(Integer id) {
+		RemoteResult result = null;
+		if(id == null){
+			LOGGER.info("调用sourceTeamCancle 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		MatchApply condition = new MatchApply();
+		condition.setId(id);
+		condition.setStatus(MatchApply.STATUS_SOURCE_CANCLE);
+		if(matchApplyService.update(condition) > 0){
+			result = RemoteResult.success();
+		}else{
+			result = RemoteResult.failure(BusinessCode.FAILED.getCode(), BusinessCode.FAILED.getValue());
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/targetTeamCancle", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String targetTeamCancle(Integer id) {
+		RemoteResult result = null;
+		if(id == null){
+			LOGGER.info("调用targetTeamCancle 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		MatchApply condition = new MatchApply();
+		condition.setId(id);
+		condition.setStatus(MatchApply.STATUS_TARGET_CANCLE);
+		if(matchApplyService.update(condition) > 0){
+			result = RemoteResult.success();
+		}else{
+			result = RemoteResult.failure(BusinessCode.FAILED.getCode(), BusinessCode.FAILED.getValue());
+		}
+		return JSON.toJSONString(result);
+	}
+	
 }

@@ -17,6 +17,16 @@ public class MatchApply extends BaseDomain {
 	
 	public static final int TYPE_TEAM = 2;
 
+	public static final int STATUS_APPLYING = 1;				//申请
+	public static final int STATUS_AGREEMENT = 2;				//同意
+	public static final int STATUS_SOURCE_CANCLE = 3;			//主队取消
+	public static final int STATUS_REJECT = 4;					//拒绝
+	public static final int STATUS_TARGET_CANCLE = 5;			//客队取消
+	
+	
+	
+	
+
 	private Integer type;
 	
 	private Integer sourceIdentityId;

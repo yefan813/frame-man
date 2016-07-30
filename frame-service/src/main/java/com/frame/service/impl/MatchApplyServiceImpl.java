@@ -1,5 +1,6 @@
 package com.frame.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,13 +16,20 @@ import com.frame.domain.MatchApply;
 import com.frame.domain.Team;
 import com.frame.domain.UserLogin;
 import com.frame.domain.UserTeamRelation;
+import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
+import com.frame.domain.vo.TeamApplyRecordVO;
+import com.frame.domain.vo.UserApplyRecordVO;
 import com.frame.service.MatchApplyService;
 import com.frame.service.TeamService;
 import com.frame.service.UserLoginService;
+import com.frame.service.UserService;
+import com.frame.service.UserTeamRelationService;
 import com.frame.service.base.BaseServiceImpl;
+import com.frame.service.utils.CopyProperties;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.taobao.api.internal.toplink.channel.embedded.EmbeddedWebSocketClient;
 
 
 
@@ -35,7 +43,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 	
 	
 	@Resource
-	private TeamService TeamService;
+	private TeamService teamService;
 	
 	
 	@Resource
@@ -43,6 +51,12 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 	
 	@Resource
 	private APNSService apnsService;
+	
+	@Resource
+	private UserService userService;
+	
+	@Resource
+	private UserTeamRelationService userTeamRelationService;
 
 	@Override
 	public BaseDao<MatchApply, Long> getDao() {
@@ -64,8 +78,8 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		if(res > 0){
 			//球队月球 需要推送双方球队，所有成员
 			if(matchApply.getType() == MatchApply.TYPE_TEAM){
-				Team souTL = TeamService.selectEntry(matchApply.getSourceIdentityId().longValue());
-				Team tarTL = TeamService.selectEntry(matchApply.getTargetIdentityId().longValue());
+				Team souTL = teamService.selectEntry(matchApply.getSourceIdentityId().longValue());
+				Team tarTL = teamService.selectEntry(matchApply.getTargetIdentityId().longValue());
 				
 				
 				List<UserLogin> sourceTeam = userLoginService.queryUserDeviceTokenByTeamId(matchApply.getSourceIdentityId());
@@ -114,6 +128,128 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		}
 		
 		return result;
+	}
+
+
+	@Override
+	public List<UserApplyRecordVO> queryPersionMatchApply(Integer userId) {
+		List<UserApplyRecordVO> res = null;
+		if(null == userId){
+			LOGGER.error("调用 applMatchService 接口 mineApplyMatch 传入参数错误");
+			return null;
+		}
+		
+		res = Lists.newArrayList();
+		
+		MatchApply matchQuery = new MatchApply();
+		matchQuery.setSourceIdentityId(userId);
+		matchQuery.setType(MatchApply.TYPE_PERSONLY);
+		matchQuery.setYn(YnEnum.Normal.getKey());
+		
+		List<MatchApply> list = matchApplyDao.selectEntryList(matchQuery);
+		if(CollectionUtils.isNotEmpty(list)){
+			for (MatchApply apply : list) {
+				UserApplyRecordVO recordVO = new UserApplyRecordVO();
+				try {
+					CopyProperties.copy(apply, recordVO);
+					//TODO 获取用户参加列表
+					
+					
+					res.add(recordVO);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return res;
+	}
+
+
+	@Override
+	public List<TeamApplyRecordVO> queryMineTeamApplyMatch(Integer userId) {
+		List<TeamApplyRecordVO> res = null;
+		if(null == userId || userId < 0){
+			LOGGER.error("调用 queryMineTeamApplyMatch 接口 mineApplyMatch 传入参数错误");
+			return null;
+		}
+		res = Lists.newArrayList();
+		UserTeamRelation query = new UserTeamRelation();
+		query.setUserId(userId.longValue());
+		query.setYn(YnEnum.Normal.getKey());
+		List<UserTeamRelation> relations = userTeamRelationService.selectEntryList(query);
+		
+		if(CollectionUtils.isNotEmpty(relations)){
+			MatchApply matchQuery;
+			for (UserTeamRelation userTeamRelation : relations) {
+				matchQuery = new MatchApply();
+				matchQuery.setSourceIdentityId(userTeamRelation.getTeamId().intValue());
+				matchQuery.setType(MatchApply.TYPE_PERSONLY);
+				matchQuery.setYn(YnEnum.Normal.getKey());
+				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
+				
+				List<TeamApplyRecordVO>  convertRes = convert2TeamApplyRecordVO(matchs);
+				if(CollectionUtils.isNotEmpty(convertRes)){
+					res.addAll(convertRes);
+				}
+			}
+		}
+		return res;
+	}
+
+	
+	private List<TeamApplyRecordVO> convert2TeamApplyRecordVO(List<MatchApply> matchs){
+		List<TeamApplyRecordVO> res = null;
+		if(CollectionUtils.isEmpty(matchs)){
+			return null;
+		}
+		for (MatchApply match : matchs) {
+			TeamApplyRecordVO vo = new TeamApplyRecordVO();
+			try {
+				CopyProperties.copy(match, vo);
+				Team sourceTeam = teamService.selectEntry(match.getSourceIdentityId().longValue());
+				Team targetTeam = teamService.selectEntry(match.getTargetIdentityId().longValue());
+				vo.setSourceIdentity(sourceTeam);
+				vo.setTargetIdentity(targetTeam);
+				res.add(vo);
+			} catch (Exception e) {
+				LOGGER.error("调用convert2TeamApplyRecordVO 异常",e);
+			}
+		}
+		
+		
+		
+		return res;
+	}
+
+	@Override
+	public List<TeamApplyRecordVO> queryMineTeamInventMatch(Integer userId) {
+		List<TeamApplyRecordVO> res = null;
+		if(null == userId || userId < 0){
+			LOGGER.error("调用 queryMineTeamApplyMatch 接口 mineApplyMatch 传入参数错误");
+			return null;
+		}
+		res = Lists.newArrayList();
+		UserTeamRelation query = new UserTeamRelation();
+		query.setUserId(userId.longValue());
+		query.setYn(YnEnum.Normal.getKey());
+		List<UserTeamRelation> relations = userTeamRelationService.selectEntryList(query);
+		
+		if(CollectionUtils.isNotEmpty(relations)){
+			MatchApply matchQuery;
+			for (UserTeamRelation userTeamRelation : relations) {
+				matchQuery = new MatchApply();
+				matchQuery.setTargetIdentityId(userTeamRelation.getTeamId().intValue());
+				matchQuery.setType(MatchApply.TYPE_PERSONLY);
+				matchQuery.setYn(YnEnum.Normal.getKey());
+				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
+				
+				List<TeamApplyRecordVO>  convertRes = convert2TeamApplyRecordVO(matchs);
+				if(CollectionUtils.isNotEmpty(convertRes)){
+					res.addAll(convertRes);
+				}
+			}
+		}
+		return res;
 	}
 
 }
