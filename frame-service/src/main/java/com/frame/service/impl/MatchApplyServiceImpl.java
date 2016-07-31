@@ -154,7 +154,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 					CopyProperties.copy(apply, recordVO);
 					//TODO 获取用户参加列表
 					
-					
+					recordVO.setId(apply.getId());
 					res.add(recordVO);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -183,7 +183,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 			for (UserTeamRelation userTeamRelation : relations) {
 				matchQuery = new MatchApply();
 				matchQuery.setSourceIdentityId(userTeamRelation.getTeamId().intValue());
-				matchQuery.setType(MatchApply.TYPE_PERSONLY);
+				matchQuery.setType(MatchApply.TYPE_TEAM);
 				matchQuery.setYn(YnEnum.Normal.getKey());
 				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
 				
@@ -202,12 +202,14 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		if(CollectionUtils.isEmpty(matchs)){
 			return null;
 		}
+		res = Lists.newArrayList();
 		for (MatchApply match : matchs) {
 			TeamApplyRecordVO vo = new TeamApplyRecordVO();
 			try {
 				CopyProperties.copy(match, vo);
 				Team sourceTeam = teamService.selectEntry(match.getSourceIdentityId().longValue());
 				Team targetTeam = teamService.selectEntry(match.getTargetIdentityId().longValue());
+				vo.setId(match.getId());
 				vo.setSourceIdentity(sourceTeam);
 				vo.setTargetIdentity(targetTeam);
 				res.add(vo);
@@ -239,7 +241,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 			for (UserTeamRelation userTeamRelation : relations) {
 				matchQuery = new MatchApply();
 				matchQuery.setTargetIdentityId(userTeamRelation.getTeamId().intValue());
-				matchQuery.setType(MatchApply.TYPE_PERSONLY);
+				matchQuery.setType(MatchApply.TYPE_TEAM);
 				matchQuery.setYn(YnEnum.Normal.getKey());
 				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
 				

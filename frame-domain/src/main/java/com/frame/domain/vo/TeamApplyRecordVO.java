@@ -18,6 +18,8 @@ public class TeamApplyRecordVO implements Serializable {
 	 */
 	private static final long serialVersionUID = 4665532042979313802L;
 
+	private Integer id;
+	
 	private Integer type;
 
 	private Team sourceIdentity;
@@ -76,6 +78,14 @@ public class TeamApplyRecordVO implements Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	@Override
