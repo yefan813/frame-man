@@ -1,5 +1,6 @@
 package com.frame.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -34,6 +35,7 @@ import com.frame.service.AppSecretService;
 import com.frame.service.ImgSysService;
 import com.frame.service.TaoBaoSmsService;
 import com.frame.service.UserAuthsService;
+import com.frame.service.UserLoginService;
 import com.frame.service.UserService;
 import com.frame.service.UserValidService;
 import com.frame.service.utils.RandomStrUtils;
@@ -52,6 +54,10 @@ public class UserController extends BaseController {
 	
 	@Resource
 	private UserAuthsService userAuthsService;
+	
+	@Resource
+	private UserLoginService userLoginService;
+	
 	
 	@Resource
 	private AppSecretService appSecretService;
@@ -240,7 +246,7 @@ public class UserController extends BaseController {
 			result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
 			return JSON.toJSONString(result);
 		}
-		
+		Date now = new Date();
 		if(userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_TEL || userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_EMAIL || userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_USERNAME){
 			if(userAuths.getIdentifier() == null || userAuths.getCredential() == null){
 				LOGGER.error("站内 调用login 传入的参数错误，无用户登陆类型，密码");
@@ -262,10 +268,15 @@ public class UserController extends BaseController {
 					secret.setUserId(appSecrets.get(0).getUserId());
 					secret.setApiKey(appSecrets.get(0).getApiKey());
 					secret.setSecretKey(appSecrets.get(0).getSecretKey());
+					
+					UserLogin condition = new UserLogin();
+					condition.setUserId(appSecrets.get(0).getUserId());
+					userLoginService.insertEntry(condition);
+					
 					result = RemoteResult.success(secret);
 					return JSON.toJSONString(result);
 				}else{
-					LOGGER.error("站内 调用login 找不到信管的蜜月信息");
+					LOGGER.error("站内 调用login找不到信管的蜜月信息");
 					result = RemoteResult.failure("0001", "找不到相关的密钥信息，请联系管理员");
 					return JSON.toJSONString(result);
 				}

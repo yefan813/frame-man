@@ -22,6 +22,7 @@ import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.service.AppSecretService;
 import com.frame.service.UserAuthsService;
+import com.frame.service.UserLoginService;
 import com.frame.service.UserService;
 import com.frame.service.base.BaseServiceImpl;
 import com.frame.service.utils.RandomStrUtils;
@@ -39,6 +40,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 	
 	@Resource
 	private UserAuthsService UserAuthsService;
+	
+	@Resource
+	private UserLoginService userLoginService;
 
 	@Override
 	public BaseDao<User, Long> getDao() {
@@ -64,6 +68,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			result = userDao.insertEntryCreateId(user);//插入默认用户
 		}
 		if(null != user && result <= 0){
+			LOGGER.error("registUser服务器内部错误,插入数据库失败");
 			res = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
 			return res;
 		}
@@ -80,6 +85,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		}
 		
 		if(userAuthsRes <= 0){
+			LOGGER.error("registUser服务器内部错误,插入数据库失败");
 			res = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
 			return res;
 		}
@@ -98,6 +104,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			appRes = appSecretService.insertEntry(appSecret);
 		}
 		if(appRes <= 0){
+			LOGGER.error("registUser服务器内部错误,插入数据库失败");
 			res = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
 			return res;
 		}
@@ -105,6 +112,12 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		secret.setUserId(appSecret.getUserId());
 		secret.setApiKey(appSecret.getApiKey());
 		secret.setSecretKey(appSecret.getSecretKey());
+		
+		
+		UserLogin condition = new UserLogin();
+		condition.setUserId(appSecret.getUserId());
+		userLoginService.insertEntry(condition);
+		
 		res = RemoteResult.success(secret);
 		
 		return res;

@@ -70,6 +70,7 @@
 		<![CDATA[
 			INSERT INTO tb_user_login (user_id,login_ip,login_time,location,latitude,longitude,address,device_token,feature,created,modified,yn)
 			VALUES (#{userId},#{loginIp},#{loginTime},#{location},#{latitude},#{longitude},#{address},#{deviceToken},#{feature},now(),now(),#{yn})
+			ON DUPLICATE KEY UPDATE login_time = now(),modified = now()
 			]]>
 	</insert>
 	
