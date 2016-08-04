@@ -88,7 +88,7 @@
 
 	<!-- 修改记录通过主键 -->
 	<update id="updateByKey" parameterType="matchApply" >
-		<![CDATA[UPDATE team]]>
+		<![CDATA[UPDATE tb_match_apply]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
