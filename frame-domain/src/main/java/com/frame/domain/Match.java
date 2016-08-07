@@ -7,6 +7,12 @@ import com.frame.domain.base.BaseDomain;
 public class Match extends BaseDomain {
 	private static final long serialVersionUID = -7869400238880038556L;
 
+	public static Integer STATUS_WAIT = 4;
+	public static Integer STATUS_GOING = 1;
+	public static Integer STATUS_PAUSE = 2;
+	public static Integer STATUS_END = 3;
+	
+	
 	private String homeTeamId;
 	private String homeTeamName;
 	private String guestTeamId;

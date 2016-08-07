@@ -1,5 +1,7 @@
 package com.frame.dao.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.frame.dao.MatchApplyDao;
@@ -11,6 +13,8 @@ public class MatchApplyDaoImpl extends BaseDaoImpl<MatchApply, Long> implements 
 
 	private final static String NAMESPACE = "com.frame.dao.MatchApplyDao.";
 	
+	private static final String SELECT_PERSIONAPPLYBY_LOCATION = "selectPersionApplyByLocation";
+	
 
 	@Override
 	public String getNameSpace(String statement) {
@@ -18,5 +22,11 @@ public class MatchApplyDaoImpl extends BaseDaoImpl<MatchApply, Long> implements 
 		return NAMESPACE + statement;
 	}
 
+	
+	@Override
+	public List<MatchApply> getPerionApplyByLocation(MatchApply matchApply) {
+		return selectList(getNameSpace(SELECT_PERSIONAPPLYBY_LOCATION), matchApply);
+	}
+	
 
 }

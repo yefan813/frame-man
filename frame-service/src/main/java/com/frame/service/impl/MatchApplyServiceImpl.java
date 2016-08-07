@@ -1,6 +1,5 @@
 package com.frame.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -17,6 +16,7 @@ import com.frame.domain.Team;
 import com.frame.domain.UserLogin;
 import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
+import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.vo.TeamApplyRecordVO;
 import com.frame.domain.vo.UserApplyRecordVO;
@@ -29,7 +29,6 @@ import com.frame.service.base.BaseServiceImpl;
 import com.frame.service.utils.CopyProperties;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.taobao.api.internal.toplink.channel.embedded.EmbeddedWebSocketClient;
 
 
 
@@ -252,6 +251,32 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 			}
 		}
 		return res;
+	}
+
+
+	@Override
+	public Page<MatchApply> getPerionApplyByLocation(Page<MatchApply> page,Double lng, Double lat) {
+		
+		MatchApply query = new MatchApply();
+		query.setLongitude(lng);
+		query.setLatitude(lat);
+		query.setStartIndex(page.getStartIndex());
+		query.setEndIndex(page.getEndIndex());
+		query.setOrderField("myDistance");
+		query.setOrderFieldType("asc");
+		
+		List<MatchApply> data = matchApplyDao.getPerionApplyByLocation(query);
+		if(CollectionUtils.isNotEmpty(data)){
+			page.setResult(data);
+		}
+		
+		MatchApply countQuery = new MatchApply();
+		query.setYn(YnEnum.Normal.getKey());
+		int totalCount = matchApplyDao.selectEntryListCount(countQuery);
+		
+		page.setTotalCount(totalCount);
+		
+		return page;
 	}
 
 }

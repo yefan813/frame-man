@@ -33,13 +33,14 @@ public class MatchController extends BaseController {
 			result = RemoteResult.failure("0001", "传入参数type错误");
 			return JSON.toJSONString(result);
 		}
+		
 		match.setYn(YnEnum.Normal.getKey());
 		if(matchService.insertEntry(match) > 0){
 			LOGGER.info("调用createMatch 创建比赛成功");
 			result = RemoteResult.success(match);
 		}else{
 			LOGGER.info("调用createMatch 创建比赛失败");
-			result.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
+			result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
 		}
 		return JSON.toJSONString(result);
 	}

@@ -10,5 +10,7 @@ import com.frame.domain.Playground;
 
 public interface MatchApplyDao extends BaseDao<MatchApply, Long> {
 	
+	public List<MatchApply> getPerionApplyByLocation(MatchApply matchApply);
+	
 
 }

@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.frame.domain.MatchApply;
+import com.frame.domain.Playground;
 import com.frame.domain.base.YnEnum;
+import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.domain.vo.TeamApplyRecordVO;
 import com.frame.domain.vo.UserApplyRecordVO;
 import com.frame.service.MatchApplyService;
+import com.frame.service.vo.PlaygroundVO;
 
 
 @Controller
@@ -191,5 +194,37 @@ public class MatchApplyController extends BaseController {
 		}
 		return JSON.toJSONString(result);
 	}
-	
+	@RequestMapping(value = "/listPersionApplyMatchByLocation", method = {RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody String listPlaygrounds(Page<MatchApply> page,String location){
+		RemoteResult result = null;
+		double lng = 9999d;double lat = 9999d;
+		
+		if(null == location || !location.contains(",")){
+			result = RemoteResult.result(BusinessCode.PARAMETERS_ERROR);
+			return JSON.toJSONString(result);
+		}
+		try{
+			String[] locations = location.split(",");
+			if(locations.length > 0){
+				lng = Double.valueOf(locations[0]);
+				lat = Double.valueOf(locations[1]);
+			}
+			
+			Page<MatchApply> matchApplys = matchApplyService.getPerionApplyByLocation(page, lng, lat);
+			if(matchApplys != null && CollectionUtils.isNotEmpty(matchApplys.getResult())){
+				LOGGER.info("调用listPersionApplyMatchByLocation ，获取数据成功");
+				result = RemoteResult.success( matchApplys.getResult());
+			}else{
+				LOGGER.info("调用listPersionApplyMatchByLocation ，无数据");
+				result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+			}
+			
+		}catch (Exception e) {
+			LOGGER.error("列表异常", e);
+			System.out.println("列表异常" + e);
+			result = RemoteResult.result(BusinessCode.SERVER_INTERNAL_ERROR);
+		} 
+		
+		return JSON.toJSONString(result);
+	}
 }

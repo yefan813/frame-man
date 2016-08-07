@@ -11,7 +11,7 @@ public class Team extends BaseQuery {
 
 	public static final Integer TEAMSTATUS_FULL = 1;
 	public static final Integer TEAMSTATUS_NOTFULL = 2;
-	
+
 	private Integer id;
 	/**
 	 * 球队当前人数
@@ -41,6 +41,8 @@ public class Team extends BaseQuery {
 	 * 球队名称
 	 */
 	private String name;
+	
+	private String teamDesc;
 
 	private String createUserName;
 	private Long createUser;
@@ -177,6 +179,14 @@ public class Team extends BaseQuery {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getTeamDesc() {
+		return teamDesc;
+	}
+
+	public void setTeamDesc(String teamDesc) {
+		this.teamDesc = teamDesc;
 	}
 
 	@Override

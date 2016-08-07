@@ -62,6 +62,30 @@ public class TeamController extends BaseController {
 		return JSON.toJSONString(result);
 	}
 	
+	@RequestMapping(value = "/getTeamById", method = {RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody String getAllTeams(Long teamId){
+		RemoteResult result = null;
+		if(teamId == null || teamId < 0){
+			LOGGER.error("调用getTeamById 传入参数为：" + teamId);
+			result = RemoteResult.result(BusinessCode.PARAMETERS_ERROR);
+			return JSON.toJSONString(result);
+		}
+		try{
+			Team res = teamService.selectEntry(teamId);
+			if(null != res){
+				result = RemoteResult.result(BusinessCode.SUCCESS, res);
+			}else{
+				result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+			}
+			
+		}catch (Exception e) {
+			LOGGER.error("列表异常", e);
+			System.out.println("列表异常" + e);
+			result = RemoteResult.result(BusinessCode.SERVER_INTERNAL_ERROR);
+		} 
+		return JSON.toJSONString(result);
+	}
+	
 	@RequestMapping(value = "/getUserTeams/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
 	public @ResponseBody String getUserTeams(@PathVariable Long userId){
 		
@@ -87,7 +111,8 @@ public class TeamController extends BaseController {
 	public @ResponseBody String createTeam(@RequestParam(value="userId") Long userId,
 			@RequestParam(value="userName") String userName,
 			@RequestParam(value="name") String name,
-			@RequestParam(value="peopleCount") Integer peopleCount,@RequestParam(value = "imgFile", required = false) MultipartFile imgFile){
+			@RequestParam(value="peopleCount") Integer peopleCount,
+			@RequestParam(value="teamDescription") String teamDesc,@RequestParam(value = "imgFile", required = false) MultipartFile imgFile){
 		RemoteResult result = null;
 		Team  team = new Team();
 		

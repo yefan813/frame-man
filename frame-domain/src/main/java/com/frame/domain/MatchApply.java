@@ -37,6 +37,10 @@ public class MatchApply extends BaseDomain {
 	
 	private String matchAddress;
 	
+	private Double longitude;
+	
+	private Double latitude;
+	
 	private Integer status;
 
 	public Integer getType() {
@@ -85,6 +89,22 @@ public class MatchApply extends BaseDomain {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
 
 	@Override

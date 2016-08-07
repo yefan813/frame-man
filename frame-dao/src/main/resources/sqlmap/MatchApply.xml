@@ -12,6 +12,8 @@
 			status,
 			match_time as matchTime,
 			match_address as matchAddress,
+			longitude,
+			latitude,
 			type,
 			feature,
 			created,
@@ -33,6 +35,8 @@
 			<if test="matchTime != null"><![CDATA[AND match_time = #{matchTime}]]></if>
 			<if test="matchAddress != null"><![CDATA[AND match_address = #{matchAddress}]]></if>
 			<if test="type != null"><![CDATA[AND type = #{type}]]></if>
+			<if test="longitude != null"><![CDATA[AND longitude = #{longitude}]]></if>
+			<if test="latitude != null"><![CDATA[AND latitude = #{latitude}]]></if>
 			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
 			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
 			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
@@ -55,6 +59,8 @@
 			<if test="matchTime != null"><![CDATA[match_time = #{matchTime},]]></if>
 			<if test="matchAddress != null"><![CDATA[match_address = #{matchAddress},]]></if>
 			<if test="type != null"><![CDATA[type = #{type},]]></if>
+			<if test="longitude != null"><![CDATA[longitude = #{longitude},]]></if>
+			<if test="latitude != null"><![CDATA[latitude = #{latitude},]]></if>
 			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
 			<![CDATA[modified = now(),]]>
 			<if test="yn != null"><![CDATA[yn = #{yn},]]></if>
@@ -64,8 +70,8 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_match_apply (type,source_identity_id,target_identity_id,status,match_time,match_address,feature,created,modified,yn)
-			VALUES (#{type},#{sourceIdentityId},#{targetIdentityId},#{status},#{matchTime},#{matchAddress},#{feature},now(),now(),#{yn})
+			INSERT INTO tb_match_apply (type,source_identity_id,target_identity_id,status,match_time,match_address,longitude,latitude,feature,created,modified,yn)
+			VALUES (#{type},#{sourceIdentityId},#{targetIdentityId},#{status},#{matchTime},#{matchAddress},#{longitude},#{latitude},#{feature},now(),now(),#{yn})
 		]]>
 	</insert>
 	
@@ -121,5 +127,19 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	
+	<!-- 其它SQL语句 -->
+	<select id="selectPersionApplyByLocation" parameterType="Map" resultType="matchApply">
+		<![CDATA[SELECT type,source_identity_id,target_identity_id,match_time,match_address,longitude,latitude,status,
+        111.1111 *
+	    DEGREES(acos( cos( radians(latitude) ) 
+	      * cos( radians(#{latitude}) ) 
+	      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
+	      * sin( radians(#{latitude}) ))) as myDistance
+	      
+        FROM tb_match_apply
+        ]]>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
 	
 </mapper>
