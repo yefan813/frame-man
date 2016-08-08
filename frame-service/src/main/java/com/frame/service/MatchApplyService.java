@@ -19,7 +19,7 @@ public interface MatchApplyService extends BaseService<MatchApply, Long> {
 	
 	public List<TeamApplyRecordVO> queryMineTeamInventMatch(Integer userId);
 	
-	public Page<MatchApply> getPerionApplyByLocation(Page<MatchApply> page,Double lng, Double lat);
+	public Page<MatchApply> getPerionApplyByLocation(Page<MatchApply> page,Double lng, Double lat, Integer status);
 	
 	
 }

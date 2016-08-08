@@ -129,7 +129,7 @@
 	<!-- 其它SQL语句 -->
 	
 	<!-- 其它SQL语句 -->
-	<select id="selectPersionApplyByLocation" parameterType="Map" resultType="matchApply">
+	<select id="selectPersionApplyByLocation" parameterType="matchApply" resultType="matchApply">
 		<![CDATA[SELECT type,source_identity_id,target_identity_id,match_time,match_address,longitude,latitude,status,
         111.1111 *
 	    DEGREES(acos( cos( radians(latitude) ) 
@@ -137,7 +137,7 @@
 	      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
 	      * sin( radians(#{latitude}) ))) as myDistance
 	      
-        FROM tb_match_apply
+        FROM tb_match_apply where type = #{type}
         ]]>
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
 	</select>

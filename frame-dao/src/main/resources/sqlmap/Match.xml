@@ -77,7 +77,7 @@
 			INSERT INTO tb_match (home_team_id,home_team_name,guest_team_id,guest_team_name,home_team_score,guest_team_score,status,address,match_time,feature,created,modified,yn)
 			VALUES (#{homeTeamId},#{homeTeamName},#{guestTeamId},#{guestTeamName},#{homeTeamScore},#{guestTeamScore},#{status},#{address},#{matchTime},#{feature},now(),now(),#{yn})
 			ON DUPLICATE KEY UPDATE
-			tel=#{tel},parking_type=#{parkingType}
+			home_team_score=#{homeTeamScore},guest_team_score=#{guestTeamScore},status = #{status}
 			
 		]]>
 	</insert>

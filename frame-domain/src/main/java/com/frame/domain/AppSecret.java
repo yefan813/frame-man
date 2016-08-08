@@ -1,8 +1,6 @@
 package com.frame.domain;
 
 
-import java.util.Date;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.frame.domain.base.BaseDomain;

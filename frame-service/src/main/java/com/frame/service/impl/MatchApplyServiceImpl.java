@@ -255,11 +255,12 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 
 
 	@Override
-	public Page<MatchApply> getPerionApplyByLocation(Page<MatchApply> page,Double lng, Double lat) {
+	public Page<MatchApply> getPerionApplyByLocation(Page<MatchApply> page,Double lng, Double lat, Integer status) {
 		
 		MatchApply query = new MatchApply();
 		query.setLongitude(lng);
 		query.setLatitude(lat);
+		query.setType(MatchApply.TYPE_PERSONLY);
 		query.setStartIndex(page.getStartIndex());
 		query.setEndIndex(page.getEndIndex());
 		query.setOrderField("myDistance");

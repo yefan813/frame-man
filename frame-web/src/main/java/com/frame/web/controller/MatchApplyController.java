@@ -195,7 +195,7 @@ public class MatchApplyController extends BaseController {
 		return JSON.toJSONString(result);
 	}
 	@RequestMapping(value = "/listPersionApplyMatchByLocation", method = {RequestMethod.GET, RequestMethod.POST})
-	public @ResponseBody String listPlaygrounds(Page<MatchApply> page,String location){
+	public @ResponseBody String listPersionApplyMatchByLocation(Page<MatchApply> page,String location){
 		RemoteResult result = null;
 		double lng = 9999d;double lat = 9999d;
 		
@@ -210,7 +210,7 @@ public class MatchApplyController extends BaseController {
 				lat = Double.valueOf(locations[1]);
 			}
 			
-			Page<MatchApply> matchApplys = matchApplyService.getPerionApplyByLocation(page, lng, lat);
+			Page<MatchApply> matchApplys = matchApplyService.getPerionApplyByLocation(page, lng, lat,MatchApply.TYPE_PERSONLY);
 			if(matchApplys != null && CollectionUtils.isNotEmpty(matchApplys.getResult())){
 				LOGGER.info("调用listPersionApplyMatchByLocation ，获取数据成功");
 				result = RemoteResult.success( matchApplys.getResult());

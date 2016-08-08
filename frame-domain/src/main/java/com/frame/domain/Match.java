@@ -19,7 +19,7 @@ public class Match extends BaseDomain {
 	private String guestTeamName;
 	private String homeTeamScore;
 	private String guestTeamScore;
-	private String status;
+	private Integer status;
 	private String matchTime;
 	private String address;
 
@@ -71,11 +71,11 @@ public class Match extends BaseDomain {
 		this.guestTeamScore = guestTeamScore;
 	}
 
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 

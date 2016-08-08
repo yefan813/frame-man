@@ -63,7 +63,7 @@ public class TeamController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/getTeamById", method = {RequestMethod.GET, RequestMethod.POST})
-	public @ResponseBody String getAllTeams(Long teamId){
+	public @ResponseBody String getTeamById(Long teamId){
 		RemoteResult result = null;
 		if(teamId == null || teamId < 0){
 			LOGGER.error("调用getTeamById 传入参数为：" + teamId);
