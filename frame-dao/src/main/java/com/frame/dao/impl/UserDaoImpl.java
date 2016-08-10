@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.frame.dao.UserDao;
 import com.frame.dao.base.BaseDaoImpl;
+import com.frame.domain.MatchApply;
 import com.frame.domain.User;
 import com.frame.domain.UserLogin;
 
@@ -17,6 +18,7 @@ public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 	private final static String UPDATE_BY_TEL = "updateByTel";
 	private final static String GETNEARBYUSER = "getNearByUser";
 	private final static String GETNEARBYUSERCOUNT = "getNearByUserCount";
+	private final static String GETUSERJOINPERSIONAPPLYRECORD = "getUserJoinPersionApplyRecord";
 
 	@Override
 	public String getNameSpace(String statement) {
@@ -30,14 +32,17 @@ public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 
 	@Override
 	public List<User> getNearByUser(UserLogin userLogin) {
-		// TODO Auto-generated method stub
 		return selectList(getNameSpace(GETNEARBYUSER), userLogin);
 	}
 
 	@Override
 	public int getNearByUserCount(UserLogin userLogin) {
-		// TODO Auto-generated method stub
 		return select(getNameSpace(GETNEARBYUSERCOUNT), userLogin);
+	}
+
+	@Override
+	public List<User> getUserJoinPersionApplyRecord(MatchApply matchApply) {
+		return selectList(getNameSpace(GETUSERJOINPERSIONAPPLYRECORD),matchApply);
 	}
 
 }

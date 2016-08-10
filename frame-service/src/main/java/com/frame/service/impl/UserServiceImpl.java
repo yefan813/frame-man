@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.frame.dao.UserDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.AppSecret;
+import com.frame.domain.MatchApply;
 import com.frame.domain.User;
 import com.frame.domain.UserAuths;
 import com.frame.domain.UserLogin;
@@ -142,6 +143,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		
 		remoteResult.setData(page.getResult());
 		return remoteResult;
+	}
+
+	@Override
+	public List<User> getUserJoinPersionApplyRecord(MatchApply matchApply) {
+		return userDao.getUserJoinPersionApplyRecord(matchApply);
 	}
 
 }

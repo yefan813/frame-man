@@ -2,6 +2,7 @@ package com.frame.service;
 
 import java.util.List;
 
+import com.frame.domain.MatchApply;
 import com.frame.domain.User;
 import com.frame.domain.UserAuths;
 import com.frame.domain.UserLogin;
@@ -22,5 +23,7 @@ public interface UserService extends BaseService<User, Long> {
 	public RemoteResult registUser(User user, UserAuths userAuths);
 	
 	public RemoteResult getNearByUser(Page<User> page, UserLogin userLogin);
+	
+	public List<User> getUserJoinPersionApplyRecord(MatchApply matchApply);
 	
 }

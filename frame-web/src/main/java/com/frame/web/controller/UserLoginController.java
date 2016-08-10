@@ -31,6 +31,11 @@ public class UserLoginController extends BaseController {
 	@Resource
 	private APNSService aPNSService;
 
+	/**
+	 * 保存用户登录信息接口
+	 * @param userLogin
+	 * @return
+	 */
 	@RequestMapping(value = "/saveUserLoginInfo", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String saveUserLoginInfo(UserLogin userLogin) {
 		RemoteResult result = null;
@@ -58,6 +63,12 @@ public class UserLoginController extends BaseController {
 	
 	
 	
+	/**
+	 * 注册用户deviceToken接口
+	 * @param userId
+	 * @param deviceToken
+	 * @return
+	 */
 	@RequestMapping(value = "/registDeviceToken", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String registDeviceToken(Integer userId, String deviceToken) {
 		RemoteResult result = null;
@@ -86,6 +97,12 @@ public class UserLoginController extends BaseController {
 
 	
 	
+	/**
+	 * 发送推送消息接口
+	 * @param msg
+	 * @param deviceToken
+	 * @return
+	 */
 	@RequestMapping(value = "/sendNotifi", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String sendNotifi(String msg, String deviceToken) {
 		RemoteResult result = null;

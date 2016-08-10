@@ -34,6 +34,11 @@ public class MatchApplyController extends BaseController {
 	private MatchApplyService matchApplyService;
 	
 	
+	/**
+	 * 比赛申请接口，支持个人，球队
+	 * @param matchApply
+	 * @return
+	 */
 	@RequestMapping(value = "/applyMatch", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String applyMatch(MatchApply matchApply) {
 		RemoteResult result = null;
@@ -55,21 +60,64 @@ public class MatchApplyController extends BaseController {
 				return JSON.toJSONString(result);
 			}
 		}
+		
+		if(matchApply.getType() == MatchApply.TYPE_PERSONLY){
+			matchApply.setParentApplyId(MatchApply.DEFAULT_APPLYER_IDENTITY);
+		}
 		matchApply.setStatus(MatchApply.STATUS_APPLYING);
 		matchApply.setYn(YnEnum.Normal.getKey());
 		result = matchApplyService.applyMatch(matchApply);
 		return JSON.toJSONString(result);
 	}
 	
+	
+	/**
+	 * 根据userId 查找个人约球记录
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value = "/joinPersionMatchApply", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String joinPersionMatchApply(Integer persionApplyId ,Integer userId){
+		RemoteResult result = null;
+		if(userId == null || persionApplyId == null){
+			LOGGER.info("调用joinPersionMatchApply 传入的参数type错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		MatchApply originalApply = matchApplyService.selectEntry(persionApplyId.longValue());
+		if(null == originalApply){
+			result = RemoteResult.failure("0001", "没找到此个人约球记录");
+			return JSON.toJSONString(result);
+		}
+		MatchApply matchApply = new MatchApply();
+		matchApply.setSourceIdentityId(originalApply.getSourceIdentityId());
+		matchApply.setTargetIdentityId(userId);
+		matchApply.setParentApplyId(persionApplyId);
+		matchApply.setYn(YnEnum.Normal.getKey());
+		List<UserApplyRecordVO> voList = matchApplyService.queryPersionMatchApply(userId);
+		if(CollectionUtils.isEmpty(voList)){
+			LOGGER.info("调用mineApplyMatch ,无数据");
+			result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+		}else{
+			result = RemoteResult.success(voList);
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	
+	/**
+	 * 根据userId 查找个人约球记录
+	 * @param userId
+	 * @return
+	 */
 	@RequestMapping(value = "/persionMatchApply", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody String persionMatchApply(Integer userId) {
+	public @ResponseBody String queryPersionMatchApply(Integer userId) {
 		RemoteResult result = null;
 		if(userId == null ){
 			LOGGER.info("调用mineApplyMatch 传入的参数type错误");
 			result = RemoteResult.failure("0001", "传入参数type错误");
 			return JSON.toJSONString(result);
 		}
-		
 		
 		List<UserApplyRecordVO> voList = matchApplyService.queryPersionMatchApply(userId);
 		if(CollectionUtils.isEmpty(voList)){

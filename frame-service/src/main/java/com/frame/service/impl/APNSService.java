@@ -56,12 +56,13 @@ public class APNSService {
 	            // 尝试推送10条消息内容不同的消息
                 String payload = payloadBuilder.alertBody(content).build();
                 LOGGER.info(service.push(deviceTokens, payload).toString());
+                msg = RemoteResult.success();
 	        } catch (NetworkIOException e) {
-	        	LOGGER.error("推送消息到苹果APNS服务器遇到网络异常");
-	            e.printStackTrace();
+	        	LOGGER.error("推送消息到苹果APNS服务器遇到网络异常" + e);
+	        	msg = RemoteResult.failure("0001", "推送消息到苹果APNS服务器遇到网络异常");
 	        } catch (Exception ex) {
-	        	LOGGER.error("推送消息到苹果APNS服务器错误");
-	            ex.printStackTrace();
+	        	LOGGER.error("推送消息到苹果APNS服务器错误" + ex);
+	        	msg = RemoteResult.failure("0001", "推送消息到苹果APNS服务器遇到网络异常");
 	        } finally {
 	        	LOGGER.info("推送成功，推送列表为:");
 	            for (String t : deviceTokens) {

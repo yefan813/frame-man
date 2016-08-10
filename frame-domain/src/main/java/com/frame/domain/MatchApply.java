@@ -13,6 +13,8 @@ import com.frame.domain.base.BaseDomain;
 public class MatchApply extends BaseDomain {
 	private static final long serialVersionUID = -7869400238880038556L;
 
+	public static final int DEFAULT_APPLYER_IDENTITY = -1;
+	
 	public static final int TYPE_PERSONLY = 1;
 
 	public static final int TYPE_TEAM = 2;
@@ -28,6 +30,8 @@ public class MatchApply extends BaseDomain {
 	private Integer sourceIdentityId;
 
 	private Integer targetIdentityId;
+	
+	private Integer parentApplyId;
 
 	private Date matchTime;
 
@@ -101,6 +105,14 @@ public class MatchApply extends BaseDomain {
 
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
+	}
+
+	public Integer getParentApplyId() {
+		return parentApplyId;
+	}
+
+	public void setParentApplyId(Integer parentApplyId) {
+		this.parentApplyId = parentApplyId;
 	}
 
 	@Override

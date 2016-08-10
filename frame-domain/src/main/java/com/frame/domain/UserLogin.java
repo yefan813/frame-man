@@ -28,8 +28,9 @@ public class UserLogin extends BaseDomain {
 	private String location; // 用户定位坐标
 
 	private Double myDistance;
-	
+
 	private String deviceToken;
+
 	public Integer getUserId() {
 		return userId;
 	}

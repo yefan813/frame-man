@@ -185,4 +185,20 @@
 	    from tb_user_login u1 where u1.user_id != #{userId}) as t1 on t1.user_id = user1.id where id != #{userId}
         ]]>
 	</select>
+	
+	
+	<!-- 其它SQL语句 -->
+	<select id="getUserJoinPersionApplyRecord" parameterType="mathApply" resultType="int">
+		<![CDATA[ select ]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where id in
+			(select target_identity_id from tb_match_apply 
+			 where parent_apply_id = #{parentApplyId} 
+			and source_identity_id = #{sourceIdentityId} and type = 1);
+        ]]>
+	</select>
+	
+	
+	
 </mapper>

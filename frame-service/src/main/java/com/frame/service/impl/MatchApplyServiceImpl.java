@@ -13,6 +13,7 @@ import com.frame.dao.MatchApplyDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.MatchApply;
 import com.frame.domain.Team;
+import com.frame.domain.User;
 import com.frame.domain.UserLogin;
 import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
@@ -142,6 +143,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		
 		MatchApply matchQuery = new MatchApply();
 		matchQuery.setSourceIdentityId(userId);
+		matchQuery.setParentApplyId(MatchApply.DEFAULT_APPLYER_IDENTITY);
 		matchQuery.setType(MatchApply.TYPE_PERSONLY);
 		matchQuery.setYn(YnEnum.Normal.getKey());
 		
@@ -152,7 +154,14 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 				try {
 					CopyProperties.copy(apply, recordVO);
 					//TODO 获取用户参加列表
-					
+					MatchApply joinQuery = new MatchApply();
+					joinQuery.setSourceIdentityId(userId);
+					joinQuery.setParentApplyId(apply.getId());
+					joinQuery.setYn(YnEnum.Normal.getKey());
+					List<User> userList = userService.getUserJoinPersionApplyRecord(joinQuery);
+					if(CollectionUtils.isNotEmpty(userList)){
+						recordVO.setUserList(userList);
+					}
 					recordVO.setId(apply.getId());
 					res.add(recordVO);
 				} catch (Exception e) {
@@ -182,6 +191,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 			for (UserTeamRelation userTeamRelation : relations) {
 				matchQuery = new MatchApply();
 				matchQuery.setSourceIdentityId(userTeamRelation.getTeamId().intValue());
+				matchQuery.setParentApplyId(MatchApply.DEFAULT_APPLYER_IDENTITY);
 				matchQuery.setType(MatchApply.TYPE_TEAM);
 				matchQuery.setYn(YnEnum.Normal.getKey());
 				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
