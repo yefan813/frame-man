@@ -73,7 +73,7 @@ public class TeamController extends BaseController {
 		try{
 			Team res = teamService.selectEntry(teamId);
 			if(null != res){
-				result = RemoteResult.result(BusinessCode.SUCCESS, res);
+				result = RemoteResult.success(res);
 			}else{
 				result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
 			}
