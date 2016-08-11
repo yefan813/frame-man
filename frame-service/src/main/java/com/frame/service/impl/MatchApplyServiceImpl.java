@@ -191,7 +191,6 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 			for (UserTeamRelation userTeamRelation : relations) {
 				matchQuery = new MatchApply();
 				matchQuery.setSourceIdentityId(userTeamRelation.getTeamId().intValue());
-				matchQuery.setParentApplyId(MatchApply.DEFAULT_APPLYER_IDENTITY);
 				matchQuery.setType(MatchApply.TYPE_TEAM);
 				matchQuery.setYn(YnEnum.Normal.getKey());
 				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);

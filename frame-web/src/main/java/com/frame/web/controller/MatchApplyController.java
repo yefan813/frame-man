@@ -94,12 +94,12 @@ public class MatchApplyController extends BaseController {
 		matchApply.setTargetIdentityId(userId);
 		matchApply.setParentApplyId(persionApplyId);
 		matchApply.setYn(YnEnum.Normal.getKey());
-		List<UserApplyRecordVO> voList = matchApplyService.queryPersionMatchApply(userId);
-		if(CollectionUtils.isEmpty(voList)){
+		if(matchApplyService.insertEntry(matchApply) > 0){
+			LOGGER.info("调用joinPersionMatchApply成功");
+			result = RemoteResult.success();
+		}else{
 			LOGGER.info("调用mineApplyMatch ,无数据");
 			result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
-		}else{
-			result = RemoteResult.success(voList);
 		}
 		return JSON.toJSONString(result);
 	}
