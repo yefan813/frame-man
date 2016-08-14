@@ -27,6 +27,7 @@ import com.frame.domain.enums.BusinessCode;
 import com.frame.domain.img.ImageValidate;
 import com.frame.domain.img.ImgDealMsg;
 import com.frame.domain.img.Result;
+import com.frame.domain.vo.TeamVO;
 import com.frame.service.ImgSysService;
 import com.frame.service.TeamService;
 import com.frame.service.UserTeamRelationService;
@@ -71,7 +72,8 @@ public class TeamController extends BaseController {
 			return JSON.toJSONString(result);
 		}
 		try{
-			Team res = teamService.selectEntry(teamId);
+			
+			TeamVO res = teamService.getTeamById(teamId);
 			if(null != res){
 				result = RemoteResult.success(res);
 			}else{
