@@ -1,5 +1,6 @@
 package com.frame.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,6 +8,7 @@ import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.frame.dao.MatchApplyDao;
@@ -19,6 +21,7 @@ import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
+import com.frame.domain.vo.MatchApplyVO;
 import com.frame.domain.vo.TeamApplyRecordVO;
 import com.frame.domain.vo.UserApplyRecordVO;
 import com.frame.service.MatchApplyService;
@@ -57,6 +60,9 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 	
 	@Resource
 	private UserTeamRelationService userTeamRelationService;
+	
+	@Value("${img.prefix}")
+	private String IMAGEPREFIX;
 
 	@Override
 	public BaseDao<MatchApply, Long> getDao() {
@@ -132,8 +138,8 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 
 
 	@Override
-	public List<UserApplyRecordVO> queryPersionMatchApply(Integer userId) {
-		List<UserApplyRecordVO> res = null;
+	public List<MatchApplyVO> queryPersionMatchApply(Integer userId) {
+		List<MatchApplyVO> res = null;
 		if(null == userId){
 			LOGGER.error("调用 applMatchService 接口 mineApplyMatch 传入参数错误");
 			return null;
@@ -150,22 +156,9 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		List<MatchApply> list = matchApplyDao.selectEntryList(matchQuery);
 		if(CollectionUtils.isNotEmpty(list)){
 			for (MatchApply apply : list) {
-				UserApplyRecordVO recordVO = new UserApplyRecordVO();
-				try {
-					CopyProperties.copy(apply, recordVO);
-					//TODO 获取用户参加列表
-					MatchApply joinQuery = new MatchApply();
-					joinQuery.setSourceIdentityId(userId);
-					joinQuery.setParentApplyId(apply.getId());
-					joinQuery.setYn(YnEnum.Normal.getKey());
-					List<User> userList = userService.getUserJoinPersionApplyRecord(joinQuery);
-					if(CollectionUtils.isNotEmpty(userList)){
-						recordVO.setUserList(userList);
-					}
-					recordVO.setId(apply.getId());
-					res.add(recordVO);
-				} catch (Exception e) {
-					e.printStackTrace();
+				MatchApplyVO vo = getMatchApplyById(apply);
+				if(null != vo){
+					res.add(vo);
 				}
 			}
 		}
@@ -174,8 +167,8 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 
 
 	@Override
-	public List<TeamApplyRecordVO> queryMineTeamApplyMatch(Integer userId) {
-		List<TeamApplyRecordVO> res = null;
+	public List<MatchApplyVO> queryMineTeamApplyMatch(Integer userId) {
+		List<MatchApplyVO> res = null;
 		if(null == userId || userId < 0){
 			LOGGER.error("调用 queryMineTeamApplyMatch 接口 mineApplyMatch 传入参数错误");
 			return null;
@@ -195,7 +188,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 				matchQuery.setYn(YnEnum.Normal.getKey());
 				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
 				
-				List<TeamApplyRecordVO>  convertRes = convert2TeamApplyRecordVO(matchs);
+				List<MatchApplyVO>  convertRes = convert2TeamApplyRecordVO(matchs);
 				if(CollectionUtils.isNotEmpty(convertRes)){
 					res.addAll(convertRes);
 				}
@@ -205,35 +198,24 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 	}
 
 	
-	private List<TeamApplyRecordVO> convert2TeamApplyRecordVO(List<MatchApply> matchs){
-		List<TeamApplyRecordVO> res = null;
+	private List<MatchApplyVO> convert2TeamApplyRecordVO(List<MatchApply> matchs){
+		List<MatchApplyVO> res = null;
 		if(CollectionUtils.isEmpty(matchs)){
 			return null;
 		}
 		res = Lists.newArrayList();
 		for (MatchApply match : matchs) {
-			TeamApplyRecordVO vo = new TeamApplyRecordVO();
-			try {
-				CopyProperties.copy(match, vo);
-				Team sourceTeam = teamService.selectEntry(match.getSourceIdentityId().longValue());
-				Team targetTeam = teamService.selectEntry(match.getTargetIdentityId().longValue());
-				vo.setId(match.getId());
-				vo.setSourceIdentity(sourceTeam);
-				vo.setTargetIdentity(targetTeam);
+			MatchApplyVO vo = getMatchApplyById(match);
+			if(null != vo){
 				res.add(vo);
-			} catch (Exception e) {
-				LOGGER.error("调用convert2TeamApplyRecordVO 异常",e);
 			}
 		}
-		
-		
-		
 		return res;
 	}
 
 	@Override
-	public List<TeamApplyRecordVO> queryMineTeamInventMatch(Integer userId) {
-		List<TeamApplyRecordVO> res = null;
+	public List<MatchApplyVO> queryMineTeamInventMatch(Integer userId) {
+		List<MatchApplyVO> res = null;
 		if(null == userId || userId < 0){
 			LOGGER.error("调用 queryMineTeamApplyMatch 接口 mineApplyMatch 传入参数错误");
 			return null;
@@ -253,7 +235,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 				matchQuery.setYn(YnEnum.Normal.getKey());
 				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
 				
-				List<TeamApplyRecordVO>  convertRes = convert2TeamApplyRecordVO(matchs);
+				List<MatchApplyVO>  convertRes = convert2TeamApplyRecordVO(matchs);
 				if(CollectionUtils.isNotEmpty(convertRes)){
 					res.addAll(convertRes);
 				}
@@ -264,11 +246,17 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 
 
 	@Override
-	public Page<MatchApply> getPerionApplyByLocation(Page<MatchApply> page,Double lng, Double lat, Integer status) {
+	public Page<MatchApplyVO> getPerionApplyByLocation(Page<MatchApply> page,Double lng, Double lat) {
+		Page<MatchApplyVO> newPage = new Page<MatchApplyVO>();
+		newPage.setPageSize(page.getStartIndex());
+		newPage.setCurrentPage(page.getCurrentPage());
+		
+		List<MatchApplyVO> matchApplyVOs = Lists.newArrayList();
 		
 		MatchApply query = new MatchApply();
 		query.setLongitude(lng);
 		query.setLatitude(lat);
+		query.setParentApplyId(MatchApply.DEFAULT_APPLYER_IDENTITY);
 		query.setType(MatchApply.TYPE_PERSONLY);
 		query.setStartIndex(page.getStartIndex());
 		query.setEndIndex(page.getEndIndex());
@@ -277,16 +265,76 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		
 		List<MatchApply> data = matchApplyDao.getPerionApplyByLocation(query);
 		if(CollectionUtils.isNotEmpty(data)){
-			page.setResult(data);
+			for (MatchApply matchApply : data) {
+				MatchApplyVO vo = getMatchApplyById(matchApply);
+				matchApplyVOs.add(vo);
+			}
+			newPage.setResult(matchApplyVOs);
 		}
 		
 		MatchApply countQuery = new MatchApply();
 		query.setYn(YnEnum.Normal.getKey());
 		int totalCount = matchApplyDao.selectEntryListCount(countQuery);
 		
-		page.setTotalCount(totalCount);
+		newPage.setTotalCount(totalCount);
 		
-		return page;
+		return newPage;
+	}
+
+
+	@Override
+	public MatchApplyVO getMatchApplyById(MatchApply matchApply) {
+		if(null == matchApply){
+			return null;
+		}
+		MatchApplyVO res = null;
+		try {
+			res = new MatchApplyVO();
+			CopyProperties.copy(matchApply, res);
+			res.setId(matchApply.getId());
+			if(matchApply.getType() == MatchApply.TYPE_PERSONLY){
+				Integer userId = matchApply.getSourceIdentityId();
+				User source = userService.selectEntry(userId.longValue());
+				if(null != source.getAvatarUrl()){
+					source.setAvatarUrl(IMAGEPREFIX + source.getAvatarUrl());
+				}
+				res.setSourceObject(source);
+				
+				
+				MatchApply joinQuery = new MatchApply();
+				joinQuery.setSourceIdentityId(userId);
+				joinQuery.setParentApplyId(matchApply.getId());
+				joinQuery.setYn(YnEnum.Normal.getKey());
+				List<User> userList = userService.getUserJoinPersionApplyRecord(joinQuery);
+				if(CollectionUtils.isNotEmpty(userList)){
+					for(User user : userList){
+						if(null != user.getAvatarUrl()){
+							user.setAvatarUrl(IMAGEPREFIX + user.getAvatarUrl());
+						}
+						
+					}
+					res.setTargetObject(userList);
+				}
+			}else if(matchApply.getType() == MatchApply.TYPE_TEAM){
+				Team sourceTeam = teamService.selectEntry(matchApply.getSourceIdentityId().longValue());
+				if(null != sourceTeam.getImgUrl()){
+					sourceTeam.setImgUrl(IMAGEPREFIX + sourceTeam.getImgUrl());
+				}
+				
+				
+				Team targetTeam = teamService.selectEntry(matchApply.getTargetIdentityId().longValue());
+				if(null != targetTeam.getImgUrl()){
+					targetTeam.setImgUrl(IMAGEPREFIX + targetTeam.getImgUrl());
+				}
+				
+				res.setSourceObject(sourceTeam);
+				res.setTargetObject(targetTeam);
+			}
+		}catch (Exception e) {
+			LOGGER.error("调用CopyProperties.copy 异常",e);
+			return res;
+		}
+		return res;
 	}
 
 }

@@ -133,7 +133,7 @@
 	
 	<!-- 其它SQL语句 -->
 	<select id="selectPersionApplyByLocation" parameterType="matchApply" resultType="matchApply">
-		<![CDATA[SELECT type,source_identity_id,target_identity_id,parent_apply_id,match_time,match_address,longitude,latitude,status,
+		<![CDATA[SELECT id,type,source_identity_id,target_identity_id,parent_apply_id,match_time,match_address,longitude,latitude,status,
         111.1111 *
 	    DEGREES(acos( cos( radians(latitude) ) 
 	      * cos( radians(#{latitude}) ) 
