@@ -1,13 +1,10 @@
 package com.frame.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.jws.soap.SOAPBinding.Use;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +17,6 @@ import com.frame.dao.UserTeamRelationDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.Team;
 import com.frame.domain.User;
-import com.frame.domain.UserLogin;
 import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;

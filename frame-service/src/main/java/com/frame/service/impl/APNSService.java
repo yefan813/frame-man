@@ -1,21 +1,24 @@
 package com.frame.service.impl;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.druid.util.StringUtils;
 import com.frame.domain.common.RemoteResult;
+import com.frame.domain.enums.BusinessCode;
+import com.frame.service.UserLoginService;
+import com.google.common.collect.Lists;
 import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsService;
 import com.notnoop.apns.ApnsServiceBuilder;
@@ -33,10 +36,41 @@ public class APNSService {
 	@Value("${iosCertPath}")
 	private String iosCertPath;
 	
+	@Resource
+	private UserLoginService userLoginService;
+	
+	
+	public RemoteResult senPushNotificationByIds(List<Long> userIds,  String content){
+		RemoteResult result = null;
+		if(CollectionUtils.isEmpty(userIds)){
+			result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+			return result;
+		}
+		List<String> deviceTokens = userLoginService.getDeviceTokenByIds(userIds);
+		result = senPushNotification(deviceTokens,content);
+		return result;
+	}
+	
+	public RemoteResult senPushNotification(Long userId,  String content){
+		RemoteResult result = null;
+		if(null == userId || StringUtils.isEmpty(content)){
+			result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+			return result;
+		}
+		List<Long> userIds = Lists.newArrayList();
+		userIds.add(userId);
+		List<String> deviceTokens = userLoginService.getDeviceTokenByIds(userIds);
+		result = senPushNotification(deviceTokens,content);
+		return result;
+	}
+	
 	@Async
 	public RemoteResult senPushNotification(List<String> deviceTokens, String content){
 		RemoteResult msg = null;
-		
+		if(CollectionUtils.isEmpty(deviceTokens)){
+			msg = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+			return msg;
+		}
 		 long start = System.currentTimeMillis();
 	 
 	        // 创建和苹果APNS服务器的连接connection对象

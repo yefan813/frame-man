@@ -28,6 +28,7 @@
 		<typeAlias type="com.frame.domain.UserLogin" alias="userLogin"/>
 		<typeAlias type="com.frame.domain.MatchApply" alias="matchApply"/>
 		<typeAlias type="com.frame.domain.MatchData" alias="matchData"/>
+		<typeAlias type="com.frame.domain.JoinTeam" alias="joinTeam"/>
 		
 		
 		
@@ -46,5 +47,6 @@
 		<mapper resource="sqlmap/UserLogin.xml" />
 		<mapper resource="sqlmap/MatchApply.xml" />
 		<mapper resource="sqlmap/MatchData.xml" />
+		<mapper resource="sqlmap/JoinTeam.xml" />
 	</mappers>
 </configuration>

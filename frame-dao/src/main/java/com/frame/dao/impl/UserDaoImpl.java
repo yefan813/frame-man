@@ -19,6 +19,7 @@ public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 	private final static String GETNEARBYUSER = "getNearByUser";
 	private final static String GETNEARBYUSERCOUNT = "getNearByUserCount";
 	private final static String GETUSERJOINPERSIONAPPLYRECORD = "getUserJoinPersionApplyRecord";
+	private final static String SELECTUSERLISTBYTEAMID = "selectUserListByTeamId";
 
 	@Override
 	public String getNameSpace(String statement) {
@@ -42,7 +43,12 @@ public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 
 	@Override
 	public List<User> getUserJoinPersionApplyRecord(MatchApply matchApply) {
-		return selectList(getNameSpace(GETUSERJOINPERSIONAPPLYRECORD),matchApply);
+		return selectList(getNameSpace(GETUSERJOINPERSIONAPPLYRECORD), matchApply);
+	}
+
+	@Override
+	public List<User> getTeamUserByTeamId(Long teamId) {
+		return selectList(getNameSpace(SELECTUSERLISTBYTEAMID), teamId);
 	}
 
 }

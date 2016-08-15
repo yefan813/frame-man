@@ -150,4 +150,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		return userDao.getUserJoinPersionApplyRecord(matchApply);
 	}
 
+	@Override
+	public List<User> getTeamUserByTeamId(Long teamId) {
+		return userDao.getTeamUserByTeamId(teamId);
+	}
+
 }

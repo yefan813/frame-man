@@ -16,5 +16,7 @@ public interface UserDao extends BaseDao<User, Long> {
 	public int getNearByUserCount(UserLogin userLogin);
 	
 	public List<User> getUserJoinPersionApplyRecord(MatchApply matchApply);
+	
+	public List<User> getTeamUserByTeamId(Long teamId);
 
 }

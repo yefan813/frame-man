@@ -11,7 +11,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.stereotype.Service;
 
 import com.frame.dao.PlayGroundDao;
@@ -21,7 +20,6 @@ import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.service.PlayGroundInfoService;
 import com.frame.service.base.BaseServiceImpl;
-import com.frame.service.utils.HttpClientUtil;
 import com.frame.service.vo.PlaygroundVO;
 
 

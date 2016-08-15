@@ -16,12 +16,13 @@ public class UserLoginDaoImpl extends BaseDaoImpl<UserLogin, Integer> implements
 	private final static String SELECT_USERDEVICETOKENENTRYLIST = "selectUserDeviceTokenEntryList";
 	
 	private final static String REGIST_DEVICES = "registDeviceToken";
+	
+	private final static String SELECT_DEVICETOKENSBY_USERIDS = "selectDeviceTokensByUserIds";
 
 	
 	
 	@Override
 	public String getNameSpace(String statement) {
-		// TODO Auto-generated method stub
 		return NAMESPACE + statement;
 	}
 
@@ -34,8 +35,13 @@ public class UserLoginDaoImpl extends BaseDaoImpl<UserLogin, Integer> implements
 
 	@Override
 	public int registDeviceToken(UserLogin userLogin) {
-		// TODO Auto-generated method stub
 		return update(getNameSpace(REGIST_DEVICES), userLogin);
+	}
+
+
+	@Override
+	public List<String> getDeviceTokenByIds(List<Long> userIds) {
+		return selectList(getNameSpace(SELECT_DEVICETOKENSBY_USERIDS), userIds);
 	}
 
 	

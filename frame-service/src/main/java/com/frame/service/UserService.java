@@ -26,4 +26,6 @@ public interface UserService extends BaseService<User, Long> {
 	
 	public List<User> getUserJoinPersionApplyRecord(MatchApply matchApply);
 	
+	public List<User> getTeamUserByTeamId(Long teamId);
+	
 }

@@ -200,5 +200,13 @@
 	</select>
 	
 	
+	<!-- 查询,通过条件 -->
+	<select id="selectUserListByTeamId" parameterType="int" resultType="user">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where id in (select user_id from user_team_relation where team_id = #{teamId} and yn=1 ) ]]>
+	</select>
+	
 	
 </mapper>
