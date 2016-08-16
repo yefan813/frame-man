@@ -63,7 +63,7 @@ public class TaoBaoSmsServiceImpl implements TaoBaoSmsService {
 			req.setSmsFreeSignName("注册验证");
 			req.setSmsParamString("{\"code\":\""+ validCode + "\",\"product\":\"篮球派\"}");
 			req.setRecNum(phoneNum);
-			req.setSmsTemplateCode("SMS_11370156");
+			req.setSmsTemplateCode("SMS_12946670");
 			AlibabaAliqinFcSmsNumSendResponse rsp = null;
 			try {
 				rsp = client.execute(req);

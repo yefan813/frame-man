@@ -156,11 +156,13 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 			User applyor = userService.selectEntry(thisJoinTeam.getUserId());
 			if(null == applyor){
 				LOGGER.info("没找到申请用户相关信息");
+				return result;
 			}
 			
 			Team team = teamService.selectEntry(thisJoinTeam.getTeamId());
 			if(null == team){
 				LOGGER.info("没找到申请球队相关信息");
+				return result;
 			}
 			apnsService.senPushNotification(applyor.getId().longValue(), "球队：" + team.getName() + " 队长同意了你的加入球队申请,开始的你的球队之旅吧！");
 			
@@ -184,16 +186,19 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 			JoinTeam thisJoinTeam = joinTeamDao.selectEntry(joinTeam.getId().longValue());
 			if(null == thisJoinTeam){
 				LOGGER.info("没找到申请球队相关信息");
+				return result;
 			}
 			
 			User applyor = userService.selectEntry(thisJoinTeam.getUserId());
 			if(null == applyor){
 				LOGGER.info("没找到申请用户相关信息");
+				return result;
 			}
 			
 			Team team = teamService.selectEntry(thisJoinTeam.getTeamId());
 			if(null == team){
 				LOGGER.info("没找到申请球队相关信息");
+				return result;
 			}
 			apnsService.senPushNotification(applyor.getId().longValue(), "球队：" + team.getName() + " 队长拒绝了你的加入球队申请,太没有眼光了吧！");
 		}else{
@@ -217,11 +222,13 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 			User initator = userService.selectEntry(joinTeam.getInitiator());
 			if(null == initator){
 				LOGGER.info("没找到发起用户相关信息");
+				return result;
 			}
 			
 			Team targetTeam = teamService.selectEntry(joinTeam.getTeamId());
 			if(null == targetTeam){
 				LOGGER.info("没找到目标球队相关信息");
+				return result;
 			}
 			apnsService.senPushNotification(joinTeam.getUserId().longValue(), "球队:" + targetTeam.getName() + " 队员:" + initator.getNickName() + " 发现你太强大了，邀请你加入球队,不要辜负他们哦...");
 		}else{
@@ -259,16 +266,19 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 			User targetUser = userService.selectEntry(thisJoinTeam.getInitiator());
 			if(null == targetUser){
 				LOGGER.info("没找到发起人用户相关信息");
+				return result;
 			}
 			
 			User initor = userService.selectEntry(thisJoinTeam.getInitiator());
 			if(null == initor){
 				LOGGER.info("没找到发起人用户相关信息");
+				return result;
 			}
 			
 			Team targetTeam = teamService.selectEntry(thisJoinTeam.getTeamId());
 			if(null == targetTeam){
 				LOGGER.info("没找到申请球队相关信息");
+				return result;
 			}
 			apnsService.senPushNotification(initor.getId().longValue(), "用户:" + targetUser.getNickName() + ",同意加入球队:" + targetTeam.getName() + ",开始约球吧！");
 			
@@ -296,11 +306,13 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 			User targetUser = userService.selectEntry(thisJoinTeam.getInitiator());
 			if(null == targetUser){
 				LOGGER.info("没找到发起人用户相关信息");
+				return result;
 			}
 			
 			User initor = userService.selectEntry(thisJoinTeam.getInitiator());
 			if(null == initor){
 				LOGGER.info("没找到发起人用户相关信息");
+				return result;
 			}
 			Team targetTeam = teamService.selectEntry(thisJoinTeam.getTeamId());
 			if(null == targetTeam){

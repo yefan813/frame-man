@@ -41,7 +41,7 @@ public class UserLoginDaoImpl extends BaseDaoImpl<UserLogin, Integer> implements
 
 	@Override
 	public List<String> getDeviceTokenByIds(List<Long> userIds) {
-		return selectList(getNameSpace(SELECT_DEVICETOKENSBY_USERIDS), userIds);
+		return selectList(getNameSpace(SELECT_DEVICETOKENSBY_USERIDS), userIds.toArray());
 	}
 
 	
