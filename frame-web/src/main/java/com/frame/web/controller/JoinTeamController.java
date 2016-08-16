@@ -28,7 +28,7 @@ public class JoinTeamController extends BaseController {
 	@Resource
 	private JoinTeamService joinTeamService;
 	
-	@RequestMapping(value = "/getInventJoinTeamByUserId", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/getApplyJoinTeamByTeamId", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String getApplyJoinTeamByTeamId(Page<JoinTeam> page, JoinTeam joinTeam) {
 		RemoteResult result = null;
 		if(null == joinTeam || joinTeam.getTeamId() == null ){
