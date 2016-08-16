@@ -292,7 +292,8 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 			if(matchApply.getType() == MatchApply.TYPE_PERSONLY){
 				Integer userId = matchApply.getSourceIdentityId();
 				User source = userService.selectEntry(userId.longValue());
-				if(null != source.getAvatarUrl()){
+				
+				if(null!= source && null != source.getAvatarUrl()){
 					source.setAvatarUrl(IMAGEPREFIX + source.getAvatarUrl());
 				}
 				res.setSourceObject(source);

@@ -188,7 +188,7 @@
 	
 	
 	<!-- 其它SQL语句 -->
-	<select id="getUserJoinPersionApplyRecord" parameterType="matchApply" resultType="int">
+	<select id="getUserJoinPersionApplyRecord" parameterType="matchApply" resultType="user">
 		<![CDATA[ select ]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
