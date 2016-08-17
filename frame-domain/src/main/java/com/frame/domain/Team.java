@@ -42,16 +42,16 @@ public class Team extends BaseQuery {
 	 */
 	private String name;
 	
-	private String teamDesc;
-
-	private String createUserName;
-	private Long createUser;
-	private String address;
-	private String location;
-	private String feature;
-	private Date created;
-	private Date modified;
-	private Integer yn;
+	private String teamDesc;				//球队描述
+		
+	private String createUserName;			//创建用户抿成
+	private Long createUser;				//创建用户id
+	private String address;					//地址
+	private String location;				//坐标
+	private String feature;					//
+	private Date created;					//
+	private Date modified;					//
+	private Integer yn;						//
 
 	public Integer getId() {
 		return id;

@@ -155,7 +155,7 @@ public class JoinTeamController extends BaseController {
 			return JSON.toJSONString(result);
 		}
 		JoinTeam joinTeam = joinTeamService.selectEntry(id);
-		JoinTeamVO vo = joinTeamService.geJoinTeamVO(joinTeam);
+		JoinTeamVO vo = joinTeamService.getJoinTeamVO(joinTeam);
 		if(vo != null){
 			LOGGER.info("调用getJoinTeamRecordById 数据成功");
 			result = RemoteResult.success(vo);

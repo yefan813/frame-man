@@ -25,23 +25,23 @@ public class MatchApply extends BaseDomain {
 	public static final int STATUS_REJECT = 4; // 拒绝
 	public static final int STATUS_TARGET_CANCLE = 5; // 客队取消
 
-	private Integer type;
+	private Integer type;					//比赛申请类型 1个人 2 球队
 
-	private Integer sourceIdentityId;
+	private Integer sourceIdentityId;		//发起方id
 
-	private Integer targetIdentityId;
+	private Integer targetIdentityId;		//目标放id
 	
-	private Integer parentApplyId;
+	private Integer parentApplyId;			//父申请id 用于保存加入个人越球id
 
-	private Date matchTime;
+	private Date matchTime;					//比赛时间
 
-	private String matchAddress;
+	private String matchAddress;			//比赛地址
 
-	private Double longitude;
+	private Double longitude;				//精度
 
-	private Double latitude;
+	private Double latitude;				//维度
 
-	private Integer status;
+	private Integer status;					//申请状态
 
 	public Integer getType() {
 		return type;

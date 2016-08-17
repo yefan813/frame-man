@@ -55,7 +55,7 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 	}
 
 	@Override
-	public JoinTeamVO geJoinTeamVO(JoinTeam joinTeam) {
+	public JoinTeamVO getJoinTeamVO(JoinTeam joinTeam) {
 		if(null == joinTeam){
 			return null;
 		}

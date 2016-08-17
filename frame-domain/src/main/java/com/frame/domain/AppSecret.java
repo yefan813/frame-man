@@ -16,13 +16,13 @@ public class AppSecret extends BaseDomain {
 	 */
 	private static final long serialVersionUID = -4402189344781237566L;
 
-	private Integer userId; // 用户id
+	private Integer userId; 				// 用户id
 
-	private String userName; //用户名
+	private String userName; 				//用户名
 
-	private String apiKey; // apikey
+	private String apiKey; 					// apikey
 
-	private String secretKey; // secret
+	private String secretKey; 				// secret
 
 
 	public Integer getUserId() {

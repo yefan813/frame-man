@@ -6,19 +6,18 @@ import com.frame.domain.base.BaseDomain;
 
 public class UserTeamRelation extends BaseDomain {
 	private static final long serialVersionUID = -7869400238880038556L;
-	
-	public static final Integer TEAM_TYPE_CAPTURE = 1 ; 
-	public static final Integer TEAM_TYPE_MEMBER = 2 ;
-	private Long userId;
-	
-	private String userName;
-	
-	private Long teamId;
-	
-	private String teamName;
-	
-	private Integer type;
-	
+
+	public static final Integer TEAM_TYPE_CAPTURE = 1;
+	public static final Integer TEAM_TYPE_MEMBER = 2;
+	private Long userId;			//用户id
+
+	private String userName;		//用户名
+
+	private Long teamId;			//球队id
+
+	private String teamName;		//球队名称
+
+	private Integer type;			//类型 1 队长 2 队员
 
 	public Long getUserId() {
 		return userId;

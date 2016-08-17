@@ -16,11 +16,11 @@ public class JoinTeam extends BaseDomain {
 	public static Integer TYPE_INVENT = 1;
 	public static Integer TYPE_APPLY = 2;
 
-	private Long initiator;
-	private Long teamId;
-	private Long userId;
-	private Integer status;
-	private Integer type;
+	private Long initiator;				//发起者
+	private Long teamId;				//球队id
+	private Long userId;				//用户id
+	private Integer status;				//状态
+	private Integer type;				//类型 1 被邀请 2申请
 
 	public Long getInitiator() {
 		return initiator;

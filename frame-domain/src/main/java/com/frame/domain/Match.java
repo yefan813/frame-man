@@ -1,5 +1,7 @@
 package com.frame.domain;
 
+import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.frame.domain.base.BaseDomain;
@@ -11,17 +13,16 @@ public class Match extends BaseDomain {
 	public static Integer STATUS_GOING = 1;
 	public static Integer STATUS_PAUSE = 2;
 	public static Integer STATUS_END = 3;
-	
-	
-	private String homeTeamId;
-	private String homeTeamName;
-	private String guestTeamId;
-	private String guestTeamName;
-	private String homeTeamScore;
-	private String guestTeamScore;
-	private Integer status;
-	private String matchTime;
-	private String address;
+
+	private String homeTeamId;				//主队id
+	private String homeTeamName;			//主队名
+	private String guestTeamId;				//客队id
+	private String guestTeamName;			//客队名
+	private String homeTeamScore;			//主队比分
+	private String guestTeamScore;			//客队比分
+	private Integer status;					//状态
+	private Date matchTime;				//开始比赛时间
+	private String address;					//比赛地址
 
 	public String getHomeTeamId() {
 		return homeTeamId;
@@ -79,11 +80,11 @@ public class Match extends BaseDomain {
 		this.status = status;
 	}
 
-	public String getMatchTime() {
+	public Date getMatchTime() {
 		return matchTime;
 	}
 
-	public void setMatchTime(String matchTime) {
+	public void setMatchTime(Date matchTime) {
 		this.matchTime = matchTime;
 	}
 

@@ -7,27 +7,23 @@ import com.frame.domain.base.BaseDomain;
 public class Playground extends BaseDomain {
 	private static final long serialVersionUID = -7869400238880038556L;
 
-	private String id;
-	private String name;
-	private String address;
-	private String location;
-	private Double longitude;
-	private Double latitude;
-	private String distance;
-	private Double myDistance;
-	private String tel;
-	private String pcode;
-	private String pname;
-	private String cityCode;
-	private String cityName;
-	private String adCode;
-	private String adName;
-	private String parkingType;
-	private String indoorMap;
+	private String name;			//名称
+	private String address;			//地址
+	private String location;		//坐标经纬度
+	private Double longitude;		//经度
+	private Double latitude;		//维度
+	private String distance;		//距离
+	private Double myDistance;		//当前坐标距离
+	private String tel;				//电话
+	private String pcode;			//
+	private String pname;			//
+	private String cityCode;		//城市code
+	private String cityName;		//城市名称
+	private String adCode;			//
+	private String adName;			//
+	private String parkingType;		//停车
+	private String indoorMap;		//室内
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -137,7 +133,6 @@ public class Playground extends BaseDomain {
 		this.longitude = longitude;
 	}
 
-
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
@@ -149,7 +144,7 @@ public class Playground extends BaseDomain {
 	public void setDistance(String distance) {
 		this.distance = distance;
 	}
-	
+
 	public Double getMyDistance() {
 		return myDistance;
 	}
