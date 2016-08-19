@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.frame.domain.Team;
 import com.frame.domain.common.Page;
+import com.frame.domain.common.RemoteResult;
 import com.frame.domain.vo.TeamVO;
 import com.frame.service.base.BaseService;
 
@@ -29,7 +30,7 @@ public interface TeamService extends BaseService<Team, Long> {
 	 * @param team
 	 * @return
 	 */
-	public Boolean createTeam(Long userId,Team team);
+	public RemoteResult createTeam(Long userId,Team team);
 	
 	/**
 	 * 查看球队详细信息

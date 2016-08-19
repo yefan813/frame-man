@@ -20,6 +20,7 @@ import com.frame.domain.User;
 import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
+import com.frame.domain.common.RemoteResult;
 import com.frame.domain.vo.TeamVO;
 import com.frame.service.TeamService;
 import com.frame.service.UserService;
@@ -55,22 +56,20 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 
 	@Override
 	public List<Team> getAllTeams(Page<Team> page) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
 	public List<Team> getUserTeams(Long userId) {
-		// TODO Auto-generated method stub
 		return teamDao.getUserTeams(userId);
 	}
 
 
 	@Override
 	@Transactional
-	public Boolean createTeam(Long userId, Team team) {
-		boolean res = false;
+	public RemoteResult createTeam(Long userId, Team team) {
+		RemoteResult res = null;
 		teamDao.insertEntryCreateId(team);
 		
 		UserTeamRelation utRelation  =  new UserTeamRelation();
@@ -79,9 +78,12 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 		utRelation.setUserId(userId);
 		utRelation.setType(UserTeamRelation.TEAM_TYPE_CAPTURE);
 		utRelation.setYn(YnEnum.Normal.getKey());
-		int result = userTeamRelationDao.insertEntry(utRelation);
+		int result = userTeamRelationDao.insertEntryCreateId(utRelation);
 		if(result > 0){
-			res = true;
+			TeamVO teamVO = getTeamById(team.getId().longValue());
+			res = RemoteResult.success(teamVO);
+		}else{
+			res = RemoteResult.failure("0001", "创建失败");
 		}
 		return res;
 	}

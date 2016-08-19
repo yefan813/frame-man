@@ -165,14 +165,7 @@ public class TeamController extends BaseController {
 			return JSON.toJSONString(result);
 		}
 		if(null != team){
-			boolean res = teamService.createTeam(userId, team);
-			if(res){
-				LOGGER.error("创建活动成功！");
-				result = RemoteResult.result(BusinessCode.SUCCESS);
-			}else{
-				LOGGER.error("创建活动失败！");
-				result = RemoteResult.result(BusinessCode.FAILED);
-			}
+			result = teamService.createTeam(userId, team);
 		}
 		return JSON.toJSONString(result);
 	}
