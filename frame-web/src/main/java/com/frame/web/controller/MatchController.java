@@ -35,13 +35,7 @@ public class MatchController extends BaseController {
 		}
 		
 		match.setYn(YnEnum.Normal.getKey());
-		if(matchService.insertEntry(match) > 0){
-			LOGGER.info("调用createMatch 创建比赛成功");
-			result = RemoteResult.success(match);
-		}else{
-			LOGGER.info("调用createMatch 创建比赛失败");
-			result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
-		}
+		result = matchService.createMatch(match);
 		return JSON.toJSONString(result);
 	}
 	

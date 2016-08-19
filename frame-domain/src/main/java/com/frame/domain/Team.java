@@ -4,15 +4,15 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.frame.domain.base.BaseDomain;
 import com.frame.domain.base.BaseQuery;
 
-public class Team extends BaseQuery {
+public class Team extends BaseDomain {
 	private static final long serialVersionUID = -7869400238880038556L;
 
 	public static final Integer TEAMSTATUS_FULL = 1;
 	public static final Integer TEAMSTATUS_NOTFULL = 2;
 
-	private Integer id;
 	/**
 	 * 球队当前人数
 	 */
@@ -53,13 +53,6 @@ public class Team extends BaseQuery {
 	private Date modified;					//
 	private Integer yn;						//
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getFeature() {
 		return feature;

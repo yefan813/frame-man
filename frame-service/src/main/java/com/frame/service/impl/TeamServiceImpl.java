@@ -78,10 +78,9 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 		utRelation.setUserId(userId);
 		utRelation.setType(UserTeamRelation.TEAM_TYPE_CAPTURE);
 		utRelation.setYn(YnEnum.Normal.getKey());
-		int result = userTeamRelationDao.insertEntryCreateId(utRelation);
+		int result = userTeamRelationDao.insertEntry(utRelation);
 		if(result > 0){
-			TeamVO teamVO = getTeamById(team.getId().longValue());
-			res = RemoteResult.success(teamVO);
+			res = RemoteResult.success();
 		}else{
 			res = RemoteResult.failure("0001", "创建失败");
 		}
@@ -102,8 +101,9 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 		TeamVO teamVO = new TeamVO();
 		
 		try {
-			CopyProperties.copy(teamVO, team);
+			CopyProperties.copy(team, teamVO);
 			teamVO.setId(team.getId());
+			teamVO.setImgUrl(IMAGEPREFIX + teamVO.getImgUrl());
 		} catch (Exception e) {
 			LOGGER.info("getTeamById 属性拷贝异常" , e);
 			return null;
