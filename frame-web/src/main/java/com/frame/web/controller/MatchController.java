@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.frame.domain.Match;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
@@ -36,7 +37,7 @@ public class MatchController extends BaseController {
 		
 		match.setYn(YnEnum.Normal.getKey());
 		result = matchService.createMatch(match);
-		return JSON.toJSONString(result);
+		return JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect);
 	}
 	
 	@RequestMapping(value = "/endMatch", method = { RequestMethod.GET, RequestMethod.POST })
