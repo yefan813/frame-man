@@ -1,11 +1,15 @@
 package com.frame.service;
 
 import com.frame.domain.JoinTeam;
+import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.vo.JoinTeamVO;
 import com.frame.service.base.BaseService;
 
 public interface JoinTeamService extends BaseService<JoinTeam, Long> {
+	
+	
+	public Page<JoinTeamVO> getApplyJoinTeamByTeamId(Page<JoinTeam> page, JoinTeam joinTeam);
 	
 	/**
 	 * 得到加入球队记录

@@ -71,4 +71,6 @@ public class MatchDataController extends BaseController {
 		return JSON.toJSONString(result);
 	}
 	
+	
+	//TODO getMatchData（MatchData）  返回matchDataVo
 }

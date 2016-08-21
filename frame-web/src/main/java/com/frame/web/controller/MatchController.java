@@ -26,6 +26,24 @@ public class MatchController extends BaseController {
 	@Resource
 	private MatchService matchService;
 	
+	@RequestMapping(value = "/startMatch", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String startMatch(Match match) {
+		RemoteResult result = null;
+		if(null == match || match.getId() == null){
+			LOGGER.info("调用startMatch 传入的参数错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		match.setStatus(Match.STATUS_GOING);
+		match.setYn(YnEnum.Normal.getKey());
+		if(matchService.updateByKey(match) > 0){
+			result = RemoteResult.success();
+		}else{
+			result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(), BusinessCode.SERVER_INTERNAL_ERROR.getValue());
+		}
+		return JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect);
+	}
+	
 	@RequestMapping(value = "/createMatch", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String createMatch(Match match) {
 		RemoteResult result = null;
@@ -34,7 +52,7 @@ public class MatchController extends BaseController {
 			result = RemoteResult.failure("0001", "传入参数type错误");
 			return JSON.toJSONString(result);
 		}
-		
+		match.setStatus(Match.STATUS_CREAT);
 		match.setYn(YnEnum.Normal.getKey());
 		result = matchService.createMatch(match);
 		return JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect);
@@ -43,19 +61,46 @@ public class MatchController extends BaseController {
 	@RequestMapping(value = "/endMatch", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String endMatch(Match match) {
 		RemoteResult result = null;
-		if(null == match || match.getHomeTeamId() == null ||  match.getGuestTeamId() == null ){
-			LOGGER.info("调用createMatch 传入的参数错误");
+		if(null == match || match.getId() == null){
+			LOGGER.info("调用endMatch 传入的参数错误");
 			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		
+		if( match.getHomeTeamScore() == null || match.getGuestTeamScore() == null){
+			LOGGER.info("调用endMatch 传入的参数错误");
+			result = RemoteResult.failure("0001", "请上传比赛比分，homeTeamSoce,guestTeamScore");
 			return JSON.toJSONString(result);
 		}
 		
 		match.setYn(YnEnum.Normal.getKey());
 		match.setStatus(Match.STATUS_END);
 		if(matchService.update(match) > 0){
-			LOGGER.info("调用createMatch end比赛成功");
+			LOGGER.info("调用endMatch 比赛成功");
 			result = RemoteResult.success(match);
 		}else{
-			LOGGER.info("调用createMatch end比赛失败");
+			LOGGER.info("调用endMatch 比赛失败");
+			result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/reOpenMatch", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String reOpenMatch(Match match) {
+		RemoteResult result = null;
+		if(null == match || match.getHomeTeamId() == null ||  match.getGuestTeamId() == null ){
+			LOGGER.info("调用reOpenMatch 传入的参数错误");
+			result = RemoteResult.failure("0001", "传入参数type错误");
+			return JSON.toJSONString(result);
+		}
+		
+		match.setYn(YnEnum.Normal.getKey());
+		match.setStatus(Match.STATUS_GOING);
+		if(matchService.update(match) > 0){
+			LOGGER.info("调用reOpenMatch比赛成功");
+			result = RemoteResult.success(match);
+		}else{
+			LOGGER.info("调用reOpenMatch比赛失败");
 			result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
 		}
 		return JSON.toJSONString(result);

@@ -17,6 +17,7 @@ import com.frame.domain.Team;
 import com.frame.domain.User;
 import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
+import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.domain.vo.JoinTeamVO;
@@ -52,6 +53,30 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 	@Override
 	public BaseDao<JoinTeam, Long> getDao() {
 		return joinTeamDao;
+	}
+
+	@Override
+	public Page<JoinTeamVO> getApplyJoinTeamByTeamId(Page<JoinTeam> page, JoinTeam joinTeam) {
+		
+		Page<JoinTeamVO> pageVo = new Page<JoinTeamVO>();
+		pageVo.setCurrentPage(page.getCurrentPage());
+		
+		List<JoinTeamVO> voList = Lists.newArrayList();
+		
+		Page<JoinTeam> pages = selectPage(joinTeam, page);
+		
+		List<JoinTeam> joinTeams = pages.getResult();
+		if(CollectionUtils.isNotEmpty(joinTeams)){
+			for (JoinTeam join : joinTeams) {
+				JoinTeamVO vo = getJoinTeamVO(join);
+				if(vo != null){
+					voList.add(vo);
+				}
+			}
+			pageVo.setTotalCount(pages.getTotalCount());
+			pageVo.setResult(voList);
+		}
+		return pageVo;
 	}
 
 	@Override

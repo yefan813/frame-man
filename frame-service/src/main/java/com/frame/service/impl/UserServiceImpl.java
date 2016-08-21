@@ -130,6 +130,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		userLogin.setEndIndex(page.getEndIndex());
 		
 		List<User> res = userDao.getNearByUser(userLogin);
+		//TODO image 加入前缀
 		if(CollectionUtils.isNotEmpty(res)){
 			remoteResult = RemoteResult.success();
 		}else{

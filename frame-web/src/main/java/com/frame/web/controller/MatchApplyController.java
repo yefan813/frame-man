@@ -43,16 +43,12 @@ public class MatchApplyController extends BaseController {
 	public @ResponseBody String persionApplyMatch(MatchApply matchApply) {
 		RemoteResult result = null;
 		
-		if(null == matchApply || matchApply.getType() == null ){
-			LOGGER.info("调用applyMatch 传入的参数type错误");
-			result = RemoteResult.failure("0001", "传入参数type错误");
-			return JSON.toJSONString(result);
-		}
-		if(matchApply.getType() == MatchApply.TYPE_PERSONLY && matchApply.getSourceIdentityId()==null){
+		if(matchApply.getSourceIdentityId()==null){
 			LOGGER.info("调用applyMatch 传入的参数SourceIdentityI错误");
 			result = RemoteResult.failure("0001", "传入参数SourceIdentityI错误");
 			return JSON.toJSONString(result);
 		}
+		matchApply.setType(MatchApply.TYPE_PERSONLY);
 		matchApply.setParentApplyId(MatchApply.DEFAULT_APPLYER_IDENTITY);
 		matchApply.setStatus(MatchApply.STATUS_APPLYING);
 		matchApply.setYn(YnEnum.Normal.getKey());
@@ -70,16 +66,12 @@ public class MatchApplyController extends BaseController {
 	public @ResponseBody String teamApplyMatch(MatchApply matchApply) {
 		RemoteResult result = null;
 		
-		if(null == matchApply || matchApply.getType() == null ){
-			LOGGER.info("调用applyMatch 传入的参数type错误");
-			result = RemoteResult.failure("0001", "传入参数type错误");
-			return JSON.toJSONString(result);
-		}
-		if(matchApply.getType() == MatchApply.TYPE_TEAM &&( matchApply.getSourceIdentityId()==null || matchApply.getTargetIdentityId() == null)){
+		if(matchApply.getSourceIdentityId()==null || matchApply.getTargetIdentityId() == null){
 			LOGGER.info("调用applyMatch 传入的参数SourceIdentityI,TargetIdentityId错误");
 			result = RemoteResult.failure("0001", "传入参数错误");
 			return JSON.toJSONString(result);
 		}
+		matchApply.setType(MatchApply.TYPE_TEAM);
 		matchApply.setStatus(MatchApply.STATUS_APPLYING);
 		matchApply.setYn(YnEnum.Normal.getKey());
 		result = matchApplyService.applyMatch(matchApply);

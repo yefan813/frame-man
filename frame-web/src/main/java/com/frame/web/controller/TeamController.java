@@ -47,6 +47,8 @@ public class TeamController extends BaseController {
 	@Resource
 	private UserTeamRelationService userTeamRelationService;
 	
+	
+	
 	@RequestMapping(value = "/getAllTeams", method = {RequestMethod.GET, RequestMethod.POST})
 	public @ResponseBody String getAllTeams(Page<Team> page){
 		RemoteResult result = null;
@@ -54,6 +56,7 @@ public class TeamController extends BaseController {
 			Team query = new Team();
 			query.setYn(YnEnum.Normal.getKey());
 			Page<Team> teams = teamService.selectPage(query, page);
+			//TODO image 加入前缀
 			result = RemoteResult.result(BusinessCode.SUCCESS, teams.getResult());
 		}catch (Exception e) {
 			LOGGER.error("列表异常", e);
@@ -99,6 +102,7 @@ public class TeamController extends BaseController {
 		}
 		try{
 			List<Team> teams = teamService.getUserTeams(userId);
+			//TODO image 加入前缀
 			result = RemoteResult.result(BusinessCode.SUCCESS, teams);
 		}catch (Exception e) {
 			LOGGER.error("列表异常", e);
