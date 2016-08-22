@@ -45,7 +45,6 @@ public class PlaygroundController extends BaseController {
 			System.out.println("列表异常" + e);
 			result = RemoteResult.result(BusinessCode.SERVER_INTERNAL_ERROR);
 		} 
-		
 		return JSON.toJSONString(result);
 	}
 	

@@ -67,8 +67,7 @@ public class MatchDataController extends BaseController {
 						BusinessCode.SERVER_INTERNAL_ERROR.getValue());
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
-			LOGGER.error("服务器内部错误",e);
+			LOGGER.error("服务器内部错误", e);
 		}
 		return JSON.toJSONString(result);
 	}
@@ -76,22 +75,27 @@ public class MatchDataController extends BaseController {
 	@RequestMapping(value = "/getMatchDataById", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String getMatchDataById(Long matchId) {
 		RemoteResult result = null;
-		if (null == matchId || matchId < 0) {
-			LOGGER.info("调用getMatchData 传入的参数错误");
-			result = RemoteResult.failure("0001", "传入参数type错误");
-			return JSON.toJSONString(result);
-		}
-		MatchData query = new MatchData();
-		query.setMatchId(matchId);
-		query.setYn(YnEnum.Normal.getKey());
+		try {
+			if (null == matchId || matchId < 0) {
+				LOGGER.info("调用getMatchData 传入的参数错误");
+				result = RemoteResult.failure("0001", "传入参数type错误");
+				return JSON.toJSONString(result);
+			}
+			MatchData query = new MatchData();
+			query.setMatchId(matchId);
+			query.setYn(YnEnum.Normal.getKey());
 
-		List<MatchData> matchDatas = matchDataService.selectEntryList(query);
-		if (CollectionUtils.isNotEmpty(matchDatas)) {
-			LOGGER.info("调用 getMatchData 获取数据成功");
-			result = RemoteResult.success(matchDatas.get(0));
-		} else {
-			LOGGER.info("调用getMatchData 获取数据失败");
-			result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+			List<MatchData> matchDatas = matchDataService.selectEntryList(query);
+			if (CollectionUtils.isNotEmpty(matchDatas)) {
+				LOGGER.info("调用 getMatchData 获取数据成功");
+				result = RemoteResult.success(matchDatas.get(0));
+			} else {
+				LOGGER.info("调用getMatchData 获取数据失败");
+				result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+			}
+		} catch (Exception e) {
+			LOGGER.error("失败:" + e.getMessage(), e);
+			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
 		}
 		return JSON.toJSONString(result);
 	}
