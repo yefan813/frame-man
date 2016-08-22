@@ -55,7 +55,6 @@
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
-			<if test="name != null"><![CDATA[name = #{name},]]></if>
 			<if test="homeTeamId != null"><![CDATA[home_team_id = #{homeTeamId},]]></if>
 			<if test="homeTeamName != null"><![CDATA[home_team_name = #{homeTeamName},]]></if>
 			<if test="guestTeamId != null"><![CDATA[guest_team_id = #{guestTeamId},]]></if>
