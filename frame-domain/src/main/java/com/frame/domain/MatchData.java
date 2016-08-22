@@ -10,7 +10,7 @@ public class MatchData extends BaseDomain {
 	private Long matchId;				//比赛id
 	private Integer homeTeamId;			//主队id
 	private String homeTeamData;		//主队数据
-	private String guestTeamId;			//客队id
+	private Integer guestTeamId;			//客队id
 	private String guestTeamData;		//客队数据
 
 	public Long getMatchId() {
@@ -37,11 +37,11 @@ public class MatchData extends BaseDomain {
 		this.homeTeamData = homeTeamData;
 	}
 
-	public String getGuestTeamId() {
+	public Integer getGuestTeamId() {
 		return guestTeamId;
 	}
 
-	public void setGuestTeamId(String guestTeamId) {
+	public void setGuestTeamId(Integer guestTeamId) {
 		this.guestTeamId = guestTeamId;
 	}
 

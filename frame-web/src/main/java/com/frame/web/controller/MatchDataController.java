@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.frame.domain.Match;
 import com.frame.domain.MatchData;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.service.MatchDataService;
+import com.frame.service.MatchService;
 
 
 @Controller
@@ -28,14 +30,28 @@ public class MatchDataController extends BaseController {
 	@Resource
 	private MatchDataService matchDataService;
 	
+	@Resource
+	private MatchService matchService;
+	
 	@RequestMapping(value = "/uploadMatchData", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String uploadMatchData(MatchData matchData) {
 		RemoteResult result = null;
-		if(null == matchData || matchData.getHomeTeamId() == null ||  matchData.getGuestTeamId() == null ){
+		if(null == matchData || matchData.getHomeTeamId() == null ||  matchData.getGuestTeamId() == null || matchData.getMatchId() == null){
 			LOGGER.info("调用uploadMatchData 传入的参数错误");
-			result = RemoteResult.failure("0001", "传入参数type错误");
+			result = RemoteResult.failure("0001", "传入参数错误");
 			return JSON.toJSONString(result);
 		}
+		Match match = matchService.selectEntry(matchData.getMatchId());
+		if(null != match){
+			if(matchData.getHomeTeamId().longValue() != match.getHomeTeamId() || matchData.getGuestTeamId().longValue() != match.getGuestTeamId()){
+				result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+				return JSON.toJSONString(result);
+			}
+		}else{
+			result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+			return JSON.toJSONString(result);
+		}
+		
 		matchData.setYn(YnEnum.Normal.getKey());
 		if(matchDataService.insertEntry(matchData) > 0){
 			LOGGER.info("调用uploadMatchData 上传数据成功");
