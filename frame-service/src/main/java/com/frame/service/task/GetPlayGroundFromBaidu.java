@@ -31,7 +31,7 @@ public class GetPlayGroundFromBaidu {
 	private PlayGroundInfoService playGroundInfoService;
 
 	public void work() {
-		System.out.println("从高德取数据------");
+		LOGGER.info("从高德取数据------");
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("key", BAIDU_PRIVATE_KEY);
 		params.put("keywords", "篮球场");
@@ -51,7 +51,6 @@ public class GetPlayGroundFromBaidu {
 			
 		} catch (Exception e) {
 			LOGGER.error("请求高德api出现错误" + e);
-			System.out.println("请求高德api出现错误" + e);
 		}
 	}
 
@@ -64,7 +63,6 @@ public class GetPlayGroundFromBaidu {
 			pList = JSON.parseArray(gaodeApiResult.getPois(), Playground.class);
 		} catch (Exception e) {
 			LOGGER.error("请求高德api出现错误" + e);
-			System.out.println("请求高德api出现错误" + e);
 		}
 		return pList;
 
@@ -83,7 +81,6 @@ public class GetPlayGroundFromBaidu {
 				playground.setLongitude(Double.valueOf(locations[0]));
 				playground.setLatitude(Double.valueOf(locations[1]));
 			}
-			
 			playGroundInfoService.insertEntry(playground);
 		}
 	}

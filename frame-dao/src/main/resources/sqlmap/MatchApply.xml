@@ -37,8 +37,6 @@
 			<if test="matchTime != null"><![CDATA[AND match_time = #{matchTime}]]></if>
 			<if test="matchAddress != null"><![CDATA[AND match_address = #{matchAddress}]]></if>
 			<if test="type != null"><![CDATA[AND type = #{type}]]></if>
-			<if test="longitude != null"><![CDATA[AND longitude = #{longitude}]]></if>
-			<if test="latitude != null"><![CDATA[AND latitude = #{latitude}]]></if>
 			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
 			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
 			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
@@ -140,8 +138,9 @@
 	      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
 	      * sin( radians(#{latitude}) ))) as myDistance
 	      
-        FROM tb_match_apply where type = #{type}
+        FROM tb_match_apply
         ]]>
+        <include refid="QUERY_WHERE_CLAUSE"/>
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
 	</select>
 	

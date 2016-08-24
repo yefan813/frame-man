@@ -273,7 +273,8 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		}
 		
 		MatchApply countQuery = new MatchApply();
-		query.setYn(YnEnum.Normal.getKey());
+		countQuery.setParentApplyId(MatchApply.DEFAULT_APPLYER_IDENTITY);
+		countQuery.setYn(YnEnum.Normal.getKey());
 		int totalCount = matchApplyDao.selectEntryListCount(countQuery);
 		
 		newPage.setTotalCount(totalCount);
