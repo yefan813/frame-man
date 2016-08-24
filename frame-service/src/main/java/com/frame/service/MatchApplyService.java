@@ -10,6 +10,9 @@ import com.frame.service.base.BaseService;
 
 public interface MatchApplyService extends BaseService<MatchApply, Long> {
 	
+	
+	public RemoteResult joinPersionMatchApply(Integer persionApplyId, Integer userId);
+	
 	/**
 	 * 申请比赛
 	 * @param matchApply

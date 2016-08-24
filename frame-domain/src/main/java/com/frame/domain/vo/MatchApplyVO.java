@@ -34,6 +34,8 @@ public class MatchApplyVO extends BaseDomain {
 	private Double latitude;
 
 	private Integer status;
+	
+	private Double myDistance;		//当前坐标距离
 
 	public Integer getType() {
 		return type;
@@ -105,6 +107,14 @@ public class MatchApplyVO extends BaseDomain {
 
 	public void setParentApplyId(Integer parentApplyId) {
 		this.parentApplyId = parentApplyId;
+	}
+
+	public Double getMyDistance() {
+		return myDistance;
+	}
+
+	public void setMyDistance(Double myDistance) {
+		this.myDistance = myDistance;
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class MatchApplyController extends BaseController {
 	public @ResponseBody String persionApplyMatch(MatchApply matchApply) {
 		RemoteResult result = null;
 		try {
-			if (matchApply.getSourceIdentityId() == null) {
+			if (matchApply.getSourceIdentityId() == null || matchApply.getLatitude() == null || matchApply.getLongitude() == null) {
 				LOGGER.info("调用applyMatch 传入的参数SourceIdentityI错误");
 				result = RemoteResult.failure("0001", "传入参数SourceIdentityI错误");
 				return JSON.toJSONString(result);
@@ -142,23 +142,7 @@ public class MatchApplyController extends BaseController {
 				result = RemoteResult.failure("0001", "传入参数type错误");
 				return JSON.toJSONString(result);
 			}
-			MatchApply originalApply = matchApplyService.selectEntry(persionApplyId.longValue());
-			if (null == originalApply) {
-				result = RemoteResult.failure("0001", "没找到此个人约球记录");
-				return JSON.toJSONString(result);
-			}
-			MatchApply matchApply = new MatchApply();
-			matchApply.setSourceIdentityId(originalApply.getSourceIdentityId());
-			matchApply.setTargetIdentityId(userId);
-			matchApply.setParentApplyId(persionApplyId);
-			matchApply.setYn(YnEnum.Normal.getKey());
-			if (matchApplyService.insertEntry(matchApply) > 0) {
-				LOGGER.info("调用joinPersionMatchApply成功");
-				result = RemoteResult.success();
-			} else {
-				LOGGER.info("调用mineApplyMatch ,无数据");
-				result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
-			}
+			result = matchApplyService.joinPersionMatchApply(persionApplyId, userId);
 		} catch (Exception e) {
 			LOGGER.error("失败:" + e.getMessage(), e);
 			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());

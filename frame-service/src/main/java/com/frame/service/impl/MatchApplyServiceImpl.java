@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.frame.dao.MatchApplyDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.MatchApply;
@@ -20,6 +22,7 @@ import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
+import com.frame.domain.enums.BusinessCode;
 import com.frame.domain.vo.MatchApplyVO;
 import com.frame.service.MatchApplyService;
 import com.frame.service.TeamService;
@@ -333,6 +336,41 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 			return res;
 		}
 		return res;
+	}
+
+
+	@Override
+	@Transactional
+	public RemoteResult joinPersionMatchApply(Integer persionApplyId, Integer userId) {
+		RemoteResult result = null;
+		MatchApply originalApply = selectEntry(persionApplyId.longValue());
+		if (null == originalApply) {
+			result = RemoteResult.failure("0001", "没找到此个人约球记录");
+		}
+		MatchApply updateApply = new MatchApply();
+		updateApply.setId(persionApplyId);
+		updateApply.setStatus(MatchApply.STATUS_PERSION_GOING);
+		update(updateApply);
+		
+		MatchApply matchApply = new MatchApply();
+		matchApply.setSourceIdentityId(originalApply.getSourceIdentityId());
+		matchApply.setTargetIdentityId(userId);
+		matchApply.setParentApplyId(persionApplyId);
+		matchApply.setMatchAddress(originalApply.getMatchAddress());
+		matchApply.setMatchTime(originalApply.getMatchTime());
+		matchApply.setLatitude(originalApply.getLatitude());
+		matchApply.setLongitude(originalApply.getLongitude());
+		matchApply.setType(MatchApply.TYPE_PERSONLY);
+		matchApply.setStatus(MatchApply.STATUS_PERSION_GOING);
+		matchApply.setYn(YnEnum.Normal.getKey());
+		if (insertEntry(matchApply) > 0) {
+			LOGGER.info("调用joinPersionMatchApply成功");
+			result = RemoteResult.success();
+		} else {
+			LOGGER.info("调用mineApplyMatch ,无数据");
+			result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+		}
+		return result;
 	}
 
 }

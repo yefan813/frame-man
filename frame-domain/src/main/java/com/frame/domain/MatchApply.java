@@ -24,6 +24,8 @@ public class MatchApply extends BaseDomain {
 	public static final int STATUS_SOURCE_CANCLE = 3; // 主队取消
 	public static final int STATUS_REJECT = 4; // 拒绝
 	public static final int STATUS_TARGET_CANCLE = 5; // 客队取消
+	public static final int STATUS_PERSION_GOING = 6; // 客队取消
+	
 
 	private Integer type;					//比赛申请类型 1个人 2 球队
 
@@ -42,6 +44,8 @@ public class MatchApply extends BaseDomain {
 	private Double latitude;				//维度
 
 	private Integer status;					//申请状态
+	
+	private Double myDistance;		//当前坐标距离
 
 	public Integer getType() {
 		return type;
@@ -113,6 +117,14 @@ public class MatchApply extends BaseDomain {
 
 	public void setParentApplyId(Integer parentApplyId) {
 		this.parentApplyId = parentApplyId;
+	}
+
+	public Double getMyDistance() {
+		return myDistance;
+	}
+
+	public void setMyDistance(Double myDistance) {
+		this.myDistance = myDistance;
 	}
 
 	@Override
