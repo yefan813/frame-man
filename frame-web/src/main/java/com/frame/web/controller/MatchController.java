@@ -17,6 +17,7 @@ import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
+import com.frame.domain.vo.MatchVO;
 import com.frame.service.MatchService;
 
 @Controller
@@ -28,7 +29,7 @@ public class MatchController extends BaseController {
 	private MatchService matchService;
 
 	@RequestMapping(value = "/getMatchByTeamId", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody String getMatchByTeamId(Page<Match> page, Long teamId) {
+	public @ResponseBody String getMatchByTeamId(Page<MatchVO> page, Long teamId) {
 		RemoteResult result = null;
 		try {
 			if(null == teamId || teamId < 0){

@@ -21,7 +21,7 @@ public class MatchVO extends BaseDomain {
 
 	private Object guestTeam;
 
-	private Integer matchTime;
+	private Date matchTime;
 
 	private String address;
 
@@ -56,12 +56,12 @@ public class MatchVO extends BaseDomain {
 	}
 
 
-	public Integer getMatchTime() {
+	public Date getMatchTime() {
 		return matchTime;
 	}
 
 
-	public void setMatchTime(Integer matchTime) {
+	public void setMatchTime(Date matchTime) {
 		this.matchTime = matchTime;
 	}
 

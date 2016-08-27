@@ -12,6 +12,7 @@ import com.frame.dao.base.BaseDaoImpl;
 import com.frame.domain.Match;
 import com.frame.domain.Playground;
 import com.frame.domain.common.Page;
+import com.frame.domain.vo.MatchVO;
 
 @Repository("matchDao")
 public class MatchDaoImpl extends BaseDaoImpl<Match, Long> implements MatchDao {
@@ -35,7 +36,7 @@ public class MatchDaoImpl extends BaseDaoImpl<Match, Long> implements MatchDao {
 	}
 
 	@Override
-	public List<Match> getMatchByTeamId(Page<Match> page, Long teamId) {
+	public List<Match> getMatchByTeamId(Page<MatchVO> page, Long teamId) {
 		Map<String , Object> params = new HashMap<String, Object>();
 		params.put("teamId", teamId);
 		params.put("startIndex", page.getStartIndex());
