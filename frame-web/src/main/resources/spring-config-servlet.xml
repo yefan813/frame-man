@@ -39,7 +39,7 @@
 		</property>
 	</bean>
 
-   	<mvc:interceptors>
+<!--    	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/out-ifs/**" />
@@ -50,7 +50,7 @@
 				<property name="key" value="${wm.passport.token.public_key}" />
 			</bean>
 		</mvc:interceptor>
-	</mvc:interceptors>
+	</mvc:interceptors> -->
 
 	<mvc:annotation-driven />
 	<!-- 支持异步方法执行 -->

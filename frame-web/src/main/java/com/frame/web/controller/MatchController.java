@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.frame.domain.Match;
+import com.frame.domain.Team;
 import com.frame.domain.base.YnEnum;
+import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.service.MatchService;
@@ -25,6 +27,24 @@ public class MatchController extends BaseController {
 	@Resource
 	private MatchService matchService;
 
+	@RequestMapping(value = "/getMatchByTeamId", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String getMatchByTeamId(Page<Match> page, Long teamId) {
+		RemoteResult result = null;
+		try {
+			if(null == teamId || teamId < 0){
+				LOGGER.info("调用getMatchByTeamId 传入的参数错误");
+				result = RemoteResult.failure("0001", "传入参数teamId错误");
+				return JSON.toJSONString(result);
+			}
+			
+			result = matchService.getMatchByTeamId(page,teamId);
+		} catch (Exception e) {
+			LOGGER.error("失败:" + e.getMessage(), e);
+			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
+		}
+		return JSON.toJSONString(result, SerializerFeature.DisableCircularReferenceDetect);
+	}
+	
 	@RequestMapping(value = "/startMatch", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String startMatch(Match match) {
 		RemoteResult result = null;

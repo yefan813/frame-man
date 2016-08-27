@@ -130,5 +130,19 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<!-- 总数查询,通过条件 -->
+	<select id="selectMatchByTeamId" parameterType="Map" resultType="match">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where home_team_id=#{teamId} or guest_team_id=#{teamId}]]>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
 	
+	<!-- 总数查询,通过条件 -->
+	<select id="selectMatchByTeamIdCount" parameterType="match" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where home_team_id=#{teamId} or guest_team_id=#{teamId}]]>
+	</select>
 </mapper>

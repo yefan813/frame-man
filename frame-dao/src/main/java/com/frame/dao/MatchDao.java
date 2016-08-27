@@ -6,6 +6,7 @@ import java.util.Map;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.Match;
 import com.frame.domain.Playground;
+import com.frame.domain.common.Page;
 
 public interface MatchDao extends BaseDao<Match, Long> {
 	
@@ -15,5 +16,11 @@ public interface MatchDao extends BaseDao<Match, Long> {
 	 * @return
 	 */
 	public List<Playground> getPlaygroundInfo(Map<String, Object> parameters);
-
+	
+	
+	public List<Match> getMatchByTeamId(Page<Match> page, Long teamId);
+	
+	
+	public int getMatchByTeamIdCount(Long teamId);
+	
 }

@@ -1,5 +1,7 @@
 package com.frame.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.frame.dao.MatchDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.Match;
+import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.domain.vo.MatchVO;
@@ -67,6 +70,30 @@ public class MatchServiceImpl extends BaseServiceImpl<Match, Long> implements Ma
 		
 		result = RemoteResult.success(vo);
 		return result;
+	}
+
+
+	@Override
+	public RemoteResult getMatchByTeamId(Page<Match> page, Long teamId) {
+		RemoteResult result = null;
+		if(null == teamId || teamId < 0){
+			result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+			return result;
+		}
+		List<Match> matchs = matchDao.getMatchByTeamId(page, teamId);
+		int totalCount = matchDao.getMatchByTeamIdCount(teamId);
+		
+		page.setResult(matchs);
+		page.setTotalCount(totalCount);
+		
+		result = RemoteResult.success(page);
+		return result;
+	}
+
+
+	@Override
+	public int getMatchByTeamIdCount(Long teamId) {
+		return matchDao.getMatchByTeamIdCount(teamId);
 	}
 
 }
