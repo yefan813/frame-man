@@ -12,51 +12,62 @@ public class JoinTeamVO extends BaseDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = 5279850398675950961L;
-	private User initiator;
+	private User initiatorUser;
 	private Team targetTeam;
 	private User targetUser;
 	private Integer status;
 	private Integer type;
 
-	public User getInitiator() {
-		return initiator;
+
+	public User getInitiatorUser() {
+		return initiatorUser;
 	}
 
-	public void setInitiator(User initiator) {
-		this.initiator = initiator;
+
+	public void setInitiatorUser(User initiatorUser) {
+		this.initiatorUser = initiatorUser;
 	}
+
 
 	public Team getTargetTeam() {
 		return targetTeam;
 	}
 
+
 	public void setTargetTeam(Team targetTeam) {
 		this.targetTeam = targetTeam;
 	}
+
 
 	public User getTargetUser() {
 		return targetUser;
 	}
 
+
 	public void setTargetUser(User targetUser) {
 		this.targetUser = targetUser;
 	}
+
 
 	public Integer getStatus() {
 		return status;
 	}
 
+
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
+
 
 	public Integer getType() {
 		return type;
 	}
 
+
 	public void setType(Integer type) {
 		this.type = type;
 	}
+
 
 	@Override
 	public String toString() {

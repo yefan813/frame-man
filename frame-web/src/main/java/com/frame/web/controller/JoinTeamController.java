@@ -40,7 +40,7 @@ public class JoinTeamController extends BaseController {
 			joinTeam.setOrderFieldType("DESC");
 			joinTeam.setType(JoinTeam.TYPE_APPLY);
 			joinTeam.setYn(YnEnum.Normal.getKey());
-			Page<JoinTeamVO> pages = joinTeamService.getApplyJoinTeamByTeamId(page, joinTeam);
+			Page<JoinTeamVO> pages = joinTeamService.getJoinTeamVO(page, joinTeam);
 			if (CollectionUtils.isEmpty(pages.getResult())) {
 				result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
 			} else {
@@ -68,7 +68,7 @@ public class JoinTeamController extends BaseController {
 			joinTeam.setYn(YnEnum.Normal.getKey());
 			// Page<JoinTeam> pages = joinTeamService.selectPage(joinTeam,
 			// page);
-			Page<JoinTeamVO> pages = joinTeamService.getApplyJoinTeamByTeamId(page, joinTeam);
+			Page<JoinTeamVO> pages = joinTeamService.getJoinTeamVO(page, joinTeam);
 			if (CollectionUtils.isEmpty(pages.getResult())) {
 				result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
 			} else {

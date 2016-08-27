@@ -56,7 +56,7 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 	}
 
 	@Override
-	public Page<JoinTeamVO> getApplyJoinTeamByTeamId(Page<JoinTeam> page, JoinTeam joinTeam) {
+	public Page<JoinTeamVO> getJoinTeamVO(Page<JoinTeam> page, JoinTeam joinTeam) {
 		
 		Page<JoinTeamVO> pageVo = new Page<JoinTeamVO>();
 		pageVo.setCurrentPage(page.getCurrentPage());
@@ -93,8 +93,7 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 		if(joinTeam.getType() != null &&  joinTeam.getType() == JoinTeam.TYPE_INVENT){
 			if(joinTeam.getInitiator() != null){
 				User initator = userService.selectEntry(joinTeam.getInitiator());
-				vo.setInitiator(initator);
-				
+				vo.setInitiatorUser(initator);
 			}
 		}
 		if(joinTeam.getTeamId() != null){

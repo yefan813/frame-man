@@ -9,7 +9,7 @@ import com.frame.service.base.BaseService;
 public interface JoinTeamService extends BaseService<JoinTeam, Long> {
 	
 	
-	public Page<JoinTeamVO> getApplyJoinTeamByTeamId(Page<JoinTeam> page, JoinTeam joinTeam);
+	public Page<JoinTeamVO> getJoinTeamVO(Page<JoinTeam> page, JoinTeam joinTeam);
 	
 	/**
 	 * 得到加入球队记录
