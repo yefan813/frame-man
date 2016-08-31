@@ -18,16 +18,19 @@ import com.frame.service.EasemobAPIService;
 public class EasemobAPIServiceImpl implements EasemobAPIService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EasemobAPIServiceImpl.class);
 
-	private static EasemobRestAPIFactory factory = ClientContext.getInstance().init(ClientContext.INIT_FROM_PROPERTIES).getAPIFactory();
-	private static IMUserAPI userAPI = (IMUserAPI)factory.newInstance(EasemobRestAPIFactory.USER_CLASS);
+	
 	
 	@Override
 	public ResponseWrapper createNewIMUserSingle(IMUserBody user) {
+		EasemobRestAPIFactory factory = ClientContext.getInstance().init(ClientContext.INIT_FROM_PROPERTIES).getAPIFactory();
+		IMUserAPI userAPI = (IMUserAPI)factory.newInstance(EasemobRestAPIFactory.USER_CLASS);
 		return (ResponseWrapper) userAPI.createNewIMUserSingle(user);
 	}
 
 	@Override
 	public ResponseWrapper getIMUsersByUserName(String userName) {
+		EasemobRestAPIFactory factory = ClientContext.getInstance().init(ClientContext.INIT_FROM_PROPERTIES).getAPIFactory();
+		IMUserAPI userAPI = (IMUserAPI)factory.newInstance(EasemobRestAPIFactory.USER_CLASS);
 		return (ResponseWrapper) userAPI.getIMUsersByUserName(userName);
 	}
 
