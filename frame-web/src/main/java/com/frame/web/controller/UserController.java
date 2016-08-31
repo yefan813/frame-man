@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.frame.domain.AppSecret;
 import com.frame.domain.User;
 import com.frame.domain.UserAuths;
+import com.frame.domain.UserFriends;
 import com.frame.domain.UserLogin;
 import com.frame.domain.UserValid;
 import com.frame.domain.base.YnEnum;
@@ -34,6 +35,7 @@ import com.frame.service.AppSecretService;
 import com.frame.service.ImgSysService;
 import com.frame.service.TaoBaoSmsService;
 import com.frame.service.UserAuthsService;
+import com.frame.service.UserFriendsService;
 import com.frame.service.UserLoginService;
 import com.frame.service.UserService;
 import com.frame.service.UserValidService;
@@ -64,6 +66,9 @@ public class UserController extends BaseController {
 
 	@Resource
 	private ImgSysService imgSysService;
+	
+	@Resource
+	private UserFriendsService userFriendsService;
 
 	@Value("${img.prefix}")
 	private String IMAGEPREFIX;
@@ -194,6 +199,8 @@ public class UserController extends BaseController {
 					userAuths.setYn(YnEnum.Normal.getKey());
 
 					result = userService.registUser(defaultUser, userAuths);
+					
+					
 				} else {
 					result = RemoteResult.failure("0002", "验证失败,验证码失效，请重新获取验证码");
 				}
@@ -234,7 +241,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getValidCode", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody String registUser(String tel, Long validDate) {
+	public @ResponseBody String getValidCode(String tel, Long validDate) {
 		RemoteResult result = null;
 		try {
 			if (StringUtils.isEmpty(tel) || (validDate == null || validDate <= 0)) {
@@ -257,7 +264,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody String login(UserAuths userAuths) {
+	public @ResponseBody String login(UserAuths userAuths, String nickName) {
 		RemoteResult result = null;
 		try {
 			if (null == userAuths || userAuths.getIdentityType() == null) {
@@ -327,10 +334,11 @@ public class UserController extends BaseController {
 
 					User user = new User();
 					user.setId(oldData.getUserId());
+					user.setNickName(nickName);
 					result = userService.registUser(user, oldData);
 				} else {
 					User defaultUser = new User();
-					defaultUser.setNickName(RandomStrUtils.getUniqueString(6));
+					defaultUser.setNickName(nickName);
 					defaultUser.setYn(YnEnum.Normal.getKey());
 
 					UserAuths newData = new UserAuths();
@@ -375,4 +383,82 @@ public class UserController extends BaseController {
 		}
 		return JSON.toJSONString(result);
 	}
+	
+	@RequestMapping(value = "/applyFriend", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String applyFriend(UserFriends userFriends) {
+		RemoteResult result = null;
+		try {
+			if (null == userFriends || userFriends.getFromUserId() == null || userFriends.getToUserId() == null) {
+				LOGGER.info("调用applyFriend 传入的参数错误");
+				result = RemoteResult.failure("0001", "传入参数错误");
+				return JSON.toJSONString(result);
+			}
+			result = userFriendsService.applyFriend(userFriends);
+		} catch (Exception e) {
+			LOGGER.error("失败:" + e.getMessage(), e);
+			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	
+	@RequestMapping(value = "/getFriendsList", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String getFriendsList(Long userId) {
+		RemoteResult result = null;
+		try {
+			if (null == userId || userId < 0) {
+				LOGGER.info("调用getFriendsList 传入的参数错误");
+				result = RemoteResult.failure("0001", "传入参数错误");
+				return JSON.toJSONString(result);
+			}
+			List<User> userList = userFriendsService.getFriendsList(userId);
+			result = RemoteResult.success(userList);
+		} catch (Exception e) {
+			LOGGER.error("失败:" + e.getMessage(), e);
+			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/queryFriends", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String queryFriends(String query) {
+		RemoteResult result = null;
+		try {
+			if (StringUtils.isEmpty(query)) {
+				LOGGER.info("调用queryFriends 传入的参数错误");
+				result = RemoteResult.failure("0001", "传入参数错误");
+				return JSON.toJSONString(result);
+			}
+			List<User> userList = userFriendsService.queryFriends(query);
+			result = RemoteResult.success(userList);
+		} catch (Exception e) {
+			LOGGER.error("失败:" + e.getMessage(), e);
+			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/deleteFriends", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String deleteFriends(Long userId) {
+		RemoteResult result = null;
+		try {
+			if (null == userId || userId < 0) {
+				LOGGER.info("调用deleteFriends 传入的参数错误");
+				result = RemoteResult.failure("0001", "传入参数错误");
+				return JSON.toJSONString(result);
+			}
+			int res = userFriendsService.deleteFriends(userId);
+			if(res > 0){
+				result = RemoteResult.success();
+			}else{
+				result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(), BusinessCode.SERVER_INTERNAL_ERROR.getValue());
+			}
+			
+		} catch (Exception e) {
+			LOGGER.error("失败:" + e.getMessage(), e);
+			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
+		}
+		return JSON.toJSONString(result);
+	}
+	
 }

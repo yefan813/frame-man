@@ -11,6 +11,7 @@
 		<module>frame-api</module>
 		<module>frame-web</module>
 		<module>frame-domain</module>
+		<module>frame-chat</module>
 	</modules>
 
 
@@ -314,7 +315,11 @@
 				<artifactId>httpclient</artifactId>
 				<version>4.3.6</version>
 			</dependency>
-
+			<dependency>
+	            <groupId>org.apache.httpcomponents</groupId>
+	            <artifactId>httpmime</artifactId>
+	            <version>4.3.3</version>
+	        </dependency>
 			<dependency>
 				<groupId>com.belerweb</groupId>
 				<artifactId>pinyin4j</artifactId>

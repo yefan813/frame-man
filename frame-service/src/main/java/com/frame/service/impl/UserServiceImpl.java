@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.frame.chat.comm.body.IMUserBody;
 import com.frame.dao.UserDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.AppSecret;
@@ -22,6 +23,7 @@ import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.service.AppSecretService;
+import com.frame.service.EasemobAPIService;
 import com.frame.service.UserAuthsService;
 import com.frame.service.UserLoginService;
 import com.frame.service.UserService;
@@ -44,6 +46,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 	
 	@Resource
 	private UserLoginService userLoginService;
+	
+	@Resource
+	private EasemobAPIService easemobAPIService;
 
 	@Override
 	public BaseDao<User, Long> getDao() {
@@ -118,6 +123,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		UserLogin condition = new UserLogin();
 		condition.setUserId(appSecret.getUserId());
 		userLoginService.insertEntry(condition);
+		
+		IMUserBody userBody = new IMUserBody(user.getTel(), user.getPassword(), user.getNickName());
+		easemobAPIService.createNewIMUserSingle(userBody);
 		
 		res = RemoteResult.success(secret);
 		
