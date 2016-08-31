@@ -14,7 +14,7 @@ import com.frame.chat.comm.wrapper.ResponseWrapper;
 import com.frame.service.EasemobAPIService;
 
 
-@Service("EasemobAPIService")
+@Service("easemobAPIService")
 public class EasemobAPIServiceImpl implements EasemobAPIService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EasemobAPIServiceImpl.class);
 
