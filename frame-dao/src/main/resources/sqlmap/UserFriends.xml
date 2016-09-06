@@ -114,6 +114,66 @@
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
 	
-	<!-- 其它SQL语句 -->
+	<!-- 改变好有关系 -->
+	<update id="changeUserFriendStatus" parameterType="userFriends">
+		<![CDATA[UPDATE `tb_user_friends` SET `status` = #{status}, `action_user_id` = #{actionUserId}
+						WHERE `from_user_id` =  #{fromUserId} AND `to_user_id` = #{toUserId} and yn = 1]]>
+	</update>
 	
+	<!-- 得到某个用户的好友列表 -->
+	<select id="selectFriendsList" parameterType="userFriends" resultType="userFriends">
+	<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE (`from_user_id` = #{fromUserId} OR `to_user_id` = #{fromUserId})
+				AND `status` = 2 and yn = 1]]>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+	
+	<select id="selectFriendsListCount" parameterType="userFriends" resultType="int">
+	<![CDATA[SELECT count(id)]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE (`from_user_id` = #{fromUserId} OR `to_user_id` = #{fromUserId})
+				AND `status` = 2 and yn = 1]]>
+	</select>
+	
+	<!-- 查看某个用户被邀请的记录 -->
+	<select id="selectPendingFriendsList" parameterType="userFriends" resultType="userFriends">
+	<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE (`from_user_id` = #{fromUserId} OR `to_user_id` = #{fromUserId}) AND `status` = 1 AND `action_user_id` != #{fromUserId} and yn = 1]]>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+	
+	<select id="selectPendingFriendsListCount" parameterType="userFriends" resultType="int">
+	<![CDATA[SELECT count(id)]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE (`from_user_id` = #{fromUserId} OR `to_user_id` = #{fromUserId}) AND `status` = 1 AND `action_user_id` != #{fromUserId} and yn = 1]]>
+	</select>
+	
+	
+	<!-- 登录的用户访问其他用户的个人信息，我们应该能够获取好友请求的状态 -->
+	<select id="selct2PFriendStatus" parameterType="userFriends" resultType="userFriends">
+	<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId} and yn = 1]]>
+	</select>
+	
+	<!-- 登录的用户访问其他用户的个人信息，我们应该能够获取好友请求的状态 -->
+	<select id="selct2PIsFriend" parameterType="userFriends" resultType="userFriends">
+	<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId} AND `status` = 1 and yn = 1]]>
+	</select>
+	
+	
+	<!-- 删除好友 -->
+	<update id="deleteFriends" parameterType="userFriends">
+		<![CDATA[UPDATE tb_user_friends set yn = -1 WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId}]]>
+	</update>
 </mapper>

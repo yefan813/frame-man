@@ -1,9 +1,8 @@
 package com.frame.service;
 
-import java.util.List;
-
 import com.frame.domain.User;
 import com.frame.domain.UserFriends;
+import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.service.base.BaseService;
 
@@ -11,13 +10,17 @@ public interface UserFriendsService extends BaseService<UserFriends, Long> {
 	
 	public RemoteResult applyFriend(UserFriends userFriends);
 	
-	public List<User> getFriendsList(Long userId);
+	public RemoteResult getPendingFriendList(Page<User> page, Long userId);
 	
-	public List<User> queryFriends(String query);
+	public RemoteResult getFriendsList(Page<User> page, Long userId);
 	
-	public int deleteFriends(Long userId);
+	public RemoteResult queryFriends(Page<User> page, Long userId, String query);
 	
-	public int agreeApplyFriends(Long userId);
+	public RemoteResult deleteFriends(UserFriends userFriends);
 	
-	public int refuseInvitation(Long userId);
+	public RemoteResult agreeApplyFriends(UserFriends userFriends) throws Exception;
+	
+	public RemoteResult refuseInvitation(UserFriends userFriends);
+	
+	public int check2PIsFriend(UserFriends userFriends);
 }

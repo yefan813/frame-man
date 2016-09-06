@@ -1,5 +1,6 @@
 package com.frame.service;
 
+import java.rmi.Remote;
 import java.util.List;
 
 import com.frame.domain.MatchApply;
@@ -49,5 +50,14 @@ public interface UserService extends BaseService<User, Long> {
 	 * @return
 	 */
 	public List<User> getTeamUserByTeamId(Long teamId);
+	
+	/**
+	 * @param user
+	 * @return
+	 */
+	public RemoteResult bindTel(User user);
+	
+	
+	public RemoteResult login(UserAuths userAuths, String nickName);
 	
 }

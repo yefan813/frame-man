@@ -68,9 +68,9 @@ public class HttpClientRestAPIInvoker implements RestAPIInvoker {
 			String msg = MessageTemplate.print(MessageTemplate.BLANK_OBJ_MSG, new String[]{"Parameter header"});
 			responseWrapper.addError(msg);
 		}
-		if( null == body || !body.validate() ) {
-			responseWrapper.addError(MessageTemplate.INVALID_BODY_MSG);
-		}
+//		if( null == body || !body.validate() ) {
+//			responseWrapper.addError(MessageTemplate.INVALID_BODY_MSG);
+//		}
 		
 		if( responseWrapper.hasError() ) {
 			return responseWrapper;

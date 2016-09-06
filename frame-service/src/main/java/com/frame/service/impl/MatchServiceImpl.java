@@ -95,12 +95,14 @@ public class MatchServiceImpl extends BaseServiceImpl<Match, Long> implements Ma
 
 			for (Match match : matchs) {
 				MatchVO vo = new MatchVO();
+				
 				CopyProperties.copy(match, vo);
 				TeamVO sourceTeam = teamService.getTeamById(match.getHomeTeamId());
 				vo.setHomeTeam(sourceTeam);
 				
 				TeamVO targetTeam = teamService.getTeamById(match.getGuestTeamId());
 				vo.setGuestTeam(targetTeam);
+				vo.setId(match.getId());
 				voList.add(vo);
 
 			}

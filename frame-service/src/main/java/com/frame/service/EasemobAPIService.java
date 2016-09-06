@@ -1,12 +1,26 @@
 package com.frame.service;
 
+import java.rmi.Remote;
 import java.util.List;
 
-import com.frame.chat.comm.body.IMUserBody;
 import com.frame.chat.comm.wrapper.ResponseWrapper;
+import com.frame.domain.User;
+import com.frame.domain.common.RemoteResult;
 
 public interface EasemobAPIService{
-	public ResponseWrapper createNewIMUserSingle(IMUserBody user);
+	
+	
+	/**
+	 * @param user
+	 * @return
+	 */
+	public RemoteResult createNewIMUserSingle(User user);
+	
+	/**
+	 * @param body
+	 * @return
+	 */
+	public RemoteResult createNewIMUserBatch(List<User> body);
 	
 	
 
@@ -18,7 +32,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	public ResponseWrapper getIMUsersByUserName(String userName);
+	public User getIMUsersByUserName(String userName);
 	
 	/**
 	 * 获取IM用户[批量]，参数为空时默认返回最早创建的10个用户 <br>
@@ -30,7 +44,7 @@ public interface EasemobAPIService{
 	 *            游标，大于单页记录时会产生
 	 * @return
 	 */
-	public List<ResponseWrapper> getIMUsersBatch(Long limit, String cursor);
+	public List<User> getIMUsersBatch(Long limit, String cursor);
 	
 	
 	/**
@@ -41,7 +55,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	public ResponseWrapper deleteIMUserByUserName(String userName);
+	public RemoteResult deleteIMUserByUserName(String userName);
 	
 	/**
 	 * 删除IM用户[批量]，随机删除 <br>
@@ -51,7 +65,7 @@ public interface EasemobAPIService{
 	 *            删除数量，建议100-500
 	 * @return
 	 */
-	public Object deleteIMUserBatch(Long limit);
+	public RemoteResult deleteIMUserBatch(Long limit);
 	
 	/**
 	 * 重置IM用户密码 <br>
@@ -63,7 +77,7 @@ public interface EasemobAPIService{
 	 *            <code>{"newpassword" : "${新密码指定的字符串}"}</code>
 	 * @return
 	 */
-	Object modifyIMUserPasswordWithAdminToken(String userName, Object payload);
+	public RemoteResult modifyIMUserPasswordWithAdminToken(String userName, String newpassword);
 	
 	/**
 	 * 修改用户昵称 <br>
@@ -75,7 +89,7 @@ public interface EasemobAPIService{
 	 *            <code>{"nickname" : "${昵称值}"}</code>
 	 * @return
 	 */
-	Object modifyIMUserNickNameWithAdminToken(String userName, Object payload);
+	public RemoteResult modifyIMUserNickNameWithAdminToken(String userName, String nickname);
 	
 	/**
 	 * 给IM用户的添加好友 <br>
@@ -87,7 +101,7 @@ public interface EasemobAPIService{
 	 *            好友用戶名或用戶ID
 	 * @return
 	 */
-	Object addFriendSingle(String userName, String friendName);
+	public RemoteResult addFriendSingle(String userName, String friendName);
 
 	/**
 	 * 解除IM用户的好友关系 <br>
@@ -99,7 +113,7 @@ public interface EasemobAPIService{
 	 *            好友用戶名或用戶ID
 	 * @return
 	 */
-	Object deleteFriendSingle(String userName, String friendName);
+	public RemoteResult deleteFriendSingle(String userName, String friendName);
 
 	/**
 	 * 查看某个IM用户的好友信息 <br>
@@ -109,7 +123,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	Object getFriends(String userName);
+	public List<User> getFriends(String userName);
 
 	/**
 	 * 获取IM用户的黑名单 <br>
@@ -119,7 +133,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	Object getBlackList(String userName);
+	public List<User> getBlackList(String userName);
 
 	/**
 	 * 往IM用户的黑名单中加人 <br>
@@ -131,7 +145,7 @@ public interface EasemobAPIService{
 	 *            <code>{"usernames":["5cxhactgdj", "mh2kbjyop1"]}</code>
 	 * @return
 	 */
-	Object addToBlackList(String userName, Object payload);
+	public RemoteResult addToBlackList(String userName, List<User> users);
 
 	/**
 	 * 从IM用户的黑名单中减人 <br>
@@ -143,7 +157,7 @@ public interface EasemobAPIService{
 	 *            黑名单用戶名或用戶ID
 	 * @return
 	 */
-	Object removeFromBlackList(String userName, String blackListName);
+	public RemoteResult removeFromBlackList(String userName, String blackListName);
 
 	/**
 	 * 查看用户在线状态 <br>
@@ -153,7 +167,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	Object getIMUserStatus(String userName);
+	public Object getIMUserStatus(String userName);
 
 	/**
 	 * 查询离线消息数 <br>
@@ -163,7 +177,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	Object getOfflineMsgCount(String userName);
+	public Integer getOfflineMsgCount(String userName);
 
 	/**
 	 * 查询某条离线消息状态 <br>
@@ -175,7 +189,7 @@ public interface EasemobAPIService{
 	 *            消息ID
 	 * @return
 	 */
-	Object getSpecifiedOfflineMsgStatus(String userName, String msgId);
+	public Object getSpecifiedOfflineMsgStatus(String userName, String msgId);
 
 	/**
 	 * 用户账号禁用 <br>
@@ -185,7 +199,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	Object deactivateIMUser(String userName);
+	public RemoteResult deactivateIMUser(String userName);
 
 	/**
 	 * 用户账号解禁 <br>
@@ -195,7 +209,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	Object activateIMUser(String userName);
+	public RemoteResult activateIMUser(String userName);
 
 	/**
 	 * 强制用户下线 <br>
@@ -205,7 +219,7 @@ public interface EasemobAPIService{
 	 *            用戶名或用戶ID
 	 * @return
 	 */
-	Object disconnectIMUser(String userName);
+	public Boolean disconnectIMUser(String userName);
 
 	/**
 	 * 获取用户参与的群组 <br>
@@ -217,7 +231,7 @@ public interface EasemobAPIService{
 	 * @see http://docs.easemob.com/doku.php?id=start:100serverintegration:
 	 *      60groupmgmt
 	 */
-	Object getIMUserAllChatGroups(String userName);
+	public List<User> getIMUserAllChatGroups(String userName);
 
 	/**
 	 * 获取用户所有参与的聊天室 <br>
@@ -229,5 +243,5 @@ public interface EasemobAPIService{
 	 * @see http://docs.easemob.com/doku.php?id=start:100serverintegration:
 	 *      70chatroommgmt
 	 */
-	Object getIMUserAllChatRooms(String userName);
+	public Object getIMUserAllChatRooms(String userName);
 }

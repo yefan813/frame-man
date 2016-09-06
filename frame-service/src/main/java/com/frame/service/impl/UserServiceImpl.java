@@ -1,15 +1,19 @@
 package com.frame.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.frame.chat.comm.body.IMUserBody;
 import com.frame.dao.UserDao;
 import com.frame.dao.base.BaseDao;
@@ -49,6 +53,12 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 	
 	@Resource
 	private EasemobAPIService easemobAPIService;
+	
+	@Resource
+	private UserAuthsService userAuthsService;
+	
+	@Value("${img.prefix}")
+	private String IMAGEPREFIX;
 
 	@Override
 	public BaseDao<User, Long> getDao() {
@@ -124,11 +134,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		condition.setUserId(appSecret.getUserId());
 		userLoginService.insertEntry(condition);
 		
-		IMUserBody userBody = new IMUserBody(user.getTel(), user.getPassword(), user.getNickName());
-		easemobAPIService.createNewIMUserSingle(userBody);
-		
-		res = RemoteResult.success(secret);
-		
+		if(StringUtils.isNotEmpty(user.getTel())){
+			res = easemobAPIService.createNewIMUserSingle(user);
+			res.setData(secret);
+		}
 		return res;
 	}
 	@Override
@@ -140,7 +149,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		List<User> res = userDao.getNearByUser(userLogin);
 		//TODO image 加入前缀
 		if(CollectionUtils.isNotEmpty(res)){
-			remoteResult = RemoteResult.success();
+			for (User user : res) {
+				user.setAvatarUrl(IMAGEPREFIX + user.getAvatarUrl());
+			}
+			remoteResult = RemoteResult.success(res);
 		}else{
 			remoteResult = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
 			return remoteResult;
@@ -150,7 +162,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		page.setResult(res);
 		page.setTotalCount(total);
 		
-		remoteResult.setData(page.getResult());
 		return remoteResult;
 	}
 
@@ -162,6 +173,118 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 	@Override
 	public List<User> getTeamUserByTeamId(Long teamId) {
 		return userDao.getTeamUserByTeamId(teamId);
+	}
+
+	@Override
+	public RemoteResult bindTel(User user) {
+		RemoteResult result;
+		if(null == user || user.getId() == null || user.getTel() == null){
+			LOGGER.info("调用bindTel 传入的参数错误");
+			result = RemoteResult.failure("0001", "传入参数错误");
+			return result;
+		}
+		int res = updateByKey(user);
+		
+		if(res > 0){
+			//调用环信创建用户
+			result = easemobAPIService.createNewIMUserSingle(user);
+			
+			User dataUser = selectEntry(user.getId().longValue());
+			result.setData(dataUser);
+		}else{
+			result = RemoteResult.failure("0001", "绑定失败");
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional
+	public RemoteResult login(UserAuths userAuths, String nickName) {
+		RemoteResult result = null;
+		if (null == userAuths || userAuths.getIdentityType() == null) {
+			LOGGER.error("调用login 传入的参数错误 登陆类型【{}】", userAuths.getIdentityType());
+			result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(),
+					BusinessCode.PARAMETERS_ERROR.getValue());
+			return result;
+		}
+		Date now = new Date();
+		if (userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_TEL
+				|| userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_EMAIL
+				|| userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_USERNAME) {
+			if (userAuths.getIdentifier() == null || userAuths.getCredential() == null) {
+				LOGGER.error("站内 调用login 传入的参数错误，无用户登陆类型，密码");
+				result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(),
+						BusinessCode.PARAMETERS_ERROR.getValue());
+				return result;
+			}
+			userAuths.setYn(YnEnum.Normal.getKey());
+			List<UserAuths> resList = userAuthsService.selectEntryList(userAuths);
+			if (CollectionUtils.isNotEmpty(resList)) {
+				LOGGER.info("调用登陆方法找到用户，返回appkey secret");
+				UserAuths oldData = resList.get(0);
+
+				AppSecret query = new AppSecret();
+				query.setUserId(oldData.getUserId());
+				query.setYn(YnEnum.Normal.getKey());
+				List<AppSecret> appSecrets = appSecretService.selectEntryList(query);
+				if (CollectionUtils.isNotEmpty(appSecrets)) {
+					AppSecret secret = new AppSecret();
+					secret.setUserId(appSecrets.get(0).getUserId());
+					secret.setApiKey(appSecrets.get(0).getApiKey());
+					secret.setSecretKey(appSecrets.get(0).getSecretKey());
+
+					UserLogin condition = new UserLogin();
+					condition.setUserId(appSecrets.get(0).getUserId());
+					userLoginService.insertEntry(condition);
+
+					result = RemoteResult.success(secret);
+					return result;
+				} else {
+					LOGGER.error("站内 调用login找不到信管的蜜月信息");
+					result = RemoteResult.failure("0001", "找不到相关的密钥信息，请联系管理员");
+					return result;
+				}
+
+			}
+		}
+
+		if (userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_QQ
+				|| userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_WEICHAT
+				|| userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_WEIBO) {
+			if (userAuths.getIdentifier() == null) {
+				LOGGER.error("第三方登录调用login 传入的参数错误，无用户第三方唯一标识");
+				result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(),
+						BusinessCode.PARAMETERS_ERROR.getValue());
+				return result;
+			}
+			// 第三方登录直接更新或者新建一条记录
+			UserAuths query = new UserAuths();
+			query.setIdentityType(userAuths.getIdentityType());
+			query.setIdentifier(userAuths.getIdentifier());
+			List<UserAuths> resList = userAuthsService.selectEntryList(userAuths);
+			if (CollectionUtils.isNotEmpty(resList)) {
+				UserAuths oldData = resList.get(0);
+				oldData.setCredential(userAuths.getCredential());
+
+				User user = new User();
+				user.setId(oldData.getUserId());
+				user.setNickName(nickName);
+				result = registUser(user, oldData);
+			} else {
+				User defaultUser = new User();
+				defaultUser.setNickName(nickName);
+				defaultUser.setYn(YnEnum.Normal.getKey());
+
+				UserAuths newData = new UserAuths();
+				newData.setIdentityType(userAuths.getIdentityType());
+				newData.setIdentifier(userAuths.getIdentifier());
+				newData.setCredential(userAuths.getCredential());
+				newData.setVerified(1);// 已验证
+				newData.setYn(YnEnum.Normal.getKey());
+				result = registUser(defaultUser, newData);
+			}
+		}
+		return result;
 	}
 
 }
