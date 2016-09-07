@@ -5,6 +5,7 @@ public enum BusinessCode {
 	SUCCESS("0000", 10000, "取数据成功", null),
 	SERVER_INTERNAL_ERROR("0001", 10001, "服务器内部错误", null),
 	PARAMETERS_ERROR("0002", 10002, "传递参数错误", null),
+	NO_TEL_INFO("0004", 10004, "没有电话号码不能注册环信", null),
 	NO_RESULTS("0003", 10003, "无返回数据", null);
 	
 	

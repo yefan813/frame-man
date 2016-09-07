@@ -136,8 +136,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		
 		if(StringUtils.isNotEmpty(user.getTel())){
 			res = easemobAPIService.createNewIMUserSingle(user);
+		}else{
+			res = RemoteResult.result(BusinessCode.NO_TEL_INFO,secret);
 		}
-		res = RemoteResult.success(secret);
+		
 		return res;
 	}
 	@Override

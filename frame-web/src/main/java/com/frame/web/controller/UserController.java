@@ -1,6 +1,5 @@
 package com.frame.web.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
-import com.frame.domain.AppSecret;
 import com.frame.domain.User;
 import com.frame.domain.UserAuths;
 import com.frame.domain.UserFriends;
@@ -35,7 +33,6 @@ import com.frame.service.AppSecretService;
 import com.frame.service.EasemobAPIService;
 import com.frame.service.ImgSysService;
 import com.frame.service.TaoBaoSmsService;
-import com.frame.service.UserAuthsService;
 import com.frame.service.UserFriendsService;
 import com.frame.service.UserLoginService;
 import com.frame.service.UserService;
