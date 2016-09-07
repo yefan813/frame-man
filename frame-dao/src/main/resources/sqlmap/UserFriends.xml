@@ -164,8 +164,8 @@
 	</select>
 	
 	<!-- 登录的用户访问其他用户的个人信息，我们应该能够获取好友请求的状态 -->
-	<select id="selct2PIsFriend" parameterType="userFriends" resultType="userFriends">
-	<![CDATA[SELECT]]>
+	<select id="selct2PIsFriend" parameterType="userFriends" resultType="int">
+	<![CDATA[SELECT count(id)]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId} AND `status` = 1 and yn = 1]]>
