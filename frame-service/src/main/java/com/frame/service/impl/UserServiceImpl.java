@@ -136,8 +136,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		
 		if(StringUtils.isNotEmpty(user.getTel())){
 			res = easemobAPIService.createNewIMUserSingle(user);
-			res.setData(secret);
 		}
+		res = RemoteResult.success(secret);
 		return res;
 	}
 	@Override
@@ -240,7 +240,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 					result = RemoteResult.success(secret);
 					return result;
 				} else {
-					LOGGER.error("站内 调用login找不到信管的蜜月信息");
+					LOGGER.error("站内 调用login找不到相关的蜜月信息");
 					result = RemoteResult.failure("0001", "找不到相关的密钥信息，请联系管理员");
 					return result;
 				}
