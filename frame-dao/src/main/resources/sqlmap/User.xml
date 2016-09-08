@@ -8,7 +8,11 @@
 		<![CDATA[
 			id,
 			name,
+			status,
 			sex,
+			role,
+			address,
+			password,
 			nickname as nickName,
 			point,
 			avatar_url as avatarUrl,
@@ -28,7 +32,11 @@
 			<![CDATA[
 				user1.id,
 				user1.name,
+				user1.status,
 				user1.sex,
+				user1.role,
+				user1.address,
+				user1.password,
 				user1.nickname as nickName,
 				user1.point,
 				user1.avatar_url as avatarUrl,
@@ -48,7 +56,11 @@
 		<where>
 			<if test="id != null"><![CDATA[AND id = #{id}]]></if>
 			<if test="name != null"><![CDATA[AND name = #{name}]]></if>
+			<if test="status != null"><![CDATA[AND status = #{status}]]></if>
 			<if test="sex != null"><![CDATA[AND sex = #{sex}]]></if>
+			<if test="role != null"><![CDATA[AND role = #{role}]]></if>
+			<if test="address != null"><![CDATA[AND address = #{address}]]></if>
+			<if test="password != null"><![CDATA[AND password = #{password}]]></if>
 			<if test="nickName != null"><![CDATA[AND nickname = #{nickName}]]></if>
 			<if test="point != null"><![CDATA[AND point = #{point}]]></if>
 			<if test="avatarUrl != null"><![CDATA[AND avatar_url = #{avatarUrl}]]></if>
@@ -75,6 +87,10 @@
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
 			<if test="name != null"><![CDATA[name = #{name},]]></if>
+			<if test="status != null"><![CDATA[status = #{status},]]></if>
+			<if test="role != null"><![CDATA[role = #{role},]]></if>
+			<if test="address != null"><![CDATA[address = #{address},]]></if>
+			<if test="password != null"><![CDATA[password = #{password},]]></if>
 			<if test="sex != null"><![CDATA[sex = #{sex},]]></if>
 			<if test="nickName != null"><![CDATA[nickname = #{nickName},]]></if>
 			<if test="point != null"><![CDATA[point = #{point},]]></if>
@@ -94,8 +110,8 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="user" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_user (name,sex,nickname,point,avatar_url,email,tel,height,weight,position,level,feature,created,modified,yn)
-			VALUES (#{name},#{sex},#{nickName},#{point},#{avatarUrl},#{email},#{tel},#{height},#{weight},#{position},#{level},#{feature},now(),now(),#{yn})
+			INSERT INTO tb_user (name,role,status,address,password,sex,nickname,point,avatar_url,email,tel,height,weight,position,level,feature,created,modified,yn)
+			VALUES (#{name},#{role},#{status},#{address},#{password},#{sex},#{nickName},#{point},#{avatarUrl},#{email},#{tel},#{height},#{weight},#{position},#{level},#{feature},now(),now(),#{yn})
 		]]>
 	</insert>
 	

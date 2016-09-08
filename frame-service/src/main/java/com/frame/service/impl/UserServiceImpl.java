@@ -185,18 +185,19 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			result = RemoteResult.failure("0001", "传入参数错误");
 			return result;
 		}
+		user.setPassword(user.getTel());
 		int res = updateByKey(user);
 		
 		if(res > 0){
-			//调用环信创建用户
-			result = easemobAPIService.createNewIMUserSingle(user);
-			
 			User dataUser = selectEntry(user.getId().longValue());
+			//调用环信创建用户
+			result = easemobAPIService.createNewIMUserSingle(dataUser);
+			
 			result.setData(dataUser);
 		}else{
 			result = RemoteResult.failure("0001", "绑定失败");
 		}
-		return null;
+		return result;
 	}
 
 	@Override

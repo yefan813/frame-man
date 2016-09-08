@@ -119,6 +119,9 @@ public class UserController extends BaseController {
 		int res = userService.updateByKey(user);
 		if(StringUtils.isNotEmpty(user.getNickName())){
 			User dBUser  = userService.selectEntry(user.getId().longValue());
+			if(dBUser == null || StringUtils.isEmpty(dBUser.getTel())){
+				result =  RemoteResult.failure(BusinessCode.NO_TEL_INFO.getCode(), BusinessCode.NO_TEL_INFO.getValue());
+			}
 			result = easemobAPIService.modifyIMUserNickNameWithAdminToken(dBUser.getTel(), user.getNickName());
 		}
 		
