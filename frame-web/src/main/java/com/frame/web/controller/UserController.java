@@ -465,7 +465,7 @@ public class UserController extends BaseController {
 			if(res > 0){
 				result = RemoteResult.success();
 			}else {
-				result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(), BusinessCode.SERVER_INTERNAL_ERROR.getValue());
+				result = RemoteResult.result(BusinessCode.NO_FRIEND,null);
 			}
 		} catch (Exception e) {
 			LOGGER.error("失败:" + e.getMessage(), e);

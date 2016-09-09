@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.frame.chat.api.IMUserAPI;
 import com.frame.chat.comm.ClientContext;
 import com.frame.chat.comm.EasemobRestAPIFactory;
@@ -46,7 +47,7 @@ public class EasemobAPIServiceImpl implements EasemobAPIService {
 		if(null != responseWrapper && responseWrapper.getResponseStatus() == 200){
 			return RemoteResult.success();
 		}else{
-			return RemoteResult.failure("0001", "调用环信借口失败");
+			return RemoteResult.failure("0002", responseWrapper.toString());
 		}
 	}
 	

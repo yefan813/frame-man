@@ -192,8 +192,12 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			User dataUser = selectEntry(user.getId().longValue());
 			//调用环信创建用户
 			result = easemobAPIService.createNewIMUserSingle(dataUser);
+			if("0000".equals(result.getCode())){
+				result.setData(dataUser);
+			}else{
+				return result;
+			}
 			
-			result.setData(dataUser);
 		}else{
 			result = RemoteResult.failure("0001", "绑定失败");
 		}
