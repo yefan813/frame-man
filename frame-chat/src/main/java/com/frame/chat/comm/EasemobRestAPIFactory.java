@@ -101,10 +101,11 @@ public class EasemobRestAPIFactory {
 		RestAPIInvoker invoker = null;
 		if( ClientContext.HTTPCLIENT_API.equals(context.getImpLib()) ) {
 			invoker = httpclient;
+			System.out.println("------------->easemob use httpclient");
 		}
 		else {
 			invoker = jersey;
-			System.out.println("------------->use jersy");
+			System.out.println("------------->easemob use jersy");
 		}
 		try {
 			targetClass.getMethod(METHOD_SET_INVOKER, RestAPIInvoker.class).invoke(newObj, invoker);
