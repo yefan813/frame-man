@@ -63,7 +63,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 		try {
 			if (StringUtils.isEmpty(apiKey) || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign)) {
 				logger.error("接口过滤器调用，传入的参数错误，传入的参数为apiKey:【{}】，timestamp【{}】，sign：【{}】", apiKey, timestamp, sign);
-				result = RemoteResult.failure("0001","传入的参数错误");
+				result = RemoteResult.failure("0001","传入的参数错误,未传入apiKey，timestamp，sign");
 				writer = response.getWriter();
 				writer.write(JSON.toJSONString(result));
 				return false;
