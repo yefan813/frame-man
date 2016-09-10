@@ -104,6 +104,7 @@ public class EasemobRestAPIFactory {
 		}
 		else {
 			invoker = jersey;
+			System.out.println("------------->use jersy");
 		}
 		try {
 			targetClass.getMethod(METHOD_SET_INVOKER, RestAPIInvoker.class).invoke(newObj, invoker);
