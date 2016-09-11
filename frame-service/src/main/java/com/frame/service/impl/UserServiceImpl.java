@@ -105,9 +105,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		
 		//生成用户授权信息
 		int userAuthsRes= 0;
-		if(null != user){
-			userAuths.setUserId(user.getId().intValue());
-		}
+		userAuths.setUserId(user.getId().intValue());
+		
 		if(null != userAuths && userAuths.getId() != null){
 			userAuthsRes = UserAuthsService.updateByKey(userAuths);//更新授权信息
 		}else if(null != userAuths && userAuths.getId() == null){
@@ -282,7 +281,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			query.setIdentityType(userAuths.getIdentityType());
 			query.setIdentifier(userAuths.getIdentifier());
 			query.setYn(YnEnum.Normal.getKey());
-			List<UserAuths> resList = userAuthsService.selectEntryList(userAuths);
+			List<UserAuths> resList = userAuthsService.selectEntryList(query);
 			if (CollectionUtils.isNotEmpty(resList)) {
 				UserAuths oldData = resList.get(0);
 				oldData.setCredential(userAuths.getCredential());
