@@ -360,7 +360,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			LOGGER.info("用户编辑失败,传入的参数为：[{}]", JSON.toJSONString(user));
 			result = RemoteResult.failure("0001", "用户编辑失败，服务器异常");
 		}
-		return null;
+		return result;
 	}
 
 }
