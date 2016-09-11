@@ -6,6 +6,7 @@ public enum BusinessCode {
 	SERVER_INTERNAL_ERROR("0001", 10001, "服务器内部错误", null),
 	PARAMETERS_ERROR("0002", 10002, "传递参数错误", null),
 	NO_TEL_INFO("0004", 10004, "没有电话号码不能注册环信", null),
+	NO_REGIST("0006", 10006, "此用户没有注册", null),
 	NO_FRIEND("0005", 10005, "两人不是好友关系", null),
 	NO_RESULTS("0003", 10003, "无返回数据", null);
 	

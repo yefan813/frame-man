@@ -236,6 +236,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 						BusinessCode.PARAMETERS_ERROR.getValue());
 				return result;
 			}
+			
 			userAuths.setYn(YnEnum.Normal.getKey());
 			List<UserAuths> resList = userAuthsService.selectEntryList(userAuths);
 			if (CollectionUtils.isNotEmpty(resList)) {
@@ -263,7 +264,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 					result = RemoteResult.failure("0001", "找不到相关的密钥信息，请联系管理员");
 					return result;
 				}
-
+			}else{
+				result = RemoteResult.failure(BusinessCode.NO_REGIST.getCode(),BusinessCode.NO_REGIST.getValue());
+				return result;
 			}
 		}
 
