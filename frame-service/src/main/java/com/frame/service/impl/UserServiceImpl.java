@@ -270,7 +270,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		if (userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_QQ
 				|| userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_WEICHAT
 				|| userAuths.getIdentityType() == UserAuths.IDENTITY_RYPE_WEIBO) {
-			if (userAuths.getIdentifier() == null) {
+			if (userAuths.getIdentifier() == null || StringUtils.isEmpty(nickName)) {
 				LOGGER.error("第三方登录调用login 传入的参数错误，无用户第三方唯一标识");
 				result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(),
 						BusinessCode.PARAMETERS_ERROR.getValue());
