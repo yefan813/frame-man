@@ -81,6 +81,14 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		RemoteResult res = null;
 		int appRes = 0;
 		int result = 0;
+		//注册环信用户
+		if( user.getId() == null || StringUtils.isNotEmpty(user.getTel())){
+			RemoteResult remoteResult = easemobAPIService.createNewIMUserSingle(user);
+			if(remoteResult != null && "0000".equals(remoteResult.getCode())){
+				LOGGER.info("用户调用环信借口创建环信用户成功");
+			}
+		}
+		
 		//插入用户基本信息
 		if(null != user && user.getId() != null){
 			result = userDao.updateByKey(user);//更新默认用户
@@ -140,14 +148,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		condition.setUserId(appSecret.getUserId());
 		userLoginService.insertEntry(condition);
 		
-		if(StringUtils.isNotEmpty(user.getTel())){
-			RemoteResult remoteResult = easemobAPIService.createNewIMUserSingle(user);
-			if(remoteResult == null || !"0000".equals(remoteResult.getCode())){
-				throw new Exception("调用环信借口createNewIMUserSingle失败");
-			}
-		}else{
+		if(StringUtils.isEmpty(user.getTel())){
 			res = RemoteResult.result(BusinessCode.NO_TEL_INFO,secret);
+			return res;
 		}
+		res = RemoteResult.success(secret);
 		return res;
 	}
 	@Override
@@ -276,6 +281,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			UserAuths query = new UserAuths();
 			query.setIdentityType(userAuths.getIdentityType());
 			query.setIdentifier(userAuths.getIdentifier());
+			query.setYn(YnEnum.Normal.getKey());
 			List<UserAuths> resList = userAuthsService.selectEntryList(userAuths);
 			if (CollectionUtils.isNotEmpty(resList)) {
 				UserAuths oldData = resList.get(0);

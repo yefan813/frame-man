@@ -257,7 +257,7 @@ public class UserController extends BaseController {
 	public @ResponseBody String login(UserAuths userAuths, String nickName) {
 		RemoteResult result = null;
 		try {
-			if (null == userAuths || userAuths.getIdentityType() == null) {
+			if (null == userAuths || userAuths.getIdentityType() == null || StringUtils.isEmpty(nickName)) {
 				LOGGER.error("调用login 传入的参数错误 登陆类型【{}】", userAuths.getIdentityType());
 				result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(),
 						BusinessCode.PARAMETERS_ERROR.getValue());
