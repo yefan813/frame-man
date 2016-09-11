@@ -236,9 +236,12 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 						BusinessCode.PARAMETERS_ERROR.getValue());
 				return result;
 			}
-			
-			userAuths.setYn(YnEnum.Normal.getKey());
-			List<UserAuths> resList = userAuthsService.selectEntryList(userAuths);
+			// 第三方登录直接更新或者新建一条记录
+			UserAuths con = new UserAuths();
+			con.setIdentityType(userAuths.getIdentityType());
+			con.setIdentifier(userAuths.getIdentifier());
+			con.setYn(YnEnum.Normal.getKey());
+			List<UserAuths> resList = userAuthsService.selectEntryList(con);
 			if (CollectionUtils.isNotEmpty(resList)) {
 				LOGGER.info("调用登陆方法找到用户，返回appkey secret");
 				UserAuths oldData = resList.get(0);
