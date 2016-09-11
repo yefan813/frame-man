@@ -1,7 +1,10 @@
 package com.frame.service.impl;
 
+import java.rmi.Remote;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -33,6 +36,7 @@ import com.frame.service.UserLoginService;
 import com.frame.service.UserService;
 import com.frame.service.base.BaseServiceImpl;
 import com.frame.service.utils.RandomStrUtils;
+import com.google.common.collect.Lists;
 
 
 @Service("userService")
@@ -73,7 +77,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 
 	@Override
 	@Transactional(rollbackFor={Exception.class})
-	public RemoteResult registUser(User user, UserAuths userAuths) {
+	public RemoteResult registUser(User user, UserAuths userAuths) throws Exception {
 		RemoteResult res = null;
 		int appRes = 0;
 		int result = 0;
@@ -83,6 +87,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		}else if(null != user && user.getId() == null){
 			result = userDao.insertEntryCreateId(user);//插入默认用户
 		}
+		user = userDao.selectEntry(user.getId().longValue());
+		
 		if(null != user && result <= 0){
 			LOGGER.error("registUser服务器内部错误,插入数据库失败");
 			res = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),BusinessCode.SERVER_INTERNAL_ERROR.getValue());
@@ -135,11 +141,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		userLoginService.insertEntry(condition);
 		
 		if(StringUtils.isNotEmpty(user.getTel())){
-			res = easemobAPIService.createNewIMUserSingle(user);
+			RemoteResult remoteResult = easemobAPIService.createNewIMUserSingle(user);
+			if(remoteResult == null || !"0000".equals(remoteResult.getCode())){
+				throw new Exception("调用环信借口createNewIMUserSingle失败");
+			}
 		}else{
 			res = RemoteResult.result(BusinessCode.NO_TEL_INFO,secret);
 		}
-		
 		return res;
 	}
 	@Override
@@ -206,7 +214,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 
 	@Override
 	@Transactional
-	public RemoteResult login(UserAuths userAuths, String nickName) {
+	public RemoteResult login(UserAuths userAuths, String nickName) throws Exception {
 		RemoteResult result = null;
 		if (null == userAuths || userAuths.getIdentityType() == null) {
 			LOGGER.error("调用login 传入的参数错误 登陆类型【{}】", userAuths.getIdentityType());
@@ -292,6 +300,56 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public List<User> queryFriendsByTelOrNickName(List<Long> userIds, String query ) {
+		if(CollectionUtils.isEmpty(userIds) || StringUtils.isEmpty(query)){
+			return null;
+		}
+		List<User> users = Lists.newArrayList();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userIds", userIds);
+		map.put("query", query);
+		
+		users = userDao.queryFriendsByTelOrNickName(map);
+		return users;
+	}
+
+	@Override
+	@Transactional
+	public RemoteResult editUserInfo(User user) throws Exception {
+		RemoteResult result = null;
+		if(null == user){
+			return RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+		}
+		User dBUser  = selectEntry(user.getId().longValue());
+		
+		int res = updateByKey(user);
+		
+		if(StringUtils.isNotEmpty(user.getNickName())){
+			if(dBUser == null || StringUtils.isEmpty(dBUser.getTel())){
+				result =  RemoteResult.failure(BusinessCode.NO_TEL_INFO.getCode(), BusinessCode.NO_TEL_INFO.getValue());
+			}
+			result = easemobAPIService.modifyIMUserNickNameWithAdminToken(dBUser.getTel(), user.getNickName());
+			if(result == null || !"0000".equals(result.getCode())){
+				throw new Exception("调用环信modifyIMUserNickNameWithAdminToken借口失败");
+			}
+		}
+		
+		if (res > 0 ) {
+			LOGGER.info("用户编辑成功,传入的参数为：[{}]", JSON.toJSONString(user));
+			result = RemoteResult.success(dBUser);
+			if (null != user.getAvatarUrl()) {
+				user.setAvatarUrl(IMAGEPREFIX + user.getAvatarUrl());
+			}
+			result.setData(user);
+		} else {
+			LOGGER.info("用户编辑失败,传入的参数为：[{}]", JSON.toJSONString(user));
+			result = RemoteResult.failure("0001", "用户编辑失败，服务器异常");
+		}
+		return null;
 	}
 
 }

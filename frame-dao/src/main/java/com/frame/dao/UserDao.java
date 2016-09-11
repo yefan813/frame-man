@@ -1,6 +1,7 @@
 package com.frame.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.MatchApply;
@@ -18,5 +19,7 @@ public interface UserDao extends BaseDao<User, Long> {
 	public List<User> getUserJoinPersionApplyRecord(MatchApply matchApply);
 	
 	public List<User> getTeamUserByTeamId(Long teamId);
+	
+	public List<User> queryFriendsByTelOrNickName(Map<String, Object> params);
 
 }

@@ -116,26 +116,9 @@ public class UserController extends BaseController {
 				result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
 			}
 		}
-		int res = userService.updateByKey(user);
-		if(StringUtils.isNotEmpty(user.getNickName())){
-			User dBUser  = userService.selectEntry(user.getId().longValue());
-			if(dBUser == null || StringUtils.isEmpty(dBUser.getTel())){
-				result =  RemoteResult.failure(BusinessCode.NO_TEL_INFO.getCode(), BusinessCode.NO_TEL_INFO.getValue());
-			}
-			result = easemobAPIService.modifyIMUserNickNameWithAdminToken(dBUser.getTel(), user.getNickName());
-		}
 		
-		if (res > 0 && "0000".equals(result.getCode())) {
-			LOGGER.info("用户编辑成功,传入的参数为：[{}]", JSON.toJSONString(user));
-			result = RemoteResult.success();
-			if (null != user.getAvatarUrl()) {
-				user.setAvatarUrl(IMAGEPREFIX + user.getAvatarUrl());
-			}
-			result.setData(user);
-		} else {
-			LOGGER.info("用户编辑失败,传入的参数为：[{}]", JSON.toJSONString(user));
-			result = RemoteResult.failure("0001", "用户编辑失败，服务器异常");
-		}
+		result = userService.editUserInfo(user);
+		
 		} catch (Exception e) {
 			LOGGER.error("失败:" + e.getMessage(), e);
 			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
@@ -464,6 +447,29 @@ public class UserController extends BaseController {
 			int res = userFriendsService.check2PIsFriend(userFriends);
 			if(res > 0){
 				result = RemoteResult.success();
+			}else {
+				result = RemoteResult.result(BusinessCode.NO_FRIEND,null);
+			}
+		} catch (Exception e) {
+			LOGGER.error("失败:" + e.getMessage(), e);
+			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	
+	@RequestMapping(value = "/getUserInfo", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String getUserInfoById(User user) {
+		RemoteResult result = null;
+		try {
+			if (null == user.getId() || StringUtils.isEmpty(user.getTel()) ) {
+				LOGGER.info("调用getUserInfo 传入的参数错误");
+				result = RemoteResult.failure("0001", "传入参数错误");
+				return JSON.toJSONString(result);
+			}
+			List<User> users = userService.selectEntryList(user);
+			if(CollectionUtils.isNotEmpty(users)){
+				result = RemoteResult.success(users.get(0));
 			}else {
 				result = RemoteResult.result(BusinessCode.NO_FRIEND,null);
 			}

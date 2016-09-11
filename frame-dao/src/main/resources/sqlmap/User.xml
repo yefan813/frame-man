@@ -225,4 +225,16 @@
 	</select>
 	
 	
+		<!-- 查询,通过主键IN(array) -->
+	<select id="queryFriendsByTelOrNickName" parameterType="map" resultType="user">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+		<![CDATA[ and ( tel like CONCAT("%",#{query},"%") or nickName like CONCAT("%",#{query},"%") )]]>
+	</select>
+	
 </mapper>

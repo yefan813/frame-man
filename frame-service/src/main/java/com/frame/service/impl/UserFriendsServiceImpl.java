@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import com.frame.dao.UserFriendsDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.User;
 import com.frame.domain.UserFriends;
+import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
@@ -23,6 +25,7 @@ import com.frame.service.EasemobAPIService;
 import com.frame.service.UserFriendsService;
 import com.frame.service.UserService;
 import com.frame.service.base.BaseServiceImpl;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 
@@ -126,9 +129,34 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 
 
 	@Override
-	public RemoteResult queryFriends(Page<User> page, Long userId, String query) {
+	public RemoteResult queryFriends(Page<User> page, final Long userId, String query) {
+		RemoteResult result = null;
+		if(userId == null || StringUtils.isEmpty(query)){
+			return RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(), BusinessCode.PARAMETERS_ERROR.getValue());
+		}
+		List<Long> userIds = Lists.newArrayList();
+		UserFriends friends = new UserFriends();
+		friends.setFromUserId(userId);
+		List<UserFriends> list = userFriendsDao.selectFriendsList(friends);
 		
-		return null;
+		if(CollectionUtils.isNotEmpty(list)){
+			userIds = Lists.transform(list,new Function<UserFriends , Long>(){
+				@Override
+				public Long apply(UserFriends input) {
+					Long friendId = null;
+					if(userId.longValue() == input.getFromUserId()){
+						friendId = input.getToUserId();
+					}else{
+						friendId = input.getFromUserId();
+					}
+					return friendId;
+				}
+				
+			});
+		}
+		List<User> users = userService.queryFriendsByTelOrNickName(userIds, query);
+		result = RemoteResult.success(users);
+		return result;
 	}
 
 

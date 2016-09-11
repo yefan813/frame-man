@@ -2,6 +2,7 @@ package com.frame.service;
 
 import java.rmi.Remote;
 import java.util.List;
+import java.util.Map;
 
 import com.frame.domain.MatchApply;
 import com.frame.domain.User;
@@ -26,8 +27,9 @@ public interface UserService extends BaseService<User, Long> {
 	 * @param user
 	 * @param userAuths
 	 * @return
+	 * @throws Exception 
 	 */
-	public RemoteResult registUser(User user, UserAuths userAuths);
+	public RemoteResult registUser(User user, UserAuths userAuths) throws Exception;
 	
 	/**
 	 * 查找附近用户
@@ -58,6 +60,11 @@ public interface UserService extends BaseService<User, Long> {
 	public RemoteResult bindTel(User user);
 	
 	
-	public RemoteResult login(UserAuths userAuths, String nickName);
+	public RemoteResult login(UserAuths userAuths, String nickName) throws Exception;
+	
+	public List<User> queryFriendsByTelOrNickName(List<Long> userIds, String query );
+
+
+	public RemoteResult editUserInfo(User user) throws Exception;
 	
 }

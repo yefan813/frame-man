@@ -1,6 +1,7 @@
 package com.frame.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,8 @@ public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 	private final static String GETNEARBYUSERCOUNT = "getNearByUserCount";
 	private final static String GETUSERJOINPERSIONAPPLYRECORD = "getUserJoinPersionApplyRecord";
 	private final static String SELECTUSERLISTBYTEAMID = "selectUserListByTeamId";
+	
+	private final static String QUERYFRIENDSBYTELORNICKNAME = "queryFriendsByTelOrNickName";
 
 	@Override
 	public String getNameSpace(String statement) {
@@ -49,6 +52,11 @@ public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 	@Override
 	public List<User> getTeamUserByTeamId(Long teamId) {
 		return selectList(getNameSpace(SELECTUSERLISTBYTEAMID), teamId);
+	}
+
+	@Override
+	public List<User> queryFriendsByTelOrNickName(Map<String, Object> params) {
+		return selectList(getNameSpace(QUERYFRIENDSBYTELORNICKNAME), params);
 	}
 
 }
