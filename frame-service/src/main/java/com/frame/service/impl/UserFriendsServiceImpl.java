@@ -110,7 +110,7 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		if(CollectionUtils.isNotEmpty(fList)){
 			for (UserFriends userFriends : fList) {
 				Long friendId = null;
-				if(userId == userFriends.getFromUserId()){
+				if(userId.longValue() == userFriends.getFromUserId()){
 					friendId = userFriends.getToUserId();
 				}else{
 					friendId = userFriends.getFromUserId();
