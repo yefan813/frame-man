@@ -462,7 +462,7 @@ public class UserController extends BaseController {
 	public @ResponseBody String getUserInfoById(User user) {
 		RemoteResult result = null;
 		try {
-			if (null == user.getId() || StringUtils.isEmpty(user.getTel()) ) {
+			if (null == user.getId() && StringUtils.isEmpty(user.getTel()) ) {
 				LOGGER.info("调用getUserInfo 传入的参数错误");
 				result = RemoteResult.failure("0001", "传入参数错误");
 				return JSON.toJSONString(result);
