@@ -212,12 +212,12 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		}
 		if(res > 0 && "0000".equals(result.getCode())){
 			
-			User user = userService.selectEntry(fromId);
-			if(null == user){
+			User froUs = userService.selectEntry(fromId);
+			if(null == froUs){
 				LOGGER.error("申请加入还有没查询相关用户");
 				return result;
 			}
-			apnsService.senPushNotification(toId, "用户'" + user.getNickName() +"' 同意了你的好友请求,约起来吧~");
+			apnsService.senPushNotification(toId, "用户'" + froUs.getNickName() +"' 同意了你的好友请求,约起来吧~");
 			result = RemoteResult.success();
 		}else{
 			result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(), BusinessCode.SERVER_INTERNAL_ERROR.getValue());
@@ -261,6 +261,7 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		}
 		UserFriends friends = new UserFriends();
 		friends.setFromUserId(userId);
+		friends.setStatus(UserFriends.STATUS_WAITING);
 		friends.setStartIndex(page.getStartIndex());
 		friends.setEndIndex(page.getEndIndex());
 		friends.setYn(YnEnum.Normal.getKey());
@@ -270,7 +271,7 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		if(CollectionUtils.isNotEmpty(fList)){
 			for (UserFriends userFriends : fList) {
 				Long friendId = null;
-				if(userId == userFriends.getFromUserId()){
+				if(userId == userFriends.getFromUserId().longValue()){
 					friendId = userFriends.getToUserId();
 				}else{
 					friendId = userFriends.getFromUserId();
