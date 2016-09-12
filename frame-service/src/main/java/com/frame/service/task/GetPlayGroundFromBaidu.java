@@ -20,46 +20,67 @@ import com.frame.service.utils.HttpClientUtil;
 
 public class GetPlayGroundFromBaidu {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GetPlayGroundFromBaidu.class);
-	
+
 	@Value("${GaoDeAPIKey}")
 	private String BAIDU_PRIVATE_KEY;
-	
-	@Value("${GaoDeAPIUrl}")
+
+	@Value("${GaoDeSearchAPIUrl}")
 	private String BAIDU_MAP_URL;
-	
+
 	@Resource
 	private PlayGroundInfoService playGroundInfoService;
-	
-	public void work(){
-		System.out.println("从百度取数据------");
-		Map<String,Object> params = new HashMap<String, Object>();
+
+	public void work() {
+		LOGGER.info("从高德取数据------");
+		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("key", BAIDU_PRIVATE_KEY);
 		params.put("keywords", "篮球场");
 		params.put("city", "成都");
 		params.put("types", "");
-		params.put("offset", 100);
-		params.put("page", 1);
+		params.put("offset", 50);
 		params.put("extensions", "all");
-		
-		try{
-			String result = HttpClientUtil.sendGetRequestByJava(BAIDU_MAP_URL, params,null);
-			GaoDeAPIResult gaodeApiResult = JSON.parseObject(result, GaoDeAPIResult.class);
-			List<Playground> pList = JSON.parseArray(gaodeApiResult.getPois(), Playground.class);
-			System.out.println("从百度取数据------" + gaodeApiResult.getPois());
-			storDate2DB(pList);
-		}catch(Exception e){
+
+		try {
+			for(int i = 1 ; i <= 100 ; i++){
+				params.put("page", i);
+				List<Playground> pList = sendGetPlaygroundRequest(params);
+				if(CollectionUtils.isNotEmpty(pList)){
+					storDate2DB(pList);
+				}
+			}
+			
+		} catch (Exception e) {
 			LOGGER.error("请求高德api出现错误" + e);
-			System.out.println("请求高德api出现错误" + e);
 		}
 	}
-	
-	private void storDate2DB(List<Playground> pList){
-		if(CollectionUtils.isEmpty(pList)){
+
+	private List<Playground> sendGetPlaygroundRequest(Map<String, Object> params) {
+		List<Playground> pList = null;
+		try {
+			
+			String result = HttpClientUtil.sendGetRequestByJava(BAIDU_MAP_URL, params, null);
+			GaoDeAPIResult gaodeApiResult = JSON.parseObject(result, GaoDeAPIResult.class);
+			pList = JSON.parseArray(gaodeApiResult.getPois(), Playground.class);
+		} catch (Exception e) {
+			LOGGER.error("请求高德api出现错误" + e);
+		}
+		return pList;
+
+	}
+
+	private void storDate2DB(List<Playground> pList) {
+		if (CollectionUtils.isEmpty(pList)) {
 			LOGGER.error("输入的参数为空" + pList);
 		}
-		
+
 		for (Playground playground : pList) {
 			playground.setYn(YnEnum.Normal.getKey());
+			
+			String[] locations = playground.getLocation().split(",");
+			if(locations.length > 0){
+				playground.setLongitude(Double.valueOf(locations[0]));
+				playground.setLatitude(Double.valueOf(locations[1]));
+			}
 			playGroundInfoService.insertEntry(playground);
 		}
 	}

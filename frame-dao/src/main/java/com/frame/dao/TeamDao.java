@@ -14,7 +14,7 @@ public interface TeamDao extends BaseDao<Team, Long> {
 	 * @param parameters
 	 * @return
 	 */
-	public List<Team> getUserTeams(Integer userId);
+	public List<Team> getUserTeams(Long userId);
 	
 
 }

@@ -20,7 +20,7 @@ public class TeamDaoImpl extends BaseDaoImpl<Team, Long> implements TeamDao {
 	private final static String SELECT_USERTEAMBY_USERID = "selectUserTeamByUserId";
 	
 	@Override
-	public List<Team> getUserTeams(Integer userId) {
+	public List<Team> getUserTeams(Long userId) {
 		Map<String, Object> parameters  = new HashMap<String,Object>();
 		parameters.put("userId", userId);
 		return this.selectList(getNameSpace(SELECT_USERTEAMBY_USERID), parameters);

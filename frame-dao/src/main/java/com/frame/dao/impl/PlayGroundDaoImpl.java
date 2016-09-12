@@ -16,6 +16,8 @@ public class PlayGroundDaoImpl extends BaseDaoImpl<Playground, Long> implements 
 	
 	private final static String SELECT_PLAYGROUNBINFO = "selectPlaygroundInfo";
 	
+	private final static String SELECTP_LAYGROUNDBY_LOCATION = "selectPlayGroundByLocation";
+	
 	@Override
 	public List<Playground> getPlaygroundInfo(Map<String, Object> parameters) {
 		return this.select(getNameSpace(SELECT_PLAYGROUNBINFO), parameters);
@@ -26,6 +28,14 @@ public class PlayGroundDaoImpl extends BaseDaoImpl<Playground, Long> implements 
 		// TODO Auto-generated method stub
 		return NAMESPACE + statement;
 	}
+
+	@Override
+	public List<Playground> getPlayGroundByLocation(Map<String, Object> params) {
+		return selectList(getNameSpace(SELECTP_LAYGROUNDBY_LOCATION), params);
+	}
+	
+	
+	
 
 
 }

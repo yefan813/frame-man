@@ -55,7 +55,6 @@
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
-			<if test="name != null"><![CDATA[name = #{name},]]></if>
 			<if test="homeTeamId != null"><![CDATA[home_team_id = #{homeTeamId},]]></if>
 			<if test="homeTeamName != null"><![CDATA[home_team_name = #{homeTeamName},]]></if>
 			<if test="guestTeamId != null"><![CDATA[guest_team_id = #{guestTeamId},]]></if>
@@ -76,9 +75,6 @@
 		<![CDATA[
 			INSERT INTO tb_match (home_team_id,home_team_name,guest_team_id,guest_team_name,home_team_score,guest_team_score,status,address,match_time,feature,created,modified,yn)
 			VALUES (#{homeTeamId},#{homeTeamName},#{guestTeamId},#{guestTeamName},#{homeTeamScore},#{guestTeamScore},#{status},#{address},#{matchTime},#{feature},now(),now(),#{yn})
-			ON DUPLICATE KEY UPDATE
-			tel=#{tel},parking_type=#{parkingType}
-			
 		]]>
 	</insert>
 	
@@ -134,5 +130,19 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<!-- 总数查询,通过条件 -->
+	<select id="selectMatchByTeamId" parameterType="Map" resultType="match">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where home_team_id=#{teamId} or guest_team_id=#{teamId}]]>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
 	
+	<!-- 总数查询,通过条件 -->
+	<select id="selectMatchByTeamIdCount" parameterType="match" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where home_team_id=#{teamId} or guest_team_id=#{teamId}]]>
+	</select>
 </mapper>

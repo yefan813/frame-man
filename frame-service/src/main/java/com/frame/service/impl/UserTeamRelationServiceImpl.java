@@ -23,7 +23,6 @@ public class UserTeamRelationServiceImpl extends BaseServiceImpl<UserTeamRelatio
 
 	@Override
 	public BaseDao<UserTeamRelation, Long> getDao() {
-		// TODO Auto-generated method stub
 		return userTeamRelationDao;
 	}
 

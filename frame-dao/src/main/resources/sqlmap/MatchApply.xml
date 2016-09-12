@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frame.dao.MatchApplyDao">
+
+	<!-- groupon 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+			id,
+			source_identity_id as sourceIdentityId,
+			target_identity_id as targetIdentityId,
+			parent_apply_id as parentApplyId,
+			status,
+			match_time as matchTime,
+			match_address as matchAddress,
+			longitude,
+			latitude,
+			type,
+			feature,
+			created,
+			modified,
+			yn
+		]]>
+	</sql>
+
+	<!-- groupon 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_match_apply]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+			<if test="id != null"><![CDATA[AND id = #{id}]]></if>
+			<if test="sourceIdentityId != null"><![CDATA[AND source_identity_id = #{sourceIdentityId}]]></if>
+			<if test="targetIdentityId != null"><![CDATA[AND target_identity_id = #{targetIdentityId}]]></if>
+			<if test="parentApplyId != null"><![CDATA[AND parent_apply_id = #{parentApplyId}]]></if>
+			<if test="status != null"><![CDATA[AND status = #{status}]]></if>
+			<if test="matchTime != null"><![CDATA[AND match_time = #{matchTime}]]></if>
+			<if test="matchAddress != null"><![CDATA[AND match_address = #{matchAddress}]]></if>
+			<if test="type != null"><![CDATA[AND type = #{type}]]></if>
+			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
+			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
+			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
+			<if test="yn != null "><![CDATA[AND yn = #{yn}]]></if>
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="sourceIdentityId != null"><![CDATA[source_identity_id = #{sourceIdentityId},]]></if>
+			<if test="targetIdentityId != null"><![CDATA[target_identity_id = #{targetIdentityId},]]></if>
+			<if test="parentApplyId != null"><![CDATA[parent_apply_id = #{parentApplyId},]]></if>
+			<if test="status != null"><![CDATA[status = #{status},]]></if>
+			<if test="matchTime != null"><![CDATA[match_time = #{matchTime},]]></if>
+			<if test="matchAddress != null"><![CDATA[match_address = #{matchAddress},]]></if>
+			<if test="type != null"><![CDATA[type = #{type},]]></if>
+			<if test="longitude != null"><![CDATA[longitude = #{longitude},]]></if>
+			<if test="latitude != null"><![CDATA[latitude = #{latitude},]]></if>
+			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
+			<![CDATA[modified = now(),]]>
+			<if test="yn != null"><![CDATA[yn = #{yn},]]></if>
+		</set>
+	</sql>
+
+	<!-- 插入team记录 -->
+	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			INSERT INTO tb_match_apply (type,source_identity_id,target_identity_id,parent_apply_id,status,match_time,match_address,longitude,latitude,feature,created,modified,yn)
+			VALUES (#{type},#{sourceIdentityId},#{targetIdentityId},#{parentApplyId},#{status},#{matchTime},#{matchAddress},#{longitude},#{latitude},#{feature},now(),now(),#{yn})
+		]]>
+	</insert>
+	
+	<!-- 返回插入的编号,在事务开启状态下有效 -->
+	<select id="lastSequence" resultType="int"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+	<!-- 删除记录,主键IN(array) -->
+	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
+		<![CDATA[DELETE FROM tb_match_apply WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</delete>
+
+	<!-- 删除,通过条件 -->
+	<update id="deleteByCondtion" parameterType="matchApply" >
+		<![CDATA[DELETE FROM tb_match_apply]]>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</update>
+
+	<!-- 修改记录通过主键 -->
+	<update id="updateByKey" parameterType="matchApply" >
+		<![CDATA[UPDATE tb_match_apply]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+
+	<!-- 查询,通过主键IN(array) -->
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="matchApply">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<!-- 查询,通过条件 -->
+	<select id="selectEntryList" parameterType="matchApply" resultType="matchApply">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<!-- 总数查询,通过条件 -->
+	<select id="selectEntryListCount" parameterType="matchApply" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
+	
+	<!-- 其它SQL语句 -->
+	
+	<!-- 其它SQL语句 -->
+	<select id="selectPersionApplyByLocation" parameterType="matchApply" resultType="matchApply">
+		<![CDATA[SELECT id,type,source_identity_id,target_identity_id,parent_apply_id,match_time,match_address,longitude,latitude,status,
+        111.1111 *
+	    DEGREES(acos( cos( radians(latitude) ) 
+	      * cos( radians(#{latitude}) ) 
+	      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
+	      * sin( radians(#{latitude}) ))) as myDistance
+	      
+        FROM tb_match_apply
+        ]]>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+	
+</mapper>
