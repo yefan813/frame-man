@@ -27,6 +27,7 @@ import com.frame.service.UserService;
 import com.frame.service.base.BaseServiceImpl;
 import com.frame.service.utils.CopyProperties;
 import com.google.common.base.Function;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 
@@ -89,6 +90,7 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 
 
 	@Override
+	@Transactional
 	public TeamVO getTeamById(Long id) {
 		if(null == id){
 			return null;
@@ -127,7 +129,7 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 			if(CollectionUtils.isNotEmpty(userIds)){
 				for (Long key : userIds) {
 					User user =  userService.selectEntry(key);
-					if(null != user && !StringUtils.isEmpty(user.getAvatarUrl())){
+					if(null != user && !StringUtils.isEmpty(user.getAvatarUrl()) && !user.getAvatarUrl().startsWith("http")){
 						user.setAvatarUrl(IMAGEPREFIX + user.getAvatarUrl());
 					}
 					users.add(user);

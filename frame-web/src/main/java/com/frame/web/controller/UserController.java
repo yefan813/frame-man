@@ -21,6 +21,7 @@ import com.frame.domain.User;
 import com.frame.domain.UserAuths;
 import com.frame.domain.UserFriends;
 import com.frame.domain.UserLogin;
+import com.frame.domain.UserTeamRelation;
 import com.frame.domain.UserValid;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
@@ -446,7 +447,7 @@ public class UserController extends BaseController {
 			
 			int res = userFriendsService.check2PIsFriend(userFriends);
 			if(res > 0){
-				result = RemoteResult.success();
+				result = RemoteResult.result(BusinessCode.IS_FRIEND,null);
 			}else {
 				result = RemoteResult.result(BusinessCode.NO_FRIEND,null);
 			}
@@ -469,9 +470,11 @@ public class UserController extends BaseController {
 			}
 			List<User> users = userService.selectEntryList(user);
 			if(CollectionUtils.isNotEmpty(users)){
-				result = RemoteResult.success(users.get(0));
+				User us = users.get(0);
+				us.setAvatarUrl(IMAGEPREFIX + us.getAvatarUrl());
+				result = RemoteResult.success();
 			}else {
-				result = RemoteResult.result(BusinessCode.NO_FRIEND,null);
+				result = RemoteResult.result(BusinessCode.NO_RESULTS,null);
 			}
 		} catch (Exception e) {
 			LOGGER.error("失败:" + e.getMessage(), e);

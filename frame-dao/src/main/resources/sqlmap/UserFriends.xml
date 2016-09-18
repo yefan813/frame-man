@@ -168,7 +168,7 @@
 	<![CDATA[SELECT count(id)]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId} AND `status` = 1 and yn = 1]]>
+		<![CDATA[WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId} AND `status` = 2 and yn = 1]]>
 	</select>
 	
 	
