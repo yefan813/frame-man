@@ -472,7 +472,7 @@ public class UserController extends BaseController {
 			if(CollectionUtils.isNotEmpty(users)){
 				User us = users.get(0);
 				us.setAvatarUrl(IMAGEPREFIX + us.getAvatarUrl());
-				result = RemoteResult.success();
+				result = RemoteResult.success(us);
 			}else {
 				result = RemoteResult.result(BusinessCode.NO_RESULTS,null);
 			}
