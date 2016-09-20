@@ -82,7 +82,7 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		
 		int res = userFriendsDao.insertEntryCreateId(userFriends);
 		if(res > 0){
-			User user = userService.selectEntry(toId);
+			User user = userService.selectEntry(fromId);
 			if(null == user){
 				LOGGER.error("申请加入还有没查询相关用户");
 				return result;

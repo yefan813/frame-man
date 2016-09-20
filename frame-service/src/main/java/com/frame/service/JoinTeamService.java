@@ -55,8 +55,9 @@ public interface JoinTeamService extends BaseService<JoinTeam, Long> {
 	 * 同意邀请加入球队
 	 * @param joinTeam
 	 * @return
+	 * @throws Exception 
 	 */
-	public RemoteResult agreeInventJoinTeam(JoinTeam joinTeam);
+	public RemoteResult agreeInventJoinTeam(JoinTeam joinTeam) throws Exception;
 	
 	
 	/**

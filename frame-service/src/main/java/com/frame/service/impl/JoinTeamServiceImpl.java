@@ -263,22 +263,43 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 	}
 
 	@Override
+	@Transactional
 	public RemoteResult agreeInventJoinTeam(JoinTeam joinTeam) {
 		RemoteResult result = null;
+		if(null == joinTeam || null == joinTeam.getTeamId() || 
+				joinTeam.getUserId() == null || joinTeam.getInitiator() == null){
+			LOGGER.info("调用agreeInventJoinTeam 传入参数错误");
+			result = RemoteResult.failure("0001", "调用agreeInventJoinTeam 传入参数错误");
+			return result;
+		}
+		
+		User targetUser = userService.selectEntry(joinTeam.getUserId());
+		if(null == targetUser){
+			LOGGER.info("没找到目标用户相关信息");
+			return result;
+		}
+		
+		User initor = userService.selectEntry(joinTeam.getInitiator());
+		if(null == initor){
+			LOGGER.info("没找到发起人用户相关信息");
+			return result;
+		}
+		
+		Team targetTeam = teamService.selectEntry(joinTeam.getTeamId());
+		if(null == targetTeam){
+			LOGGER.info("没找到申请球队相关信息");
+			return result;
+		}
+		
+		
 		joinTeam.setStatus(JoinTeam.STATUS_AGREEMENT);
 		if(joinTeamDao.updateByKey(joinTeam) > 0){
 			LOGGER.info("调用agreeApplyJoinTeam 上传数据成功");
 			result = RemoteResult.success();
 			
-			JoinTeam thisJoinTeam = joinTeamDao.selectEntry(joinTeam.getId().longValue());
-			if(null == thisJoinTeam){
-				result = RemoteResult.failure("0001", "没找到申请球队相关信息");
-				return result;
-			}
-			
 			UserTeamRelation userTeamRelation = new UserTeamRelation();
-			userTeamRelation.setTeamId(thisJoinTeam.getTeamId());
-			userTeamRelation.setUserId(thisJoinTeam.getUserId());
+			userTeamRelation.setTeamId(joinTeam.getTeamId());
+			userTeamRelation.setUserId(joinTeam.getUserId());
 			userTeamRelation.setType(UserTeamRelation.TEAM_TYPE_MEMBER);
 			userTeamRelation.setYn(YnEnum.Normal.getKey());
 			if(userTeamRelationService.insertEntry(userTeamRelation) > 0){
@@ -287,23 +308,6 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 				result = RemoteResult.failure("0001", "服务器内部异常，同意加入球队失败");
 			}
 			
-			User targetUser = userService.selectEntry(thisJoinTeam.getInitiator());
-			if(null == targetUser){
-				LOGGER.info("没找到发起人用户相关信息");
-				return result;
-			}
-			
-			User initor = userService.selectEntry(thisJoinTeam.getInitiator());
-			if(null == initor){
-				LOGGER.info("没找到发起人用户相关信息");
-				return result;
-			}
-			
-			Team targetTeam = teamService.selectEntry(thisJoinTeam.getTeamId());
-			if(null == targetTeam){
-				LOGGER.info("没找到申请球队相关信息");
-				return result;
-			}
 			apnsService.senPushNotification(initor.getId().longValue(), "用户:" + targetUser.getNickName() + ",同意加入球队:" + targetTeam.getName() + ",开始约球吧！");
 			
 		}else{
