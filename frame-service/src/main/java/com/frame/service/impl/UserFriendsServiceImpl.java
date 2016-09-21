@@ -68,7 +68,7 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		
 		userFriends.setFromUserId(Math.min(fromId, toId));
 		userFriends.setToUserId(Math.max(fromId, toId));
-		
+		userFriends.setYn(YnEnum.Normal.getKey());
 		List<UserFriends> fList = userFriendsDao.selectEntryList(userFriends);
 		if(CollectionUtils.isNotEmpty(fList)){
 			LOGGER.info("两人已经是好友");
@@ -221,7 +221,7 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 			
 			User froUs = userService.selectEntry(fromId);
 			if(null == froUs){
-				LOGGER.error("申请加入还有没查询相关用户");
+				LOGGER.error("申请加入好友查询相关用户");
 				return result;
 			}
 			apnsService.senPushNotification(toId, "用户'" + froUs.getNickName() +"' 同意了你的好友请求,约起来吧~");
