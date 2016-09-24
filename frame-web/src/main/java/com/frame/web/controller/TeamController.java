@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.frame.domain.Team;
+import com.frame.domain.User;
 import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
@@ -176,4 +177,74 @@ public class TeamController extends BaseController {
 		return JSON.toJSONString(result);
 	}
 
+	
+	@RequestMapping(value = "/editTeam", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String editTeam(Team team,
+			@RequestParam(value = "imgFile", required = false) MultipartFile imgFile) {
+		RemoteResult result = null;
+		try{
+		if (null == team || team.getId() == null) {
+			LOGGER.info("调用editTeam 传入的参数错误");
+			result = RemoteResult.failure("0001", "传入参数错误");
+			return JSON.toJSONString(result);
+		}
+		Team querTeam = teamService.selectEntry(team.getId().longValue());
+		if(querTeam == null){
+			LOGGER.info("未找到编辑的相关球队");
+			result = RemoteResult.failure("0001", "未找到编辑的相关球队");
+			return JSON.toJSONString(result);
+		}
+		String imgUrl = null;
+		if (imgFile != null && imgFile.getSize() > 0) {
+			try {
+				if (imgFile.getBytes() != null && imgFile.getBytes().length > 0) {
+					Result r = ImageValidate.validate4Upload(imgFile);
+					if (r.isSuccess()) {
+						ImgDealMsg re = imgSysService.uploadByteImg(imgFile.getBytes(), "lanqiupai");
+						if (re != null && re.isSuccess()) {
+							// 上传成功
+							imgUrl = (String) re.getMsg();
+						} else {
+							// 上传文件失败，在页面提示
+							result = RemoteResult.failure("0001", "头像上传失败！");
+							return dealJosnP("", result);
+						}
+					} else {
+						result = RemoteResult.failure("0001", r.getResultCode());
+						return dealJosnP("", result);
+					}
+				}
+			} catch (Exception e) {
+				LOGGER.error("失败:" + e.getMessage(), e);
+				result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
+			}
+		}
+		
+		Team updateTeam = new Team();
+		updateTeam.setId(team.getId());
+		if(StringUtils.isNotEmpty(team.getName())){
+			updateTeam.setName(team.getName());
+		}
+		if(team.getPeopleCount() != null){
+			updateTeam.setPeopleCount(team.getPeopleCount());
+		}
+		if(StringUtils.isNotEmpty(team.getTeamDesc())){
+			updateTeam.setTeamDesc(team.getTeamDesc());
+		}
+		if(StringUtils.isNotEmpty(imgUrl)){
+			updateTeam.setImgUrl(imgUrl);
+		}
+		
+		if(teamService.updateByKey(updateTeam) > 0){
+			result = RemoteResult.success();
+		}else{
+			result = RemoteResult.failure("0001", "");
+		}
+		} catch (Exception e) {
+			LOGGER.error("失败:" + e.getMessage(), e);
+			result = RemoteResult.failure("0001", "操作失败:" + e.getMessage());
+		}
+		return JSON.toJSONString(result);
+	}
 }

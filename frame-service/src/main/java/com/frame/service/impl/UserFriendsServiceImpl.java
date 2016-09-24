@@ -68,11 +68,21 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		
 		userFriends.setFromUserId(Math.min(fromId, toId));
 		userFriends.setToUserId(Math.max(fromId, toId));
-		userFriends.setYn(YnEnum.Normal.getKey());
+		userFriends.setStatus(UserFriends.STATUS_ACCEPTED);
 		List<UserFriends> fList = userFriendsDao.selectEntryList(userFriends);
 		if(CollectionUtils.isNotEmpty(fList)){
 			LOGGER.info("两人已经是好友");
 			result = RemoteResult.failure("0001", "两人已经是好友");
+			return result;
+		}
+		
+		userFriends.setFromUserId(Math.min(fromId, toId));
+		userFriends.setToUserId(Math.max(fromId, toId));
+		userFriends.setStatus(UserFriends.STATUS_WAITING);
+		List<UserFriends> wList = userFriendsDao.selectEntryList(userFriends);
+		if(CollectionUtils.isNotEmpty(wList)){
+			LOGGER.info("已发送过申请");
+			result = RemoteResult.failure("0001", "已发送过申请");
 			return result;
 		}
 		

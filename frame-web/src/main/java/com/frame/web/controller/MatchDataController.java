@@ -43,17 +43,13 @@ public class MatchDataController extends BaseController {
 				result = RemoteResult.failure("0001", "传入参数错误");
 				return JSON.toJSONString(result);
 			}
-			Match match = matchService.selectEntry(matchData.getMatchId());
-			if (null != match) {
-				if (matchData.getHomeTeamId().longValue() != match.getHomeTeamId()
-						|| matchData.getGuestTeamId().longValue() != match.getGuestTeamId()) {
-					result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(),
-							BusinessCode.PARAMETERS_ERROR.getValue());
-					return JSON.toJSONString(result);
-				}
-			} else {
-				result = RemoteResult.failure(BusinessCode.PARAMETERS_ERROR.getCode(),
-						BusinessCode.PARAMETERS_ERROR.getValue());
+			Match query = new Match();
+			query.setHomeTeamId(matchData.getHomeTeamId());
+			query.setGuestTeamId(matchData.getGuestTeamId());
+			List<Match> matchs = matchService.selectEntryList(query);
+			if(CollectionUtils.isEmpty(matchs)){
+				LOGGER.info("调用uploadMatchData 比赛不存在");
+				result = RemoteResult.failure("0001", "比赛不存在");
 				return JSON.toJSONString(result);
 			}
 
