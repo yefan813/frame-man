@@ -122,7 +122,7 @@
 		</property>
 	</bean>
 	
-<!-- 	<bean id="velocityUrl" class="java.util.HashMap">
+	<bean id="velocityUrl" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
 				<entry key="homeModule">
@@ -137,7 +137,7 @@
 				</entry>
 			</map>
 		</constructor-arg>
-	</bean> -->
+	</bean>
 	
 	<bean id="velocityViewResolver" class="com.frame.web.utils.CusVelocityLayoutViewResolver">
 		<property name="layoutUrl" value="matchStatics/list.vm" />
