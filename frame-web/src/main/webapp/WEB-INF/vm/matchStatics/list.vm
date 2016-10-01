@@ -6,9 +6,9 @@
     <meta content="yes" name="apple-touch-fullscreen">
     <meta content="telephone=no,email=no" name="format-detection">
     <title>比赛信息</title>
-    <script type="text/javascript" src="/frame-web-0.0.1-SNAPSHOT/assets/js/flexible_css.debug.js"></script>
-    <script type="text/javascript" src="/frame-web-0.0.1-SNAPSHOT/assets/js/flexible.debug.js"></script>
-    <link rel="stylesheet" type="text/css" href="/frame-web-0.0.1-SNAPSHOT/assets/css/style.css">
+    <script type="text/javascript" src="/assets/js/flexible_css.debug.js"></script>
+    <script type="text/javascript" src="/assets/js/flexible.debug.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
     <script type="text/javascript">
    		window.infos =  ${matchData};
     </script>
@@ -17,7 +17,7 @@
     <div class="banner">
         <div class="titles clearfix">
             <a href="javascript:;" class="names font12">
-                <img ng-src="/frame-web-0.0.1-SNAPSHOT/assets/imgs/logo100.png" /> 点击下载篮球派，单手统计比赛数据
+                <img ng-src="/assets/imgs/logo100.png" /> 点击下载篮球派，单手统计比赛数据
             </a>
         </div>
     </div>
@@ -58,14 +58,17 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th style="text-align: left;">球员</th>
+                            <th style="text-align: center;">球员</th>
+							<th style="text-align: center;">号码</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="homePlayer in matchDetails.homeTeam.teamPlayerData">
-                            <td class="text-left">
-                                <span class="player-num" ng-class="{'main': homePlayer.firster}" ng-bind="homePlayer.playerNumber"></span>
+							<td class="text-left">
                                 <span class="player-name" ng-bind="homePlayer.playerName"></span>
+                            </td>
+							<td class="text-left">
+                                <span class="player-num" ng-class="{'main': homePlayer.firster}" ng-bind="homePlayer.playerNumber"></span>
                             </td>
                         </tr>
                         <tr>
@@ -121,14 +124,17 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th style="text-align: left;">球员</th>
+                            <th style="text-align: center;">球员</th>
+							<th style="text-align: center;">号码</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="guestPlayer in matchDetails.homeTeam.teamPlayerData">
                             <td class="text-left">
-                                <span class="player-num" ng-class="{'main': guestPlayer.firster}" ng-bind="guestPlayer.playerNumber"></span>
                                 <span class="player-name" ng-bind="guestPlayer.playerName"></span>
+                            </td>
+							<td class="text-left">
+                                <span class="player-num" ng-class="{'main': guestPlayer.firster}" ng-bind="guestPlayer.playerNumber"></span>
                             </td>
                         </tr>
                         <tr>
@@ -179,7 +185,7 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="/frame-web-0.0.1-SNAPSHOT/assets/js/angular/angular.min.js"></script>
-    <script type="text/javascript" src="/frame-web-0.0.1-SNAPSHOT/assets/js/index.js"></script>
+    <script type="text/javascript" src="/assets/js/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
 </body>
 </html>
