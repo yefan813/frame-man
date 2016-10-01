@@ -50,25 +50,7 @@ public class MatchDataController extends BaseController {
 				result = RemoteResult.failure("0001", "传入参数错误");
 				return JSON.toJSONString(result);
 			}
-			Match query = new Match();
-			query.setHomeTeamId(matchData.getHomeTeamId());
-			query.setGuestTeamId(matchData.getGuestTeamId());
-			List<Match> matchs = matchService.selectEntryList(query);
-			if(CollectionUtils.isEmpty(matchs)){
-				LOGGER.info("调用uploadMatchData 比赛不存在");
-				result = RemoteResult.failure("0001", "比赛不存在");
-				return JSON.toJSONString(result);
-			}
-
-			matchData.setYn(YnEnum.Normal.getKey());
-			if (matchDataService.insertEntry(matchData) > 0) {
-				LOGGER.info("调用uploadMatchData 上传数据成功");
-				result = RemoteResult.success();
-			} else {
-				LOGGER.info("调用uploadMatchData 上床数据失败");
-				result = RemoteResult.failure(BusinessCode.SERVER_INTERNAL_ERROR.getCode(),
-						BusinessCode.SERVER_INTERNAL_ERROR.getValue());
-			}
+			result = matchDataService.uploadMatchData(matchData);
 		} catch (Exception e) {
 			LOGGER.error("服务器内部错误", e);
 		}
