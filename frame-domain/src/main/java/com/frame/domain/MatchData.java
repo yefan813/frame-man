@@ -1,5 +1,7 @@
 package com.frame.domain;
 
+import java.sql.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.frame.domain.base.BaseDomain;
@@ -12,6 +14,7 @@ public class MatchData extends BaseDomain {
 	private String homeTeamData;		//主队数据
 	private Long guestTeamId;			//客队id
 	private String guestTeamData;		//客队数据
+
 
 	public Long getMatchId() {
 		return matchId;
