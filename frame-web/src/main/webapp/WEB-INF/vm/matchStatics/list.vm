@@ -95,7 +95,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="homePlayer in matchDetails.homeTeam.teamPlayerData">
-                            <td ng-bind="homePlayer.score"></td>
+                            <td>{{homePlayer.twoPoint + homePlayer.threePoint + homePlayer.freeThrow}}</td>
                             <td ng-bind="homePlayer.rebound"></td>
                             <td ng-bind="homePlayer.twoPoint"></td>
                             <td ng-bind="homePlayer.threePoint"></td>
@@ -106,10 +106,10 @@
                         </tr>
                         <tr class="last">
                             <td ng-bind="matchDetails.homeTeam.teamScore"></td>
-                            <td ng-bind="matchDetails.homeTeam.teamRebound"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td ng-bind="matchDetails.homeTeamReBound"></td>
+                            <td ng-bind="matchDetails.homeTeamTWOPoint"></td>
+                            <td ng-bind="matchDetails.homeTeamThreePoint"></td>
+                            <td ng-bind="matchDetails.homeTeamFaqiu"></td>
                             <td ng-bind="matchDetails.homeTeam.teamAssist"></td>
                             <td ng-bind="matchDetails.homeTeam.teamSteal"></td>
                             <td ng-bind="matchDetails.homeTeam.teamBlockShot"></td>
@@ -160,8 +160,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="guestPlayer in matchDetails.homeTeam.teamPlayerData">
-                            <td ng-bind="guestPlayer.score"></td>
+                        <tr ng-repeat="guestPlayer in matchDetails.guestTeam.teamPlayerData">
+                            <td>{{guestPlayer.twoPoint + guestPlayer.threePoint + guestPlayer.freeThrow}}</td>
                             <td ng-bind="guestPlayer.rebound"></td>
                             <td ng-bind="guestPlayer.twoPoint"></td>
                             <td ng-bind="guestPlayer.threePoint"></td>
@@ -172,10 +172,10 @@
                         </tr>
                         <tr class="last">
                             <td ng-bind="matchDetails.guestTeam.teamScore"></td>
-                            <td ng-bind="matchDetails.guestTeam.teamRebound"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td ng-bind="matchDetails.guestTeamReBound"></td>
+                            <td ng-bind="matchDetails.guestTeamTWOPoint"></td>
+                            <td ng-bind="matchDetails.guestTeamThreePoint"></td>
+                            <td ng-bind="matchDetails.guestTeamFaqiu"></td>
                             <td ng-bind="matchDetails.guestTeam.teamAssist"></td>
                             <td ng-bind="matchDetails.guestTeam.teamSteal"></td>
                             <td ng-bind="matchDetails.guestTeam.teamBlockShot"></td>
