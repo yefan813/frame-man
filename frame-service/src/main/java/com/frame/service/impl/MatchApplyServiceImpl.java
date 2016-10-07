@@ -186,6 +186,8 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 				matchQuery.setSourceIdentityId(userTeamRelation.getTeamId().intValue());
 				matchQuery.setType(MatchApply.TYPE_TEAM);
 				matchQuery.setYn(YnEnum.Normal.getKey());
+				matchQuery.setOrderField("created");
+				matchQuery.setOrderFieldType("DESC");
 				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
 				
 				List<MatchApplyVO>  convertRes = convert2TeamApplyRecordVO(matchs);
@@ -233,6 +235,8 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 				matchQuery.setTargetIdentityId(userTeamRelation.getTeamId().intValue());
 				matchQuery.setType(MatchApply.TYPE_TEAM);
 				matchQuery.setYn(YnEnum.Normal.getKey());
+				matchQuery.setOrderField("created");
+				matchQuery.setOrderFieldType("DESC");
 				List<MatchApply> matchs = matchApplyDao.selectEntryList(matchQuery);
 				
 				List<MatchApplyVO>  convertRes = convert2TeamApplyRecordVO(matchs);
