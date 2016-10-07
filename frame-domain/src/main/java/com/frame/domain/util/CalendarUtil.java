@@ -4,11 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.frame.common.tools.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.frame.common.tools.DateUtils;
-
 
 public class CalendarUtil {
     private static final Logger logger = LoggerFactory.getLogger(CalendarUtil.class);
@@ -36,7 +34,7 @@ public class CalendarUtil {
 	}
 	public static int getDateValue(Date date) {
 		if (date == null) return 0;
-		return Integer.parseInt(DateUtils.format(date, "yyyyMMdd"));
+		return Integer.parseInt(DateUtil.format(date, "yyyyMMdd"));
 	}
 	public static String getWeekUpperCase(Date date) {
 		int week = getWeek(date) - 1;
@@ -72,7 +70,7 @@ public class CalendarUtil {
 	}
 	public static int getYearMonth(Date date) {
 		if (date == null) return 0;
-		return Integer.parseInt(DateUtils.format(date, "yyyyMM"));
+		return Integer.parseInt(DateUtil.format(date, "yyyyMM"));
 	}
 	public static int getYearWeek(Date date) {
 		if (date == null) return 0;
@@ -130,10 +128,6 @@ public class CalendarUtil {
 		calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR); // implicitly calls complete()
         
-
-//        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-//        int maxDayOfYear = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
-//        int minimalDays = calendar.getMinimalDaysInFirstWeek();
         int weekOfYear = getYearWeek(date);
         if (calendar.get(Calendar.MONTH) == Calendar.JANUARY && weekOfYear >= 52) {
         	--year;
@@ -142,23 +136,6 @@ public class CalendarUtil {
         }
         return year;
     }
-	public static void main(String[] args) {
-		Date date = new Date();
-		System.out.println(DateUtils.format(date, "yyyy-MM-dd HH:mm:ss"));
-		System.out.println("getHour=" + getHour(date));
-		System.out.println("getDateValue=" + getDateValue(date));
-		System.out.println("getWeek=" + getWeek(date));
-		System.out.println("getMonthWeek=" + getMonthWeek(date));
-		System.out.println("getYearWeek=" + getYearWeek(date));
-		System.out.println("getQuarter=" + getQuarter(date));
-		System.out.println("getSeconds=" + getSecond(date));
-	}
-//	payments.setOrderPayHour(Integer.parseInt(DateUtils.format(order.getOrderPayTime(), "H")));
-//	payments.setOrderPayDateValue(Integer.parseInt(DateUtils.format(order.getOrderPayTime(), "yyyyMMdd")));
-//	payments.setOrderPayWeek(Integer.parseInt(DateUtils.format(order.getOrderPayTime(), "E")));
-//	payments.setOrderPayMonthWeek(Integer.parseInt(DateUtils.format(order.getOrderPayTime(), "W")));
-//	payments.setOrderPayYearWeek(Integer.parseInt(DateUtils.format(order.getOrderPayTime(), "w")));
-//	payments.setOrderPayQuarter(Integer.parseInt(DateUtils.format(order.getOrderPayTime(), "M")));//TODO 季度
-//	payments.setOrderPayTimeValue(Integer.parseInt(DateUtils.format(order.getOrderPayTime(), "s")));
+
 	
 }

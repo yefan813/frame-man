@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frame.dao.JoinTeamDao">
+
+	<!-- groupon 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+			id,
+			initiator,
+			team_id as teamId,
+			user_id as userId,
+			status,
+			type,
+			feature,
+			created,
+			modified,
+			yn
+		]]>
+	</sql>
+
+	<!-- groupon 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_join_team]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+			<if test="initiator != null"><![CDATA[AND initiator = #{initiator}]]></if>
+			<if test="teamId != null"><![CDATA[AND team_id = #{teamId}]]></if>
+			<if test="userId != null"><![CDATA[AND user_id = #{userId}]]></if>
+			<if test="status != null"><![CDATA[AND status = #{status}]]></if>
+			<if test="type != null"><![CDATA[AND type = #{type}]]></if>
+			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
+			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
+			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
+			<if test="yn != null "><![CDATA[AND yn = #{yn}]]></if>
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="initiator != null"><![CDATA[initiator = #{initiator},]]></if>
+			<if test="teamId != null"><![CDATA[team_id = #{teamId},]]></if>
+			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
+			<if test="status != null"><![CDATA[status = #{status},]]></if>
+			<if test="type != null"><![CDATA[type = #{type},]]></if>
+			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
+			<![CDATA[modified = now(),]]>
+			<if test="yn != null"><![CDATA[yn = #{yn},]]></if>
+		</set>
+	</sql>
+
+	<!-- 插入team记录 -->
+	<insert id="insertEntry" parameterType="joinTeam" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			INSERT INTO tb_join_team (initiator,team_id,user_id,status,type,feature,created,modified,yn)
+			VALUES (#{initiator},#{teamId},#{userId},#{status},#{type},#{feature},now(),now(),#{yn})
+		]]>
+	</insert>
+	
+	<!-- 返回插入的编号,在事务开启状态下有效 -->
+	<select id="lastSequence" resultType="int"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+	<!-- 删除记录,主键IN(array) -->
+	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
+		<![CDATA[DELETE FROM tb_join_team WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</delete>
+
+	<!-- 删除,通过条件 -->
+	<update id="deleteByCondtion" parameterType="joinTeam" >
+		<![CDATA[DELETE FROM tb_join_team]]>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</update>
+
+	<!-- 修改记录通过主键 -->
+	<update id="updateByKey" parameterType="joinTeam" >
+		<![CDATA[UPDATE tb_join_team]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+
+	<!-- 查询,通过主键IN(array) -->
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="joinTeam">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<!-- 查询,通过条件 -->
+	<select id="selectEntryList" parameterType="joinTeam" resultType="joinTeam">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<!-- 总数查询,通过条件 -->
+	<select id="selectEntryListCount" parameterType="joinTeam" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
+	
+	<!-- 其它SQL语句 -->
+	
+</mapper>

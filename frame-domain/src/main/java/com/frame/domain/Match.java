@@ -1,37 +1,39 @@
 package com.frame.domain;
 
+import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.frame.domain.base.BaseDomain;
 
-public class Match extends BaseDomain{
+public class Match extends BaseDomain {
 	private static final long serialVersionUID = -7869400238880038556L;
-	
-	private String homeTeamId;
-	private String homeTeamName;
-	private String guestTeamId;
-	private String guestTeamName;
-	private String homeTeamScore;
-	private String guestTeamScore;
-	private String status;
-	private String matchTime;
-	private String address;
-	
+
+	public static Integer STATUS_CREAT = 0;
+	public static Integer STATUS_GOING = 1;
+	public static Integer STATUS_PAUSE = 2;
+	public static Integer STATUS_END = 3;
+	public static Integer STATUS_WAIT = 4;
+
+	private Long homeTeamId;				//主队id
+	private String homeTeamName;			//主队名
+	private Long guestTeamId;				//客队id
+	private String guestTeamName;			//客队名
+	private Integer homeTeamScore;			//主队比分
+	private Integer guestTeamScore;			//客队比分
+	private Integer status;					//状态
+	private Date matchTime;				//开始比赛时间
+	private String address;					//比赛地址
 
 
-
-	public String getHomeTeamId() {
+	public Long getHomeTeamId() {
 		return homeTeamId;
 	}
 
 
-
-
-	public void setHomeTeamId(String homeTeamId) {
+	public void setHomeTeamId(Long homeTeamId) {
 		this.homeTeamId = homeTeamId;
 	}
-
-
 
 
 	public String getHomeTeamName() {
@@ -39,27 +41,19 @@ public class Match extends BaseDomain{
 	}
 
 
-
-
 	public void setHomeTeamName(String homeTeamName) {
 		this.homeTeamName = homeTeamName;
 	}
 
 
-
-
-	public String getGuestTeamId() {
+	public Long getGuestTeamId() {
 		return guestTeamId;
 	}
 
 
-
-
-	public void setGuestTeamId(String guestTeamId) {
+	public void setGuestTeamId(Long guestTeamId) {
 		this.guestTeamId = guestTeamId;
 	}
-
-
 
 
 	public String getGuestTeamName() {
@@ -67,69 +61,49 @@ public class Match extends BaseDomain{
 	}
 
 
-
-
 	public void setGuestTeamName(String guestTeamName) {
 		this.guestTeamName = guestTeamName;
 	}
 
 
-
-
-	public String getHomeTeamScore() {
+	public Integer getHomeTeamScore() {
 		return homeTeamScore;
 	}
 
 
-
-
-	public void setHomeTeamScore(String homeTeamScore) {
+	public void setHomeTeamScore(Integer homeTeamScore) {
 		this.homeTeamScore = homeTeamScore;
 	}
 
 
-
-
-	public String getGuestTeamScore() {
+	public Integer getGuestTeamScore() {
 		return guestTeamScore;
 	}
 
 
-
-
-	public void setGuestTeamScore(String guestTeamScore) {
+	public void setGuestTeamScore(Integer guestTeamScore) {
 		this.guestTeamScore = guestTeamScore;
 	}
 
 
-
-
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
 
-
-
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
 
-
-
-	public String getMatchTime() {
+	public Date getMatchTime() {
 		return matchTime;
 	}
 
 
-
-
-	public void setMatchTime(String matchTime) {
+	public void setMatchTime(Date matchTime) {
 		this.matchTime = matchTime;
 	}
-
-
 
 
 	public String getAddress() {
@@ -137,13 +111,9 @@ public class Match extends BaseDomain{
 	}
 
 
-
-
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
-
 
 
 	@Override

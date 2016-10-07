@@ -11,6 +11,7 @@
 			user_name as userName,
 			team_id as teamId,
 			team_name as teamName,
+			type,
 			feature,
 			created,
 			modified,
@@ -29,6 +30,7 @@
 			<if test="userName != null"><![CDATA[AND user_name = #{userName}]]></if>
 			<if test="teamId != null"><![CDATA[AND team_id = #{teamId}]]></if>
 			<if test="teamName != null"><![CDATA[AND team_name = #{teamName}]]></if>
+			<if test="type != null"><![CDATA[AND type = #{type}]]></if>
 			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
 			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
 			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
@@ -49,6 +51,7 @@
 			<if test="userName != null"><![CDATA[user_name = #{userName},]]></if>
 			<if test="teamId != null"><![CDATA[team_id = #{teamId},]]></if>
 			<if test="teamName != null"><![CDATA[team_name = #{teamName},]]></if>
+			<if test="type != null"><![CDATA[type = #{type},]]></if>
 			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
 			<![CDATA[modified = now(),]]>
 			<if test="yn != null"><![CDATA[yn = #{yn},]]></if>
@@ -58,8 +61,8 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO user_team_relation (user_id,user_name,team_id,team_name,feature,created,modified,yn)
-			VALUES (#{userId},#{userName},#{teamId},#{teamName},#{feature},now(),now(),#{yn})
+			INSERT INTO user_team_relation (user_id,user_name,team_id,team_name,type,feature,created,modified,yn)
+			VALUES (#{userId},#{userName},#{teamId},#{teamName},#{type},#{feature},now(),now(),#{yn})
 		]]>
 	</insert>
 	

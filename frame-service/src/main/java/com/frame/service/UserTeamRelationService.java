@@ -5,5 +5,4 @@ import com.frame.service.base.BaseService;
 
 public interface UserTeamRelationService extends BaseService<UserTeamRelation, Long> {
 	
-
 }

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frame.dao.UserDao">
+
+	<!-- groupon 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+			id,
+			name,
+			status,
+			sex,
+			role,
+			address,
+			password,
+			nickname as nickName,
+			point,
+			avatar_url as avatarUrl,
+			email,
+			tel,
+			height,
+			weight,
+			position,
+			level,
+			feature,
+			created,
+			modified,
+			yn
+		]]>
+	</sql>
+	<sql id="USER_QUERY_COLUMN_LIST">
+			<![CDATA[
+				user1.id,
+				user1.name,
+				user1.status,
+				user1.sex,
+				user1.role,
+				user1.address,
+				user1.password,
+				user1.nickname as nickName,
+				user1.point,
+				user1.avatar_url as avatarUrl,
+				user1.email,
+				user1.tel,
+				user1.height,
+				user1.weight,
+				user1.position,
+				user1.level,
+			]]>
+		</sql>
+	<!-- groupon 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM tb_user]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+			<if test="id != null"><![CDATA[AND id = #{id}]]></if>
+			<if test="name != null"><![CDATA[AND name = #{name}]]></if>
+			<if test="status != null"><![CDATA[AND status = #{status}]]></if>
+			<if test="sex != null"><![CDATA[AND sex = #{sex}]]></if>
+			<if test="role != null"><![CDATA[AND role = #{role}]]></if>
+			<if test="address != null"><![CDATA[AND address = #{address}]]></if>
+			<if test="password != null"><![CDATA[AND password = #{password}]]></if>
+			<if test="nickName != null"><![CDATA[AND nickname = #{nickName}]]></if>
+			<if test="point != null"><![CDATA[AND point = #{point}]]></if>
+			<if test="avatarUrl != null"><![CDATA[AND avatar_url = #{avatarUrl}]]></if>
+			<if test="email != null"><![CDATA[AND email = #{email}]]></if>
+			<if test="tel != null"><![CDATA[AND tel = #{tel}]]></if>
+			<if test="height != null"><![CDATA[AND height = #{tel}]]></if>
+			<if test="weight != null"><![CDATA[AND weight = #{weight}]]></if>
+			<if test="position != null"><![CDATA[AND position = #{tel}]]></if>
+			<if test="level != null"><![CDATA[AND level = #{level}]]></if>
+			<if test="feature != null and feature != ''"><![CDATA[AND feature = #{feature}]]></if>
+			<if test="created != null and created != ''"><![CDATA[AND created = #{created}]]></if>
+			<if test="modified != null and modified != ''"><![CDATA[AND modified = #{modified}]]></if>
+			<if test="yn != null "><![CDATA[AND yn = #{yn}]]></if>
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="name != null"><![CDATA[name = #{name},]]></if>
+			<if test="status != null"><![CDATA[status = #{status},]]></if>
+			<if test="role != null"><![CDATA[role = #{role},]]></if>
+			<if test="address != null"><![CDATA[address = #{address},]]></if>
+			<if test="password != null"><![CDATA[password = #{password},]]></if>
+			<if test="sex != null"><![CDATA[sex = #{sex},]]></if>
+			<if test="nickName != null"><![CDATA[nickname = #{nickName},]]></if>
+			<if test="point != null"><![CDATA[point = #{point},]]></if>
+			<if test="level != null"><![CDATA[level = #{level},]]></if>
+			<if test="avatarUrl != null"><![CDATA[avatar_url = #{avatarUrl},]]></if>
+			<if test="email != null"><![CDATA[email = #{email},]]></if>
+			<if test="tel != null"><![CDATA[tel = #{tel},]]></if>
+			<if test="height != null"><![CDATA[height = #{height},]]></if>
+			<if test="weight != null"><![CDATA[weight = #{weight},]]></if>
+			<if test="position != null"><![CDATA[position = #{position},]]></if>
+			<if test="feature != null"><![CDATA[feature = #{feature},]]></if>
+			<![CDATA[modified = now(),]]>
+			<if test="yn != null"><![CDATA[yn = #{yn},]]></if>
+		</set>
+	</sql>
+
+	<!-- 插入team记录 -->
+	<insert id="insertEntry" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			INSERT INTO tb_user (name,role,status,address,password,sex,nickname,point,avatar_url,email,tel,height,weight,position,level,feature,created,modified,yn)
+			VALUES (#{name},#{role},#{status},#{address},#{password},#{sex},#{nickName},#{point},#{avatarUrl},#{email},#{tel},#{height},#{weight},#{position},#{level},#{feature},now(),now(),#{yn})
+		]]>
+	</insert>
+	
+	<!-- 返回插入的编号,在事务开启状态下有效 -->
+	<select id="lastSequence" resultType="int"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+	<!-- 删除记录,主键IN(array) -->
+	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
+		<![CDATA[DELETE FROM tb_user WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</delete>
+
+	<!-- 删除,通过条件 -->
+	<update id="deleteByCondtion" parameterType="user" >
+		<![CDATA[DELETE FROM tb_user]]>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</update>
+
+	<!-- 修改记录通过主键 -->
+	<update id="updateByKey" parameterType="user" >
+		<![CDATA[UPDATE tb_user]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+	
+	<!-- 修改记录通过主键 -->
+	<update id="updateByTel" parameterType="user" >
+		<![CDATA[UPDATE tb_user]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE tel = #{tel}]]>
+	</update>
+
+	<!-- 查询,通过主键IN(array) -->
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="user">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<!-- 查询,通过条件 -->
+	<select id="selectEntryList" parameterType="user" resultType="user">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<!-- 总数查询,通过条件 -->
+	<select id="selectEntryListCount" parameterType="user" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
+	
+	<!-- 其它SQL语句 -->
+	<select id="getNearByUser" parameterType="UserLogin" resultType="user">
+		<![CDATA[SELECT]]>
+		<include refid="USER_QUERY_COLUMN_LIST"/>
+		<![CDATA[t1.myDistance from tb_user user1 
+		LEFT JOIN (select  user_id,111.1111 *
+		    DEGREES(acos( cos( radians(latitude) ) 
+		      * cos( radians(#{latitude}) ) 
+		      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
+		      * sin( radians(#{latitude}) ))) as myDistance  
+	    from tb_user_login u1 where u1.user_id != #{userId}) as t1 on t1.user_id = user1.id where id != #{userId}
+        ]]>
+        <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+	
+	
+	<!-- 其它SQL语句 -->
+	<select id="getNearByUserCount" parameterType="UserLogin" resultType="int">
+		<![CDATA[SELECT COUNT(t1.myDistance)]]>
+		<![CDATA[ from tb_user user1 
+		LEFT JOIN (select  user_id,111.1111 *
+		    DEGREES(acos( cos( radians(latitude) ) 
+		      * cos( radians(#{latitude}) ) 
+		      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
+		      * sin( radians(#{latitude}) ))) as myDistance  
+	    from tb_user_login u1 where u1.user_id != #{userId}) as t1 on t1.user_id = user1.id where id != #{userId}
+        ]]>
+	</select>
+	
+	
+	<!-- 其它SQL语句 -->
+	<select id="getUserJoinPersionApplyRecord" parameterType="matchApply" resultType="user">
+		<![CDATA[ select ]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where id in
+			(select target_identity_id from tb_match_apply 
+			 where parent_apply_id = #{parentApplyId} 
+			and source_identity_id = #{sourceIdentityId} and type = 1);
+        ]]>
+	</select>
+	
+	
+	<!-- 查询,通过条件 -->
+	<select id="selectUserListByTeamId" parameterType="int" resultType="user">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ where id in (select user_id from user_team_relation where team_id = #{teamId} and yn=1 ) ]]>
+	</select>
+	
+	
+		<!-- 查询,通过主键IN(array) -->
+	<select id="queryFriendsByTelOrNickName" parameterType="map" resultType="user">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+		<![CDATA[ and ( tel like CONCAT("%",#{query},"%") or nickName like CONCAT("%",#{query},"%") )]]>
+	</select>
+	
+</mapper>

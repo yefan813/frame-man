@@ -1,14 +1,21 @@
 package com.frame.web.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.WebRequest;
 
+import com.alibaba.fastjson.JSON;
+import com.frame.web.CustomDateEditor;
 import com.frame.web.interceptor.WeixinPassport;
 
 @Controller
@@ -16,6 +23,11 @@ public class BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
 
+	@InitBinder
+	public void initBinder(WebDataBinder binder, WebRequest request) {
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(true));
+	}
+	
 	protected HttpServletRequest getRequest() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		return request;
@@ -63,17 +75,26 @@ public class BaseController {
 		return "";
 	}
 
-	
 	public String dealJosnP(String callback, String data){
 		if(data == null) data = "";
 		
-		// TODO log
-		LOGGER.info("======jsonData======" + data);
 		if(StringUtils.isBlank(callback)){
 			return data;
 		}else{
 			return callback + "("  + data + ")";
 		}
+	}
+	public String dealJosnP(String callback, Object data){
+		if(data == null) data = "";
+
+		if(StringUtils.isBlank(callback)){
+			return JSON.toJSONString(data);
+		}else{
+			return callback + "("  + JSON.toJSONString(data) + ")";
+		}
+	}
+	public String dealJosnP(Object data){
+		return dealJosnP(null,data);
 	}
 	
 	

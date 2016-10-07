@@ -14,5 +14,9 @@ public interface PlayGroundDao extends BaseDao<Playground, Long> {
 	 * @return
 	 */
 	public List<Playground> getPlaygroundInfo(Map<String, Object> parameters);
+	
+	
+	public List<Playground> getPlayGroundByLocation(Map<String,Object> params);
+	
 
 }

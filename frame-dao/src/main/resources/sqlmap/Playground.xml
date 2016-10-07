@@ -10,6 +10,8 @@
 			name,
 			address,
 			location,
+			longitude,
+			latitude,
 			tel,
 			pcode,
 			pname,
@@ -36,6 +38,8 @@
 			<if test="name != null"><![CDATA[AND name = #{name}]]></if>
 			<if test="address != null"><![CDATA[AND address = #{address}]]></if>
 			<if test="location != null"><![CDATA[AND location = #{location}]]></if>
+			<if test="longitude != null"><![CDATA[AND longitude = #{longitude}]]></if>
+			<if test="latitude != null"><![CDATA[AND latitude = #{latitude}]]></if>
 			<if test="tel != null"><![CDATA[AND tel = #{tel}]]></if>
 			<if test="pcode != null"><![CDATA[AND pcode = #{pcode}]]></if>
 			<if test="pname != null"><![CDATA[AND pname = #{pname}]]></if>
@@ -64,6 +68,8 @@
 			<if test="name != null"><![CDATA[name = #{name},]]></if>
 			<if test="address != null"><![CDATA[address = #{address},]]></if>
 			<if test="location != null"><![CDATA[location = #{location},]]></if>
+			<if test="longitude != null"><![CDATA[longitude = #{longitude},]]></if>
+			<if test="latitude != null"><![CDATA[latitude = #{latitude},]]></if>
 			<if test="tel != null"><![CDATA[tel = #{tel},]]></if>
 			<if test="pcode != null"><![CDATA[pcode = #{pcode},]]></if>
 			<if test="pname != null"><![CDATA[pname = #{pname},]]></if>
@@ -82,11 +88,10 @@
 	<!-- 插入groupon记录 -->
 	<insert id="insertEntry" parameterType="playground" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO play_ground (name,address,location,tel,pcode,pname,citycode,cityname,adcode,adname,parking_type,indoor_map,feature,created,modified,yn)
-			VALUES (#{name},#{address},#{location},#{tel},#{pcode},#{pname},#{cityCode},#{cityName},#{adCode},#{adName},#{parkingType},#{indoorMap},#{feature},now(),now(),#{yn})
+			INSERT INTO play_ground (name,address,location,longitude,latitude,tel,pcode,pname,citycode,cityname,adcode,adname,parking_type,indoor_map,feature,created,modified,yn)
+			VALUES (#{name},#{address},#{location},#{longitude},#{latitude},#{tel},#{pcode},#{pname},#{cityCode},#{cityName},#{adCode},#{adName},#{parkingType},#{indoorMap},#{feature},now(),now(),#{yn})
 			ON DUPLICATE KEY UPDATE
-			tel=#{tel},parking_type=#{parkingType}
-			
+			tel=#{tel},parking_type=#{parkingType},longitude=#{longitude},latitude=#{latitude}
 		]]>
 	</insert>
 	
@@ -142,5 +147,18 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<select id="selectPlayGroundByLocation" parameterType="Map" resultType="playground">
+		<![CDATA[SELECT id,name,address,location,longitude,latitude,tel,pcode,cityCode,cityName,
+        111.1111 *
+	    DEGREES(acos( cos( radians(latitude) ) 
+	      * cos( radians(#{latitude}) ) 
+	      * cos( radians(#{longitude}) - radians(longitude)) + sin(radians(latitude))
+	      * sin( radians(#{latitude}) ))) as myDistance
+	      
+        FROM play_ground
+        ]]>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+	
 	
 </mapper>

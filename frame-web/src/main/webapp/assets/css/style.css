@@ -1,0 +1,407 @@
+@charset "UTF-8";
+body {
+    margin: 0;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+a:active,
+a:hover {
+    outline: 0;
+    text-decoration: none;
+}
+
+button,
+html input[type=button],
+input[type=reset],
+input[type=submit] {
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+td,
+th {
+    padding: 0;
+    text-align: center;
+    border-bottom: 1px solid #404040;
+}
+td {
+    color: #fff;
+}
+thead th {
+    border-bottom: 1px solid #404040;
+    font-weight: 400;
+    padding: 0 0.16rem;
+}
+
+img {
+    vertical-align: middle;
+    border: 0
+}
+
+@-ms-viewport {
+    width: device-width
+}
+
+html {
+    -webkit-tap-highlight-color: transparent;
+    height: 100%;
+    min-width: 320px;
+    overflow-x: hidden
+}
+
+body {
+    margin-right: auto;
+    margin-left: auto;
+    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1;
+    color: #999;
+    background-color: #404040
+}
+
+li,
+ul {
+    list-style: none;
+}
+
+
+/* font-size set start */
+
+div {
+    font-size: 12px;
+}
+
+[data-dpr="2"] div {
+    font-size: 24px;
+}
+
+[data-dpr="3"] div {
+    font-size: 36px;
+}
+
+.font12 {
+    font-size: 12px;
+}
+
+[data-dpr="2"] .font12 {
+    font-size: 24px;
+}
+
+[data-dpr="3"] .font12 {
+    font-size: 36px;
+}
+
+.font14 {
+    font-size: 14px;
+}
+
+[data-dpr="2"] .font14 {
+    font-size: 28px;
+}
+
+[data-dpr="3"] .font14 {
+    font-size: 42px;
+}
+
+.font16 {
+    font-size: 16px;
+}
+
+[data-dpr="2"] .font16 {
+    font-size: 32px;
+}
+
+[data-dpr="3"] .font16 {
+    font-size: 48px;
+}
+
+.font18 {
+    font-size: 18px;
+}
+
+[data-dpr="2"] .font18 {
+    font-size: 36px;
+}
+
+[data-dpr="3"] .font18 {
+    font-size: 54px;
+}
+
+.font20 {
+    font-size: 20px;
+}
+
+[data-dpr="2"] .font20 {
+    font-size: 40px;
+}
+
+[data-dpr="3"] .font20 {
+    font-size: 60px;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+
+/* style start */
+
+.banner {
+    width: 100%;
+    height: 1.333rem;
+    background: #333;
+}
+
+.banner .titles {
+    text-align: center;
+}
+
+.banner .titles .names {
+    display: inline-block;
+    color: #fff;
+    font-weight: 600;
+    margin-top: 0.24rem;
+}
+
+.banner .titles .names img {
+    width: 0.867rem;
+    height: 0.867rem;
+}
+
+.battle-msg {
+    position: relative;
+    width: 100%;
+}
+
+.battle-msg .battle-date,
+.common-line {
+    margin: 0 0.2rem;
+    line-height: 2.5;
+    color: #999;
+}
+
+.battle-area,
+.common-height {
+    text-align: center;
+    border-bottom: 1px solid #404040;
+    padding: 0.333rem 0;
+    background: #333;
+    color: #40adb4;
+}
+
+.battle-area span {
+    color: #40adb4;
+}
+
+.battle-team-score {
+    position: relative;
+    width: 100%;
+    background: #333;
+    border-bottom: 1px solid #404040;
+}
+
+.battle-team-score ul {
+    padding: 0.4rem 0.533rem;
+}
+
+.battle-team-score ul li {
+    width: 25%;
+    margin: 0.4rem 0 0.533rem;
+    text-align: center;
+}
+
+.battle-team-score ul li .team-logo {
+    display: block;
+    width: 1.653rem;
+    height: 1.653rem;
+    margin: 0 auto 0.533rem;
+    border-radius: 50%;
+}
+
+.battle-team-score ul li .team-name {
+    font-weight: 600;
+    color: #fff;
+}
+
+.battle-team-score ul li:nth-child(2) {
+    width: 50%;
+}
+
+.score-board {
+    margin-top: 0.6rem;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.score-board .win {
+    color: rgb(209, 120, 114);
+}
+
+.battle-team-score ul li .status {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 0.133rem 0.267rem;
+    background: #ee542a;
+    color: #fff;
+}
+
+.battle-team-score ul li .end {
+    background: #636363;
+    color: #c7c7c7;
+}
+/* best */
+.best-details {
+    background: #333;
+    color: #fff;
+}
+.best-details .team-best-name {
+    display: inline-block;
+    width:  1.387rem;
+    line-height: 1.067rem;
+    margin: 0 0.267rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #fff;
+}
+.best-details .team-best-avator {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    margin-top: 0.133rem;
+}
+.best-details .best-item-deatil {
+    text-align: center;
+    line-height: 1.067rem;
+    color: #999;
+}
+.best-details .best-item-deatil .item-score {
+    color: #fff;
+}
+.best-details .scores {
+    border-bottom: 1px solid #404040;
+}
+
+.best-details .com-wh-li {
+    width: 2.987rem;
+    height: 1.067rem;
+    line-height: 1.067rem;
+    color: #fff;
+    text-align: center;
+}
+.best-details .com-center-li {
+    height:  1.067rem;
+    line-height: 1.067rem;
+}
+.team-score-details, .player-score-details {
+    display: -webkit-box;
+    display: flex;
+    width: 100%;
+    background: #333;
+    margin-top: 0.267rem;
+}
+.table {
+    width: 100%;
+    white-space: nowrap;
+    border-collapse: collapse;
+}
+.table th {
+    height: 0.827rem;
+    padding-top: 0.16rem;
+    padding-bottom: 0.08rem;
+}
+.table td {
+    overflow: hidden;
+    height: 1.093rem;
+}
+td>img {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    /* margin: 0.133rem 0; */
+}
+.team-score-details-center .table th, .team-score-details-center .table td {
+    width: 1.84rem;
+    height: 0.827rem;
+    padding-top: 0.16rem;
+}
+.team-score-details-center .table td {
+    height: 1.093rem;
+    padding-top: 0.133rem;
+}
+
+.table .main {
+    color: #de7873;
+}
+.text-left {
+    text-align: left;
+}
+.last span, .last td {
+    color: #bbb;
+}
+.game-left tr>th {
+    /* width: 3.467rem; */
+    width: 1.467rem;
+}
+.game-left tr>td {
+    padding-left: 0.08rem;
+    padding-right: 0.08rem;
+}
+.game-left tr>td span {
+    display: inline-block;
+    width: 1.307rem;
+    text-align: center;
+}
+.game-left tr>td .player-num {
+    display: block;
+}
+.game-left tr>td .player-name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.game-right {
+    -webkit-box-flex:1;
+    flex: 1;
+    overflow-x: auto;
+}
+
+/* iphone4/4s */
+@media (device-height:480px) and (-webkit-min-device-pixel-ratio:2) {
+    /* .game-left tr>th, .game-left tr>td {
+        width: 3.067rem;
+    } */
+}
+/* iphone5/5s */
+@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+    /* .game-left tr>th, .game-left tr>td {
+        width: 3.067rem;
+    } */
+}

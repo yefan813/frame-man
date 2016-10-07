@@ -36,7 +36,7 @@ public class ImageValidate {
 	 * 
 	 * @return 如果验证失败，将返回表示验证失败原因的错误码， 验证成功则返回UploadImgInfo对象
 	 */
-	public static Result validate4Upload(MultipartFile imgFile, boolean isSkuImg) {
+	public static Result validate4Upload(MultipartFile imgFile) {
 		Result r = new Result(false);
 		
 //		r.setSuccess(true);
@@ -57,9 +57,9 @@ public class ImageValidate {
 			} else if (!isValidFileType(fileType)) { // 文件类型
 				r.setResultCode("无效的文件类型!");
 				return r;
-			} else if (isSkuImg && !checkImgSizeProduct(r, bufferedImage.getWidth(), bufferedImage.getHeight())) { // 图片尺寸
+			} /*else if (!checkImgSizeProduct(r, bufferedImage.getWidth(), bufferedImage.getHeight())) { // 图片尺寸
 				return r;
-			} else {
+			} */else {
 				// 图片验证合法， 组装uploadImgInfo对象返回
 				r.setSuccess(true);
 				return r;

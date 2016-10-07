@@ -1,6 +1,4 @@
 package com.frame.common.tools;
-
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -166,6 +164,10 @@ public class DateUtil {
 	 */
 	public static String format(Date date) {
 		return formatDateTime(date, DATE_TIME_FORMAT);
+	}
+	
+	public static String format(Date date, String format) {
+		return formatDateTime(date, format);
 	}
 
 	/**
