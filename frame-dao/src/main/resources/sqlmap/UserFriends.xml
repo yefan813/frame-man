@@ -168,12 +168,12 @@
 	<![CDATA[SELECT count(id)]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId} AND `status` = 1 and yn = 1]]>
+		<![CDATA[WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId} AND `status` = 2 and yn = 1]]>
 	</select>
 	
 	
 	<!-- 删除好友 -->
 	<update id="deleteFriends" parameterType="userFriends">
-		<![CDATA[UPDATE tb_user_friends set yn = -1 WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId}]]>
+		<![CDATA[delete  from tb_user_friends WHERE `from_user_id` = #{fromUserId} AND `to_user_id` = #{toUserId}]]>
 	</update>
 </mapper>

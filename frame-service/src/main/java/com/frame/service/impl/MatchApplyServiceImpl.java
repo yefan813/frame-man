@@ -121,7 +121,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 					}
 					
 				});
-				content = "' " + tarTL.getName() +" ' 向' " + souTL.getName() + " ' 申请比赛，请及时回复";
+				content = "' " + souTL.getName() +" ' 向' " + tarTL.getName() + " ' 申请比赛，请及时回复";
 				apnsService.senPushNotification(tarDeviceTokens, content);
 				
 				result = RemoteResult.success();

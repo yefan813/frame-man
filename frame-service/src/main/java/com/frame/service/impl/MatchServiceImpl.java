@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.frame.dao.MatchDao;
 import com.frame.dao.base.BaseDao;
 import com.frame.domain.Match;
-import com.frame.domain.Team;
+import com.frame.domain.MatchData;
+import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
 import com.frame.domain.enums.BusinessCode;
@@ -40,7 +42,7 @@ public class MatchServiceImpl extends BaseServiceImpl<Match, Long> implements Ma
 		// TODO Auto-generated method stub
 		return matchDao;
 	}
-
+	
 	@Override
 	@Transactional
 	public RemoteResult createMatch(Match match) {

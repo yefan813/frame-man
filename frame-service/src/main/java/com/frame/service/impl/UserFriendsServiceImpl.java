@@ -68,6 +68,23 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		
 		userFriends.setFromUserId(Math.min(fromId, toId));
 		userFriends.setToUserId(Math.max(fromId, toId));
+		userFriends.setStatus(UserFriends.STATUS_ACCEPTED);
+		List<UserFriends> fList = userFriendsDao.selectEntryList(userFriends);
+		if(CollectionUtils.isNotEmpty(fList)){
+			LOGGER.info("两人已经是好友");
+			result = RemoteResult.failure("0001", "两人已经是好友");
+			return result;
+		}
+		
+		userFriends.setFromUserId(Math.min(fromId, toId));
+		userFriends.setToUserId(Math.max(fromId, toId));
+		userFriends.setStatus(UserFriends.STATUS_WAITING);
+		List<UserFriends> wList = userFriendsDao.selectEntryList(userFriends);
+		if(CollectionUtils.isNotEmpty(wList)){
+			LOGGER.info("已发送过申请");
+			result = RemoteResult.failure("0001", "已发送过申请");
+			return result;
+		}
 		
 		userFriends.setActionUserId(fromId);
 		userFriends.setYn(YnEnum.Normal.getKey());
@@ -75,7 +92,7 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 		
 		int res = userFriendsDao.insertEntryCreateId(userFriends);
 		if(res > 0){
-			User user = userService.selectEntry(toId);
+			User user = userService.selectEntry(fromId);
 			if(null == user){
 				LOGGER.error("申请加入还有没查询相关用户");
 				return result;
@@ -214,7 +231,7 @@ public class UserFriendsServiceImpl extends BaseServiceImpl<UserFriends, Long> i
 			
 			User froUs = userService.selectEntry(fromId);
 			if(null == froUs){
-				LOGGER.error("申请加入还有没查询相关用户");
+				LOGGER.error("申请加入好友查询相关用户");
 				return result;
 			}
 			apnsService.senPushNotification(toId, "用户'" + froUs.getNickName() +"' 同意了你的好友请求,约起来吧~");

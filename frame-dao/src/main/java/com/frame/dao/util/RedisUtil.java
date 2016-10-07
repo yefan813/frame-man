@@ -1,19 +1,13 @@
-package com.frame.domain.util;
+package com.frame.dao.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.thoughtworks.xstream.XStream;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.thoughtworks.xstream.XStream;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+
+import java.util.*;
 
 public class RedisUtil {
     private static final Logger log = LoggerFactory.getLogger(RedisUtil.class);
@@ -21,10 +15,7 @@ public class RedisUtil {
     private JedisPool jedisPool;
     private boolean use;
     private int defaultExpireTime = 10800;
-    /**
-     * 财务系统redis前缀
-     */
-    public static final String REDIS_PREFIX_FINANCE="finance:";
+
     public RedisUtil() {
     }
 

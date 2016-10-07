@@ -1,5 +1,7 @@
 package com.frame.domain;
 
+import java.sql.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.frame.domain.base.BaseDomain;
@@ -8,10 +10,11 @@ public class MatchData extends BaseDomain {
 	private static final long serialVersionUID = -7869400238880038556L;
 
 	private Long matchId;				//比赛id
-	private Integer homeTeamId;			//主队id
+	private Long homeTeamId;			//主队id
 	private String homeTeamData;		//主队数据
-	private Integer guestTeamId;			//客队id
+	private Long guestTeamId;			//客队id
 	private String guestTeamData;		//客队数据
+
 
 	public Long getMatchId() {
 		return matchId;
@@ -21,11 +24,11 @@ public class MatchData extends BaseDomain {
 		this.matchId = matchId;
 	}
 
-	public Integer getHomeTeamId() {
+	public Long getHomeTeamId() {
 		return homeTeamId;
 	}
 
-	public void setHomeTeamId(Integer homeTeamId) {
+	public void setHomeTeamId(Long homeTeamId) {
 		this.homeTeamId = homeTeamId;
 	}
 
@@ -37,11 +40,11 @@ public class MatchData extends BaseDomain {
 		this.homeTeamData = homeTeamData;
 	}
 
-	public Integer getGuestTeamId() {
+	public Long getGuestTeamId() {
 		return guestTeamId;
 	}
 
-	public void setGuestTeamId(Integer guestTeamId) {
+	public void setGuestTeamId(Long guestTeamId) {
 		this.guestTeamId = guestTeamId;
 	}
 
