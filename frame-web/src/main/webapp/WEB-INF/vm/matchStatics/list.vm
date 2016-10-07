@@ -129,7 +129,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="guestPlayer in matchDetails.homeTeam.teamPlayerData">
+                        <tr ng-repeat="guestPlayer in matchDetails.guestTeam.teamPlayerData">
                             <td class="text-left">
                                 <span class="player-name" ng-bind="guestPlayer.playerName"></span>
                             </td>
