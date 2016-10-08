@@ -266,12 +266,12 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 	@Transactional
 	public RemoteResult agreeInventJoinTeam(JoinTeam joinTeam) {
 		RemoteResult result = null;
-		if(null == joinTeam || null == joinTeam.getTeamId() || 
-				joinTeam.getUserId() == null || joinTeam.getInitiator() == null){
+		if(null == joinTeam || null == joinTeam.getId()){
 			LOGGER.info("调用agreeInventJoinTeam 传入参数错误");
 			result = RemoteResult.failure("0001", "调用agreeInventJoinTeam 传入参数错误");
 			return result;
 		}
+		joinTeam = selectEntry(joinTeam.getId().longValue());
 		
 		User targetUser = userService.selectEntry(joinTeam.getUserId());
 		if(null == targetUser){
@@ -291,9 +291,10 @@ public class JoinTeamServiceImpl extends BaseServiceImpl<JoinTeam, Long> impleme
 			return result;
 		}
 		
-		
-		joinTeam.setStatus(JoinTeam.STATUS_AGREEMENT);
-		if(joinTeamDao.updateByKey(joinTeam) > 0){
+		JoinTeam condition = new JoinTeam();
+		condition.setId(joinTeam.getId());
+		condition.setStatus(JoinTeam.STATUS_AGREEMENT);
+		if(joinTeamDao.updateByKey(condition) > 0){
 			LOGGER.info("调用agreeApplyJoinTeam 上传数据成功");
 			result = RemoteResult.success();
 			
