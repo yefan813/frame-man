@@ -109,6 +109,7 @@ public class MatchDataController extends BaseController {
 		mathData = MyCacheUtil.getMatchStaticsHTML(matchId);
 		
 		if(StringUtils.isBlank(mathData)){
+			LOGGER.info("redis not exist this records,get data from database");
 			MatchData query = new MatchData();
 			query.setMatchId(matchId);
 			query.setYn(YnEnum.Normal.getKey());
@@ -121,6 +122,7 @@ public class MatchDataController extends BaseController {
 			RemoteResult result = RemoteResult.success(map);
 			mathData = JSON.toJSONString(result);
 			//TODO 插入redis
+			LOGGER.info("insert data into redis");
 			MyCacheUtil.setMatchStaticsHTML(matchId, mathData);
 		}
 		

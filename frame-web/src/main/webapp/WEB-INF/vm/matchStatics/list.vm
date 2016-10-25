@@ -5,7 +5,7 @@
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="yes" name="apple-touch-fullscreen">
     <meta content="telephone=no,email=no" name="format-detection">
-    <title>比赛信息</title>
+    <title>篮球派-比赛信息</title>
     <script type="text/javascript" src="/frame-web-0.0.1-SNAPSHOT/assets/js/flexible_css.debug.js"></script>
     <script type="text/javascript" src="/frame-web-0.0.1-SNAPSHOT/assets/js/flexible.debug.js"></script>
     <link rel="stylesheet" type="text/css" href="/frame-web-0.0.1-SNAPSHOT/assets/css/style.css">
@@ -99,7 +99,7 @@
                             <td ng-bind="homePlayer.rebound"></td>
                             <td ng-bind="homePlayer.twoPoint"></td>
                             <td ng-bind="homePlayer.threePoint"></td>
-                            <td ng-bind="homePlayer.falancishu"></td>
+                            <td ng-bind="homePlayer.freeThrow"></td>
                             <td ng-bind="homePlayer.assist"></td>
                             <td ng-bind="homePlayer.steal"></td>
                             <td ng-bind="homePlayer.blockShot"></td>
@@ -165,7 +165,7 @@
                             <td ng-bind="guestPlayer.rebound"></td>
                             <td ng-bind="guestPlayer.twoPoint"></td>
                             <td ng-bind="guestPlayer.threePoint"></td>
-                            <td ng-bind="guestPlayer.falancishu"></td>
+                            <td ng-bind="guestPlayer.freeThrow"></td>
                             <td ng-bind="guestPlayer.assist"></td>
                             <td ng-bind="guestPlayer.steal"></td>
                             <td ng-bind="guestPlayer.blockShot"></td>
