@@ -3,6 +3,7 @@ package com.frame.chat.comm;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,6 +65,9 @@ public class ClientContext {
 	private EasemobRestAPIFactory factory;
 	
 	private TokenGenerator token; // Wrap the token generator
+	
+	@Value("${ENV_MOD}")
+	private String ENV_MOD;
 	
 	private ClientContext() {};
 	
@@ -140,12 +144,12 @@ public class ClientContext {
 	
 	private void initFromPropertiesFile() {
 		Properties p = new Properties();
-
+		InputStream inputStream = null;
 		try {
-			InputStream inputStream = ClientContext.class.getClassLoader().getResourceAsStream("config.properties");
+			inputStream = ClientContext.class.getClassLoader().getResourceAsStream("important.properties");
 			p.load(inputStream);
 		} catch (IOException e) {
-			log.error(MessageTemplate.print(MessageTemplate.FILE_ACCESS_MSG, new String[]{"config.properties"}));
+			log.error(MessageTemplate.print(MessageTemplate.FILE_ACCESS_MSG, new String[]{"important.properties"}));
 			return; // Context not initialized
 		}
 		
@@ -158,7 +162,7 @@ public class ClientContext {
 		String impLib = p.getProperty(APP_IMP_LIB_KEY);
 		
 		if( StringUtils.isBlank(protocal) || StringUtils.isBlank(host) || StringUtils.isBlank(org) || StringUtils.isBlank(app) || StringUtils.isBlank(clientId) || StringUtils.isBlank(clientSecret) || StringUtils.isBlank(impLib) ) {
-			log.error(MessageTemplate.print(MessageTemplate.INVAILID_PROPERTIES_MSG, new String[]{"config.properties"}));
+			log.error(MessageTemplate.print(MessageTemplate.INVAILID_PROPERTIES_MSG, new String[]{"important.properties"}));
 			return; // Context not initialized
 		}
 		
