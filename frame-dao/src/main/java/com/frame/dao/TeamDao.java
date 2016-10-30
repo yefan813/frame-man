@@ -16,5 +16,7 @@ public interface TeamDao extends BaseDao<Team, Long> {
 	 */
 	public List<Team> getUserTeams(Long userId);
 	
+	public List<Team> searchTeamByName(String name, String cityCode);
+	
 
 }

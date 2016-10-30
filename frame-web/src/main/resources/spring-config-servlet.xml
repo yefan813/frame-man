@@ -39,6 +39,21 @@
 		</property>
 	</bean>
 	
+	
+<!-- 	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/out-ifs/**" />
+			<mvc:exclude-mapping path="/assets/**" />
+			<mvc:exclude-mapping path="/user/getValidCode" />
+			<mvc:exclude-mapping path="/matchData/viewMatchStatics" />
+			<mvc:exclude-mapping path="/user/login" />
+			<mvc:exclude-mapping path="/user/regist" />
+			<bean class="com.frame.web.interceptor.BaseInterceptor">
+				<property name="key" value="${wm.passport.token.public_key}" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
 
 
 	<context:annotation-config />

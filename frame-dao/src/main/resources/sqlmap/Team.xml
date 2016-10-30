@@ -14,6 +14,7 @@
 			win_times as winTimes,
 			img_url as imgUrl,
 			name,
+			city_code AS cityCode,
 			team_desc as teamDesc,
 			create_user as createUser,
 			create_user_name as createUserName,
@@ -40,6 +41,7 @@
 			<if test="winTimes != null"><![CDATA[AND win_times = #{winTimes}]]></if>
 			<if test="imgUrl != null"><![CDATA[AND img_url = #{imgUrl}]]></if>
 			<if test="name != null"><![CDATA[AND name = #{name}]]></if>
+			<if test="cityCode != null"><![CDATA[AND city_code = #{cityCode}]]></if>
 			<if test="teamDesc != null"><![CDATA[AND team_desc = #{teamDesc}]]></if>
 			<if test="createUser != null"><![CDATA[AND create_user = #{createUser}]]></if>
 			<if test="createUserName != null"><![CDATA[AND create_user_name = #{createUserName}]]></if>
@@ -68,6 +70,7 @@
 			<if test="winTimes != null"><![CDATA[win_times = #{winTimes},]]></if>
 			<if test="imgUrl != null"><![CDATA[img_url = #{imgUrl},]]></if>
 			<if test="name != null"><![CDATA[name = #{name},]]></if>
+			<if test="cityCode != null"><![CDATA[city_code = #{cityCode},]]></if>
 			<if test="teamDesc != null"><![CDATA[team_desc = #{teamDesc},]]></if>
 			<if test="address != null"><![CDATA[address = #{address},]]></if>
 			<if test="location != null"><![CDATA[location = #{location},]]></if>
@@ -80,8 +83,8 @@
 	<!-- 插入team记录 -->
 	<insert id="insertEntry" parameterType="team" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO tb_team (name,current_count,people_count,status,lost_times,win_times,img_url,team_desc,create_user,create_user_name,address,location,feature,created,modified,yn)
-			VALUES (#{name},#{currentCount},#{peopleCount},#{status},#{lostTimes},#{winTimes},#{imgUrl},#{teamDesc},#{createUser},#{createUserName},#{address},#{location},#{feature},now(),now(),#{yn})
+			INSERT INTO tb_team (name,city_code,current_count,people_count,status,lost_times,win_times,img_url,team_desc,create_user,create_user_name,address,location,feature,created,modified,yn)
+			VALUES (#{name},#{cityCode},#{currentCount},#{peopleCount},#{status},#{lostTimes},#{winTimes},#{imgUrl},#{teamDesc},#{createUser},#{createUserName},#{address},#{location},#{feature},now(),now(),#{yn})
 		]]>
 	</insert>
 	
@@ -104,7 +107,7 @@
 
 	<!-- 修改记录通过主键 -->
 	<update id="updateByKey" parameterType="team" >
-		<![CDATA[UPDATE team]]>
+		<![CDATA[UPDATE tb_team]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
@@ -144,5 +147,15 @@
 		<![CDATA[ where id in (select team_id from user_team_relation where user_id = #{userId})  ]]>
 	</select>
 	
+	<select id="selectTeamByName" parameterType="Map" resultType="team">
+		<![CDATA[ select ]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<where>
+			<if test="name != null"><![CDATA[and name like CONCAT("%",#{name},"%")]]></if>
+			<if test="cityCode != null"><![CDATA[AND city_code = #{cityCode}]]></if>
+		</where>
+		
+	</select>
 	
 </mapper>

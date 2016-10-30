@@ -19,6 +19,9 @@ public class TeamDaoImpl extends BaseDaoImpl<Team, Long> implements TeamDao {
 	
 	private final static String SELECT_USERTEAMBY_USERID = "selectUserTeamByUserId";
 	
+	private final static String SELECT_TEAM_NAME = "selectTeamByName";
+	
+	
 	@Override
 	public List<Team> getUserTeams(Long userId) {
 		Map<String, Object> parameters  = new HashMap<String,Object>();
@@ -30,6 +33,14 @@ public class TeamDaoImpl extends BaseDaoImpl<Team, Long> implements TeamDao {
 	public String getNameSpace(String statement) {
 		// TODO Auto-generated method stub
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public List<Team> searchTeamByName(String name, String cityCode) {
+		Map<String, Object> parameters  = new HashMap<String,Object>();
+		parameters.put("name", name);
+		parameters.put("cityCode", cityCode);
+		return selectList(getNameSpace(SELECT_TEAM_NAME), parameters);
 	}
 
 

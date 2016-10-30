@@ -47,6 +47,7 @@ public class Team extends BaseDomain {
 	private String createUserName;			//创建用户抿成
 	private Long createUser;				//创建用户id
 	private String address;					//地址
+	private String cityCode;
 	private String location;				//坐标
 	private String feature;					//
 	private Date created;					//
@@ -180,6 +181,14 @@ public class Team extends BaseDomain {
 
 	public void setTeamDesc(String teamDesc) {
 		this.teamDesc = teamDesc;
+	}
+
+	public String getCityCode() {
+		return cityCode;
+	}
+
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
 	}
 
 	@Override

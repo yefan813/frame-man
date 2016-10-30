@@ -1,7 +1,6 @@
 package com.frame.web.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -10,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.frame.domain.Team;
-import com.frame.domain.User;
-import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
@@ -56,6 +52,31 @@ public class TeamController extends BaseController {
 			Page<Team> teams = teamService.selectPage(query, page);
 			// TODO image 加入前缀
 			result = RemoteResult.result(BusinessCode.SUCCESS, teams.getResult());
+		} catch (Exception e) {
+			LOGGER.error("列表异常", e);
+			System.out.println("列表异常" + e);
+			result = RemoteResult.result(BusinessCode.SERVER_INTERNAL_ERROR);
+		}
+		return JSON.toJSONString(result);
+	}
+	
+	@RequestMapping(value = "/searchTeamByName", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String searchTeamByName(String name, String cityCode) {
+		RemoteResult result = null;
+		if (StringUtils.isEmpty(name)) {
+			LOGGER.error("调用searchTeamByName 传入参数为：" + name);
+			result = RemoteResult.result(BusinessCode.PARAMETERS_ERROR);
+			return JSON.toJSONString(result);
+		}
+		try {
+
+			List<Team> res = teamService.searchTeamByName(name,cityCode);
+			if (null != res) {
+				result = RemoteResult.success(res);
+			} else {
+				result = RemoteResult.failure(BusinessCode.NO_RESULTS.getCode(), BusinessCode.NO_RESULTS.getValue());
+			}
+
 		} catch (Exception e) {
 			LOGGER.error("列表异常", e);
 			System.out.println("列表异常" + e);

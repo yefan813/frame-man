@@ -39,4 +39,6 @@ public interface TeamService extends BaseService<Team, Long> {
 	 */
 	public TeamVO getTeamById(Long id);
 	
+	public List<Team> searchTeamByName(String name, String cityCode);
+	
 }

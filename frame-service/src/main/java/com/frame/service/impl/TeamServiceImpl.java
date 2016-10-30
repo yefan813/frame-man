@@ -90,6 +90,16 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
 
 
 	@Override
+	public List<Team> searchTeamByName(String name, String cityCode) {
+		if(StringUtils.isEmpty(name)){
+			LOGGER.error("fetcb team paramter is err");
+			return null;
+		}
+		return teamDao.searchTeamByName(name,cityCode);
+	}
+
+
+	@Override
 	@Transactional
 	public TeamVO getTeamById(Long id) {
 		if(null == id){
