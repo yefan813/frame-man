@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.frame.domain.Team;
+import com.frame.domain.UserTeamRelation;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
@@ -39,7 +41,7 @@ public class TeamController extends BaseController {
 
 	@Resource
 	private ImgSysService imgSysService;
-
+	
 	@Resource
 	private UserTeamRelationService userTeamRelationService;
 
@@ -85,6 +87,38 @@ public class TeamController extends BaseController {
 		return JSON.toJSONString(result);
 	}
 
+	@RequestMapping(value = "/deletePlayer", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String deletePlayer(Long teamId, Long userId) {
+		RemoteResult result = null;
+		if (teamId == null || teamId < 0 ||  userId == null || userId < 0) {
+			LOGGER.error("调用deletePlayer 传入参数为：teamId" + teamId + "----> userId" + userId);
+			result = RemoteResult.result(BusinessCode.PARAMETERS_ERROR);
+			return JSON.toJSONString(result);
+		}
+		try {
+			
+			UserTeamRelation query = new UserTeamRelation();
+			query.setTeamId(teamId);
+			query.setUserId(userId);
+			query.setYn(YnEnum.Normal.getKey());
+			
+			List<UserTeamRelation> uRelations = userTeamRelationService.selectEntryList(query);
+			if(CollectionUtils.isEmpty(uRelations)){
+				LOGGER.error("调用deletePlayer未找到对此用户的球队");
+				LOGGER.error("调用deletePlayer 传入参数为：teamId" + teamId + "----> userId" + userId);
+				result = RemoteResult.result(BusinessCode.NO_MATCH_DATA);
+				return JSON.toJSONString(result);
+			}
+			userTeamRelationService.deleteByKey(uRelations.get(0).getId().longValue());
+			result = RemoteResult.success();
+			return JSON.toJSONString(result);
+		} catch (Exception e) {
+			LOGGER.error("删除球队成员异常", e);
+			result = RemoteResult.result(BusinessCode.SERVER_INTERNAL_ERROR);
+		}
+		return JSON.toJSONString(result);
+	}
+	
 	@RequestMapping(value = "/getTeamById", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String getTeamById(Long teamId) {
 		RemoteResult result = null;
@@ -125,7 +159,6 @@ public class TeamController extends BaseController {
 			result = RemoteResult.result(BusinessCode.SUCCESS, teams);
 		} catch (Exception e) {
 			LOGGER.error("列表异常", e);
-			System.out.println("列表异常" + e);
 			result = RemoteResult.result(BusinessCode.SERVER_INTERNAL_ERROR);
 		}
 
