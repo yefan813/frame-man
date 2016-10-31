@@ -9,7 +9,8 @@ public enum BusinessCode {
 	NO_REGIST("0006", 10006, "此用户没有注册", null),
 	NO_FRIEND("0005", 10005, "两人不是好友关系", null),
 	IS_FRIEND("0007", 10007, "两人是好友关系", null),
-	NO_RESULTS("0003", 10003, "无返回数据", null);
+	NO_RESULTS("0003", 10003, "无返回数据", null),
+	NO_MATCH_DATA("0008", 10008, "未找到匹配的数据", null);
 	
 	
 	private String code;
