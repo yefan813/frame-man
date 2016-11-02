@@ -3,6 +3,8 @@ package com.frame.domain;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.frame.domain.base.BaseDomain;
 
 public class Playground extends BaseDomain {
@@ -24,17 +26,6 @@ public class Playground extends BaseDomain {
 	private String adName;			//
 	private String parkingType;		//停车
 	private String indoorMap;		//室内
-	
-	@JSONField(name="id")  
-	private String pId;
-
-	public String getpId() {
-		return pId;
-	}
-
-	public void setpId(String pId) {
-		this.pId = pId;
-	}
 
 	public String getName() {
 		return name;
