@@ -1,6 +1,8 @@
 package com.frame.service.task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.frame.domain.Playground;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.GaoDeAPIResult;
@@ -41,7 +45,7 @@ public class GetPlayGroundFromBaidu {
 		params.put("extensions", "all");
 
 		try {
-			for(int i = 1 ; i <= 100 ; i++){
+			for(int i = 1 ; i <= 30 ; i++){
 				params.put("page", i);
 				List<Playground> pList = sendGetPlaygroundRequest(params);
 				if(CollectionUtils.isNotEmpty(pList)){
@@ -55,12 +59,22 @@ public class GetPlayGroundFromBaidu {
 	}
 
 	private List<Playground> sendGetPlaygroundRequest(Map<String, Object> params) {
-		List<Playground> pList = null;
+		List<Playground> pList = new ArrayList<Playground>();
 		try {
 			
 			String result = HttpClientUtil.sendGetRequestByJava(BAIDU_MAP_URL, params, null);
 			GaoDeAPIResult gaodeApiResult = JSON.parseObject(result, GaoDeAPIResult.class);
-			pList = JSON.parseArray(gaodeApiResult.getPois(), Playground.class);
+			
+			JSONArray jsonArray  = JSON.parseArray(gaodeApiResult.getPois());
+			Iterator<Object> ctgJsonIter = jsonArray.iterator();
+			while (ctgJsonIter.hasNext()) {
+				JSONObject ctgJson = (JSONObject) ctgJsonIter.next();
+				ctgJson.remove("id");
+				Playground playground = JSON.toJavaObject(ctgJson, Playground.class);
+				pList.add(playground);
+			}
+			
+//			pList = JSON.parseArray(, Playground.class);
 		} catch (Exception e) {
 			LOGGER.error("请求高德api出现错误" + e);
 		}
