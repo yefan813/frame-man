@@ -98,10 +98,10 @@ public class PlayGroundInfoServiceImpl extends BaseServiceImpl<Playground, Long>
 		vo.setName(playground.getName());
 		vo.setTel(playground.getTel());
 		vo.setLocation(playground.getLocation());
+		vo.setAddress(playground.getAddress());
 		vo.setPcode(playground.getPcode());
 		vo.setCityName(playground.getCityName());
 		vo.setCityCode(playground.getCityCode());
-		
 		vo.setDictance(playground.getMyDistance());
 		return vo;
 	}
