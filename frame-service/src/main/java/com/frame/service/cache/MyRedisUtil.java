@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import com.frame.dao.util.RedisUtil;
 
@@ -22,7 +21,7 @@ public class MyRedisUtil extends RedisUtil {
 	 /**
      * CMS系统redis前缀
      */
-    public static final String REDIS_PREFIX_FINANCE="lanqiu:";
+    public static final String REDIS_PREFIX_LANQIU="lanqiu:";
     
 	public void setTheShardedJedisPool(ShardedJedisPool theShardedJedisPool) {
 		this.theShardedJedisPool = theShardedJedisPool;

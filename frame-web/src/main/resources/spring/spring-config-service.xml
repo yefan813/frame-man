@@ -17,4 +17,16 @@
 	<!-- 启用对事务的注解支持 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
+	<bean id="requestLimitInterceptor" class="com.frame.aspect.RequestLimitSoaMethodInterceptor">
+	</bean>
+	
+	<aop:config>  
+        <aop:aspect id="soaMethodAspect" ref="requestLimitInterceptor">  
+            <!--配置com.spring.service包下所有类或接口的所有方法-->  
+            <aop:pointcut id="soaMethodService"  
+                expression="execution(* com.frame.web.controller.UserController.getValidCode(..))" />
+            <aop:around pointcut-ref="soaMethodService" method="doAround"/>  
+        </aop:aspect>  
+    </aop:config>
+	
 </beans>
