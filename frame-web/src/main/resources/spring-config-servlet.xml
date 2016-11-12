@@ -38,11 +38,7 @@
 			</list>
 		</property>
 	</bean>
-<<<<<<< HEAD
-<!-- 	
-=======
 
->>>>>>> develop
  	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
@@ -56,11 +52,7 @@
 				<property name="key" value="${wm.passport.token.public_key}" />
 			</bean>
 		</mvc:interceptor>
-<<<<<<< HEAD
-	</mvc:interceptors> -->
-=======
 	</mvc:interceptors>
->>>>>>> develop
 
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<context:annotation-config />
