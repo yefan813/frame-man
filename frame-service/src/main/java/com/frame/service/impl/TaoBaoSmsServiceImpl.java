@@ -72,7 +72,7 @@ public class TaoBaoSmsServiceImpl implements TaoBaoSmsService {
 					msg = RemoteResult.success();
 				}else{
 					LOGGER.info("调用阿里大鱼发送短息失败:",rsp.getMsg());
-					msg = RemoteResult.failure("0001", "调用阿里大鱼发送短息失败");
+					msg = RemoteResult.failure("0001", rsp.getBody());
 				}
 			} catch (ApiException e) {
 				// TODO Auto-generated catch block

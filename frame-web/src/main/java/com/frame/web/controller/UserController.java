@@ -3,6 +3,7 @@ package com.frame.web.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,7 @@ import com.frame.domain.UserValid;
 import com.frame.domain.base.YnEnum;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
+import com.frame.domain.cusAnnotion.RequestLimit;
 import com.frame.domain.enums.BusinessCode;
 import com.frame.domain.img.ImageValidate;
 import com.frame.domain.img.ImgDealMsg;
@@ -231,8 +233,9 @@ public class UserController extends BaseController {
 	 * @param validDate
 	 * @return
 	 */
+	@RequestLimit
 	@RequestMapping(value = "/getValidCode", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody String getValidCode(String tel, Long validDate) {
+	public @ResponseBody String getValidCode(HttpServletRequest request, String tel, Long validDate) {
 		RemoteResult result = null;
 		try {
 			if (StringUtils.isEmpty(tel) || (validDate == null || validDate <= 0)) {
