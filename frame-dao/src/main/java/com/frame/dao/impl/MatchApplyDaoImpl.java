@@ -15,6 +15,8 @@ public class MatchApplyDaoImpl extends BaseDaoImpl<MatchApply, Long> implements 
 	
 	private static final String SELECT_PERSIONAPPLYBY_LOCATION = "selectPersionApplyByLocation";
 	
+	private static final String SELECT_PERSIONOUTDATEAPPLY = "selectPersionOutDateApply";
+	
 
 	@Override
 	public String getNameSpace(String statement) {
@@ -26,6 +28,12 @@ public class MatchApplyDaoImpl extends BaseDaoImpl<MatchApply, Long> implements 
 	@Override
 	public List<MatchApply> getPerionApplyByLocation(MatchApply matchApply) {
 		return selectList(getNameSpace(SELECT_PERSIONAPPLYBY_LOCATION), matchApply);
+	}
+
+
+	@Override
+	public List<MatchApply> selectPersionOutDateApply() {
+		return selectList(getNameSpace(SELECT_PERSIONOUTDATEAPPLY), null);
 	}
 	
 

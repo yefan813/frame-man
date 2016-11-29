@@ -144,4 +144,13 @@
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
 	</select>
 	
+	<!-- 总数查询,通过条件 -->
+	<select id="selectPersionOutDateApply" parameterType="matchApply" resultType="matchApply">
+	<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[where match_time < now() and type = 1 and yn = 1]]>
+	</select>
+	
+	
 </mapper>

@@ -124,7 +124,7 @@ public class MatchApplyController extends BaseController {
 	}
 
 	/**
-	 * 根据userId 查找个人约球记录
+	 * 根据userId 加入个人约球记录
 	 * 
 	 * @param userId
 	 * @return

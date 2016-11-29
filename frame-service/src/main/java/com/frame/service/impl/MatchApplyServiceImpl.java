@@ -264,7 +264,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		query.setType(MatchApply.TYPE_PERSONLY);
 		query.setStartIndex(page.getStartIndex());
 		query.setEndIndex(page.getEndIndex());
-		query.setOrderField("myDistance");
+		query.setOrderField("myDistance,match_time");
 		query.setOrderFieldType("asc");
 		
 		List<MatchApply> data = matchApplyDao.getPerionApplyByLocation(query);
@@ -377,5 +377,13 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		}
 		return result;
 	}
+
+
+	@Override
+	public List<MatchApply> selectPersionOutDateApply() {
+		return matchApplyDao.selectPersionOutDateApply();
+	}
+	
+	
 
 }

@@ -23,6 +23,11 @@
        
 
 	<bean id="getPlayGroundInfoFromBaidu" class="com.frame.service.task.GetPlayGroundFromBaidu" />
+	
+	<bean id="deletePersonApplyOutDate" class="com.frame.service.task.DeletePersonApplyDate" />
+	
+	
+	
     <bean id="getPlayGroundInfoFromBaiduTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <!-- 调用的类 -->
         <property name="targetObject">
@@ -36,7 +41,24 @@
         <property name="concurrent">
             <value>false</value>
         </property>
-    </bean>       
+    </bean> 
+    
+    <bean id="deletePersonApplyOutDateTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject">
+            <ref bean="deletePersonApplyOutDate" />
+        </property>
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod">
+            <value>work</value>
+        </property>
+
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>   
+    
+          
 
        
     <!-- 定义触发时间 -->
@@ -49,12 +71,24 @@
             <value>${quartz.getPlaygroundInfo.time}</value>
         </property>
     </bean>
+    
+    <!-- 定义触发时间 -->
+    <bean id="deletePersionOutDateTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="deletePersonApplyOutDateTask" />
+        </property>
+        <!-- cron表达式 -->
+        <property name="cronExpression">
+            <value>${quartz.deletePersion.time}</value>
+        </property>
+    </bean>
        
     <!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
     <bean id="startQuertz" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
                 <ref bean="getPlayGroundInfoTrigger"/>
+                <ref bean="deletePersionOutDateTrigger"/>
             </list>
         </property>
         <property name="autoStartup">
