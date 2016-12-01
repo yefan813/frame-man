@@ -266,6 +266,7 @@ public class MatchApplyServiceImpl extends BaseServiceImpl<MatchApply, Long> imp
 		query.setEndIndex(page.getEndIndex());
 		query.setOrderField("myDistance,match_time");
 		query.setOrderFieldType("asc");
+		query.setYn(YnEnum.Normal.getKey());
 		
 		List<MatchApply> data = matchApplyDao.getPerionApplyByLocation(query);
 		if(CollectionUtils.isNotEmpty(data)){
