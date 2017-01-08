@@ -22,7 +22,7 @@ public @interface RequestLimit {
     /** 
      * ip允许访问的次数，默认值1000 
      */  
-    int ipCount() default 10;  
+    int ipCount() default 20;  
   
     /** 
      * ip时间段，单位为毫秒，默认值一分钟 
@@ -32,7 +32,7 @@ public @interface RequestLimit {
     /** 
      * uri允许访问的次数，默认值600 
      */  
-    int uriCount() default 6;  
+    int uriCount() default 20;  
   
     /** 
      * uri时间段，单位为毫秒，默认值一分钟 
