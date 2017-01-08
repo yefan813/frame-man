@@ -2,6 +2,7 @@ package com.frame.service;
 
 import java.util.List;
 
+import com.alibaba.druid.sql.dialect.mysql.ast.MysqlForeignKey.Match;
 import com.frame.domain.MatchApply;
 import com.frame.domain.common.Page;
 import com.frame.domain.common.RemoteResult;
@@ -57,6 +58,9 @@ public interface MatchApplyService extends BaseService<MatchApply, Long> {
 	 * @return
 	 */
 	public MatchApplyVO getMatchApplyById(MatchApply matchApply);
+	
+	
+	public List<MatchApply> selectPersionOutDateApply();
 	
 	
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.frame.domain.User;
@@ -139,6 +140,7 @@ public class UserController extends BaseController {
 	 * @param validDate
 	 * @return
 	 */
+	@RequestLimit
 	@RequestMapping(value = "/regist", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String registUser(String tel, String password, String validCode, Long validDate) {
 		RemoteResult result = null;
